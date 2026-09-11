@@ -5,8 +5,8 @@ import tailwindcss from '@tailwindcss/vite';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://pacolias.github.io',
-  base: '/pacomolina-dev',
+  site: 'https://pacomolina.dev',
+  base: '/',
   integrations: [react()],
   vite: {
     plugins: [tailwindcss()],
