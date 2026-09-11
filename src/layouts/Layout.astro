@@ -1,0 +1,112 @@
+---
+import "../styles/global.css";
+import { dictionary } from "../data/i18n";
+import { site } from "../data/site";
+
+const meta = dictionary.en.meta;
+const base = import.meta.env.BASE_URL.replace(/\/$/, "");
+const ogImage = new URL(`${base}/og-image.jpg`, Astro.site).toString();
+const canonicalUrl = new URL(`${base}/`, Astro.site).toString();
+
+const personLd = {
+	"@context": "https://schema.org",
+	"@type": "Person",
+	name: site.name,
+	jobTitle: dictionary.en.hero.role,
+	url: canonicalUrl,
+	image: ogImage,
+	email: `mailto:${site.email}`,
+	address: {
+		"@type": "PostalAddress",
+		addressLocality: "Málaga",
+		addressCountry: "ES",
+	},
+	sameAs: [site.linkedin, site.github],
+};
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="icon" type="image/svg+xml" href={`${base}/favicon.svg`} />
+		<link rel="icon" href={`${base}/favicon.ico`} />
+		<link rel="apple-touch-icon" href={`${base}/apple-touch-icon.png`} />
+		<link rel="manifest" href={`${base}/manifest.webmanifest`} />
+		<link rel="canonical" href={canonicalUrl} />
+		<meta name="theme-color" content="#fdba74" id="theme-color-meta" />
+		<meta name="generator" content={Astro.generator} />
+
+		<title>{meta.title}</title>
+		<meta name="description" content={meta.description} />
+		<meta property="og:title" content={meta.title} />
+		<meta property="og:description" content={meta.description} />
+		<meta property="og:type" content="website" />
+		<meta property="og:url" content={canonicalUrl} />
+		<meta property="og:image" content={ogImage} />
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="630" />
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:image" content={ogImage} />
+
+		<script type="application/ld+json" set:html={JSON.stringify(personLd)} />
+
+		<script is:inline>
+			(function () {
+				try {
+					var stored = localStorage.getItem("lang");
+					var lang =
+						stored === "en" || stored === "es"
+							? stored
+							: (navigator.language || "en").toLowerCase().startsWith("es")
+								? "es"
+								: "en";
+					window.__INITIAL_LANG__ = lang;
+					document.documentElement.lang = lang;
+				} catch (e) {
+					window.__INITIAL_LANG__ = "en";
+				}
+			})();
+		</script>
+
+		<script is:inline>
+			(function () {
+				try {
+					var stored = localStorage.getItem("theme");
+					var theme =
+						stored === "light" || stored === "dark"
+							? stored
+							: window.matchMedia &&
+								  window.matchMedia("(prefers-color-scheme: dark)").matches
+								? "dark"
+								: "light";
+					window.__INITIAL_THEME__ = theme;
+					document.documentElement.classList.toggle("dark", theme === "dark");
+					var metaTheme = document.getElementById("theme-color-meta");
+					if (metaTheme) {
+						metaTheme.setAttribute(
+							"content",
+							theme === "dark" ? "#0c0a09" : "#fdba74"
+						);
+					}
+				} catch (e) {
+					window.__INITIAL_THEME__ = "light";
+				}
+			})();
+		</script>
+
+		<!--
+			Analytics (GoatCounter — free, cookie-less, no consent banner needed):
+			1. Create a free site at https://www.goatcounter.com/
+			2. Replace YOUR-CODE below with your site code and uncomment.
+		<script
+			data-goatcounter={`https://YOUR-CODE.goatcounter.com/count`}
+			async
+			src="//gc.zgo.at/count.js"></script>
+		-->
+	</head>
+	<body class="bg-stone-50 text-stone-800 dark:bg-stone-950 dark:text-stone-200">
+		<slot />
+	</body>
+</html>

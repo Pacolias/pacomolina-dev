@@ -1,0 +1,96 @@
+export type Lang = "en" | "es";
+
+export const dictionary = {
+  en: {
+    meta: {
+      title: "Paco Molina — AI/Software Engineer",
+      description:
+        "Portfolio of Paco Molina, an AI/Software Engineer based in Málaga, Spain. Mathematician and Computer Scientist, and builder of RedCheck, an AI-powered task manager. Open to remote, hybrid and on-site roles.",
+    },
+    hero: {
+      role: "AI/Software Engineer",
+      tagline:
+        "Mathematician and Computer Scientist, building AI-powered products and agentic architectures.",
+      availability:
+        "Based in Málaga, Spain — open to remote, hybrid or on-site AI/Software Engineer roles. Available immediately.",
+    },
+    cta: {
+      linkedin: "Connect on LinkedIn",
+      cv: "Download CV",
+    },
+    projects: {
+      redcheck: {
+        tag: "AI-Powered Smart Planner",
+        description:
+          "An AI-powered smart planner that uses Google Gemini — through a dedicated Python/FastAPI microservice — to help you prioritize your day, backed by a Java/Spring Boot core API and a React/TypeScript app.",
+        live: "Live demo",
+        website: "Website",
+        repo: "Source code",
+      },
+    },
+    stack: {
+      heading: "Tech stack",
+    },
+    contact: {
+      heading: "Let's talk",
+      button: "Send an email",
+      vcard: "Save contact",
+      github: "GitHub profile",
+    },
+    langToggle: {
+      label: "Switch to Spanish",
+      short: "ES",
+    },
+    themeToggle: {
+      toDark: "Switch to dark mode",
+      toLight: "Switch to light mode",
+    },
+  },
+  es: {
+    meta: {
+      title: "Paco Molina — AI/Software Engineer",
+      description:
+        "Portfolio de Paco Molina, AI/Software Engineer en Málaga. Matemático e Informático, y creador de RedCheck, un gestor de tareas con IA. Abierto a trabajo remoto, híbrido y presencial.",
+    },
+    hero: {
+      role: "AI/Software Engineer",
+      tagline:
+        "Matemático e Informático, construyendo productos con IA y arquitecturas agénticas.",
+      availability:
+        "Ubicado en Málaga — abierto a puestos de AI/Software Engineer en remoto, híbrido o presencial. Disponibilidad inmediata.",
+    },
+    cta: {
+      linkedin: "Conectar en LinkedIn",
+      cv: "Descargar CV",
+    },
+    projects: {
+      redcheck: {
+        tag: "Planificador Inteligente con IA",
+        description:
+          "Un planificador inteligente con IA que usa Google Gemini — a través de un microservicio dedicado en Python/FastAPI — para ayudarte a priorizar tu día, apoyado en una API core en Java/Spring Boot y una app en React/TypeScript.",
+        live: "Demo en vivo",
+        website: "Sitio web",
+        repo: "Código fuente",
+      },
+    },
+    stack: {
+      heading: "Stack tecnológico",
+    },
+    contact: {
+      heading: "Hablemos",
+      button: "Enviar un email",
+      vcard: "Guardar contacto",
+      github: "Perfil de GitHub",
+    },
+    langToggle: {
+      label: "Cambiar a inglés",
+      short: "EN",
+    },
+    themeToggle: {
+      toDark: "Cambiar a modo oscuro",
+      toLight: "Cambiar a modo claro",
+    },
+  },
+} as const;
+
+export type Dictionary = (typeof dictionary)["en"];

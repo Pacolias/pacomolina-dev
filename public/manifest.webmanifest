@@ -1,0 +1,13 @@
+{
+  "name": "Paco Molina — Junior AI & Backend Engineer",
+  "short_name": "Paco Molina",
+  "start_url": "/pacomolina-dev/",
+  "scope": "/pacomolina-dev/",
+  "display": "browser",
+  "background_color": "#fafaf9",
+  "theme_color": "#fdba74",
+  "icons": [
+    { "src": "/pacomolina-dev/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "/pacomolina-dev/favicon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}
