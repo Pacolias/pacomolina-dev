@@ -138,8 +138,12 @@ The site grew from one page into five, keeping the same look everywhere:
   — putting the English/light prerender `src` in the HTML made every other
   visitor download a variant they never see. Verified: each combination
   downloads only its own files, and live toggles swap them. Current state:
-  RedCheck = 4 variants captured from the live demo
-  (`scripts/screenshots/redcheck.mjs`); krylov-solvers = 5 plots × 4
+  RedCheck = 4 shots × 4 variants — the landing hero, SmartCheck AI's
+  daily plan (a live Gemini call on prod, ~20s each), the month dashboard
+  and Focus Mode — all at 1280×900 (at 800px tall the landing's fixed nav
+  covers its headline), captured by `scripts/screenshots/redcheck.mjs`
+  (the app reads `language`, the landing `lang` but prefers the browser
+  language, so the script clicks its toggle); krylov-solvers = 5 plots × 4
   variants re-rendered from the repo's own solvers/matrices
   (`scripts/screenshots/krylov-plots.py`; recomputed, so a couple of
   iteration counts/timings differ slightly from the repo's PNGs); Astro

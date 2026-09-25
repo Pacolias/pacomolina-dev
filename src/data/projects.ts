@@ -11,8 +11,8 @@ import { redCheck, withBase } from "./site";
 // Images live in public/images/projects/ as ~1280px-wide WebP. When the
 // project itself has languages and/or themes, give one file per variant
 // (see `ImageSource` in Gallery.tsx) so the screenshot matches how the
-// visitor is viewing this site — e.g. `themedLocalized("redcheck-app")`
-// expects redcheck-app-{light,dark}-{en,es}.webp.
+// visitor is viewing this site — e.g. `themedLocalized("redcheck-focus")`
+// expects redcheck-focus-{light,dark}-{en,es}.webp.
 
 export type ProjectLink = {
   kind: "live" | "website" | "repo";
@@ -75,13 +75,40 @@ export const projects: Project[] = [
     stack: ["Java", "Spring Boot", "Python", "FastAPI", "Gemini", "ChromaDB", "React", "TypeScript", "Docker", "NGINX"],
     images: [
       {
-        src: themedLocalized("redcheck-app"),
+        src: themedLocalized("redcheck-landing"),
         alt: {
-          en: "RedCheck's app: a monthly calendar colored by workload, task balance per subject, and the SmartCheck AI panel.",
-          es: "La app de RedCheck: un calendario mensual coloreado por carga de trabajo, el balance de tareas por asignatura y el panel de SmartCheck AI.",
+          en: "RedCheck's landing page: “Your day, organized by Artificial Intelligence”, above a demo list the AI has just sorted by risk.",
+          es: "La landing de RedCheck: “Tu día, organizado por Inteligencia Artificial”, sobre una lista de ejemplo que la IA acaba de ordenar por riesgo.",
         },
         width: 1280,
-        height: 800,
+        height: 900,
+      },
+      {
+        src: themedLocalized("redcheck-ai-plan"),
+        alt: {
+          en: "SmartCheck AI's daily plan: a risk level, a summary of the day and a prioritized strategy explaining why each task comes first.",
+          es: "El plan diario de SmartCheck AI: un nivel de riesgo, un resumen del día y una estrategia priorizada que explica por qué va primero cada tarea.",
+        },
+        width: 1280,
+        height: 900,
+      },
+      {
+        src: themedLocalized("redcheck-dashboard"),
+        alt: {
+          en: "The dashboard: a month calendar colored by workload, task balance per subject, and tasks grouped by subject with their deadlines.",
+          es: "El dashboard: un calendario mensual coloreado según la carga de trabajo, el balance de tareas por asignatura y las tareas agrupadas con sus fechas límite.",
+        },
+        width: 1280,
+        height: 900,
+      },
+      {
+        src: themedLocalized("redcheck-focus"),
+        alt: {
+          en: "Focus Mode: the calendar steps aside for today's tasks and a GitHub-style activity heatmap of your streak.",
+          es: "El Modo Foco: el calendario se aparta para dejar solo las tareas de hoy y un mapa de actividad al estilo GitHub con tu racha.",
+        },
+        width: 1280,
+        height: 900,
       },
     ],
     links: [
