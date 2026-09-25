@@ -5,74 +5,52 @@ import { withBase } from "../../data/site";
 import { useLanguage } from "../LanguageProvider";
 import { SiteShell } from "../SiteShell";
 import { PageHeader } from "../PageHeader";
+import { Bullets } from "../Bullets";
 import { Chips } from "../Chips";
+import { ExpandableRow, rowTitle } from "../ExpandableRow";
 import { Gallery } from "../Gallery";
 import { card, focusRing, sectionHeading, textLink } from "../ui";
 
-function JobCard({ job, index }: { job: Job; index: number }) {
+function JobRow({ job }: { job: Job }) {
   const { t, lang } = useLanguage();
   const dates = `${formatMonth(job.start, lang)} – ${
     job.end ? formatMonth(job.end, lang) : t.pages.work.present
   }`;
 
   return (
-    <article className={`${card} p-6 sm:p-8 ${index === 0 ? "fade-up-3" : "fade-up-4"}`}>
-      <div className="flex items-start gap-4">
+    <ExpandableRow
+      leading={
         <img
           src={job.logo}
           alt=""
-          width={48}
-          height={48}
-          className="h-12 w-12 shrink-0 rounded-xl"
+          width={40}
+          height={40}
+          className="h-10 w-10 shrink-0 rounded-xl"
         />
-        <div className="min-w-0 flex-1">
-          <h2 className="font-display text-xl font-medium leading-tight text-stone-900 dark:text-stone-100">
-            <a
-              href={job.url}
-              target="_blank"
-              rel="noreferrer noopener"
-              className={`rounded transition-colors hover:text-amber-700 dark:hover:text-amber-400 ${focusRing}`}
-            >
-              {job.company}
-            </a>
-          </h2>
-          <p className="mt-0.5 text-sm font-medium text-amber-700 dark:text-amber-400">
-            {job.role[lang]}
-          </p>
-          <p className="mt-1 flex flex-wrap gap-x-2 text-xs text-stone-500 dark:text-stone-400">
-            <span>{dates}</span>
-            <span aria-hidden="true">·</span>
-            <span>{job.location[lang]}</span>
-          </p>
-        </div>
-      </div>
-
-      <p className="mt-5 text-sm leading-relaxed text-stone-700 dark:text-stone-300">
+      }
+      title={<span className={rowTitle}>{job.company}</span>}
+      subtitle={
+        <>
+          {job.role[lang]}
+          <span className="mt-0.5 block text-xs text-stone-500 sm:hidden dark:text-stone-400">
+            {dates}
+          </span>
+        </>
+      }
+      aside={
+        <span className="mt-1 hidden shrink-0 text-xs text-stone-500 sm:block dark:text-stone-400">
+          {dates}
+        </span>
+      }
+    >
+      <p className="text-xs text-stone-500 dark:text-stone-400">{job.location[lang]}</p>
+      <p className="text-sm leading-relaxed text-stone-700 dark:text-stone-300">
         {job.summary[lang]}
       </p>
-
-      <ul className="mt-4 space-y-2">
-        {job.highlights.map((h) => (
-          <li
-            key={h.en}
-            className="relative pl-4 text-sm leading-relaxed text-stone-600 before:absolute before:left-0 before:top-[0.6em] before:h-1.5 before:w-1.5 before:rounded-full before:bg-amber-400 dark:text-stone-400 dark:before:bg-amber-500"
-          >
-            {h[lang]}
-          </li>
-        ))}
-      </ul>
-
-      <div className="mt-5">
-        <Chips items={job.stack} />
-      </div>
-
-      {job.photos.length > 0 && (
-        <div className="mt-6">
-          <Gallery images={job.photos} />
-        </div>
-      )}
-
-      <div className="mt-6 border-t border-stone-100 pt-5 dark:border-stone-800">
+      <Bullets items={job.highlights} />
+      <Chips items={job.stack} />
+      <Gallery images={job.photos} />
+      <div>
         <h3 className="text-xs font-medium uppercase tracking-wider text-stone-500 dark:text-stone-400">
           {t.pages.work.proof}
         </h3>
@@ -92,7 +70,7 @@ function JobCard({ job, index }: { job: Job; index: number }) {
           ))}
         </ul>
       </div>
-    </article>
+    </ExpandableRow>
   );
 }
 
@@ -104,11 +82,15 @@ export function WorkPage() {
     <>
       <PageHeader title={copy.title} subtitle={copy.subtitle} />
       <main className="flex flex-col gap-4 px-6 pb-4">
-        {jobs.map((job, i) => (
-          <JobCard key={job.company} job={job} index={i} />
-        ))}
+        <section className={`${card} fade-up-3 px-6 py-2 sm:px-8`}>
+          <ul>
+            {jobs.map((job) => (
+              <JobRow key={job.company} job={job} />
+            ))}
+          </ul>
+        </section>
 
-        <section className={`${card} fade-up-5 mt-4 p-6 sm:p-8`}>
+        <section className={`${card} fade-up-4 p-6 sm:p-8`}>
           <h2 className={sectionHeading}>{copy.outsideHeading}</h2>
           <p className="mt-2 text-sm leading-relaxed text-stone-600 dark:text-stone-400">
             {copy.outsideBody}
