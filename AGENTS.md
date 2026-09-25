@@ -128,7 +128,13 @@ The site grew from one page into five, keeping the same look everywhere:
   a short `blurb`; Work: logo, company, role, dates — right-aligned on
   `sm+`, under the role on phones); "+" opens everything else (gallery,
   the longer `tagline` in amber, summary, highlights, stack, links / proof).
-  He picked the plain list with no thumbnails. `featured` now means
+  He picked the plain list with no thumbnails. Rows are deliberately small
+  (14px title, 12px blurb/role, 11px status, no year — it moved inside the
+  panel) and **every blurb/role must fit on one line at 360px in both
+  languages** (he pointed out wrapped two-line blurbs as the thing to
+  avoid): keep blurbs ≲35 characters. The Work logo is 36px and the row
+  gap 10px on phones because "Fundador y AI/Software Engineer" needed
+  exactly that at 360px. `featured` now means
   "visible row"; the rest sit behind "Show all projects (n)". Featured =
   RedCheck, ShellMate, spotify-mcp, Camper Agent Orchestrator (the
   strongest AI-Engineer signals); behind "show all" = krylov-solvers,

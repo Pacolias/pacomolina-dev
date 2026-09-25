@@ -53,15 +53,9 @@ function StatusBadge({ project }: { project: Project }) {
   const { t } = useLanguage();
   const live = project.status === "live";
   return (
-    <span className="inline-flex items-center gap-1.5 text-xs text-stone-500 dark:text-stone-400">
-      {project.year}
-      <span aria-hidden="true">·</span>
-      <span className="inline-flex items-center gap-1">
-        {live && (
-          <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" aria-hidden="true" />
-        )}
-        {t.pages.projects.status[project.status]}
-      </span>
+    <span className="inline-flex items-center gap-1 text-[11px] text-stone-500 dark:text-stone-400">
+      {live && <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" aria-hidden="true" />}
+      {t.pages.projects.status[project.status]}
     </span>
   );
 }
@@ -80,7 +74,8 @@ function ProjectRow({ project }: { project: Project }) {
     >
       <Gallery images={project.images} />
       <div>
-        <p className="text-sm font-medium leading-snug text-amber-700 dark:text-amber-400">
+        <p className="text-xs text-stone-500 dark:text-stone-400">{project.year}</p>
+        <p className="mt-1 text-sm font-medium leading-snug text-amber-700 dark:text-amber-400">
           {project.tagline[lang]}
         </p>
         <p className="mt-2 text-sm leading-relaxed text-stone-600 dark:text-stone-400">

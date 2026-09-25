@@ -23,9 +23,9 @@ function JobRow({ job }: { job: Job }) {
         <img
           src={job.logo}
           alt=""
-          width={40}
-          height={40}
-          className="h-10 w-10 shrink-0 rounded-xl"
+          width={36}
+          height={36}
+          className="h-9 w-9 shrink-0 rounded-lg"
         />
       }
       title={<span className={rowTitle}>{job.company}</span>}

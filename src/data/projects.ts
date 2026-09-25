@@ -53,8 +53,8 @@ export const projects: Project[] = [
     status: "live",
     featured: true,
     blurb: {
-      en: "AI planner that turns your tasks into a plan for the day.",
-      es: "Planificador con IA que convierte tus tareas en un plan para el día.",
+      en: "AI planner that organizes your day.",
+      es: "Planificador con IA que organiza tu día.",
     },
     tagline: {
       en: "An AI-powered smart planner that turns your task list into a plan for the day.",
@@ -130,8 +130,8 @@ export const projects: Project[] = [
     status: "active",
     featured: true,
     blurb: {
-      en: "A real terminal that explains and protects while you learn.",
-      es: "Una terminal real que explica y protege mientras aprendes.",
+      en: "A real terminal that teaches you.",
+      es: "Una terminal real que te enseña.",
     },
     tagline: {
       en: "A real Linux terminal wrapped in scaffolding that explains, protects and teaches — and fades away as you learn.",
@@ -185,8 +185,8 @@ export const projects: Project[] = [
     status: "active",
     featured: true,
     blurb: {
-      en: "Lets Claude search, control and curate your Spotify.",
-      es: "Deja que Claude busque, controle y organice tu Spotify.",
+      en: "Lets Claude run your Spotify.",
+      es: "Deja que Claude maneje tu Spotify.",
     },
     tagline: {
       en: "An MCP server that lets Claude (or any MCP host) search, control and curate your Spotify.",
@@ -221,8 +221,8 @@ export const projects: Project[] = [
     status: "active",
     featured: true,
     blurb: {
-      en: "A multi-agent planner for campervan routes.",
-      es: "Un planificador multiagente de rutas en camper.",
+      en: "Multi-agent campervan route planner.",
+      es: "Rutas en camper con agentes de IA.",
     },
     tagline: {
       en: "A multi-agent system that plans campervan routes — legal constraints, overnight spots and fuel costs.",
@@ -253,8 +253,8 @@ export const projects: Project[] = [
     status: "complete",
     featured: false,
     blurb: {
-      en: "Krylov solvers in Python — the code behind my maths thesis.",
-      es: "Solvers de Krylov en Python — el código de mi TFG de matemáticas.",
+      en: "Krylov solvers from my maths thesis.",
+      es: "Solvers de Krylov de mi TFG.",
     },
     tagline: {
       en: "Matrix-free Krylov subspace solvers in Python — the code behind my maths thesis.",
@@ -322,8 +322,8 @@ export const projects: Project[] = [
     status: "live",
     featured: false,
     blurb: {
-      en: "A fast, SEO-friendly starter for landing pages.",
-      es: "Una plantilla rápida y optimizada para landings.",
+      en: "Fast, SEO-friendly landing starter.",
+      es: "Plantilla rápida para landings.",
     },
     tagline: {
       en: "A fast, SEO-friendly starter for landing pages and small business sites.",

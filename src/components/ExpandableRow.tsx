@@ -34,13 +34,13 @@ export function ExpandableRow({
           onClick={() => setOpen((o) => !o)}
           aria-expanded={open}
           aria-controls={panelId}
-          className={`group flex w-full items-start gap-3 rounded-2xl py-4 text-left sm:gap-4 ${focusRing}`}
+          className={`group flex w-full items-start gap-2.5 rounded-2xl py-3.5 text-left sm:gap-4 ${focusRing}`}
         >
           {leading}
           <span className="min-w-0 flex-1">
             <span className="block">{title}</span>
             {subtitle && (
-              <span className="mt-0.5 block text-sm text-stone-600 dark:text-stone-400">
+              <span className="mt-0.5 block text-xs leading-relaxed text-stone-600 dark:text-stone-400">
                 {subtitle}
               </span>
             )}
@@ -48,7 +48,7 @@ export function ExpandableRow({
           {aside}
           <Plus
             aria-hidden="true"
-            className={`mt-1 h-4 w-4 shrink-0 text-stone-400 transition-transform duration-300 group-hover:text-amber-600 dark:text-stone-500 dark:group-hover:text-amber-400 ${open ? "rotate-45" : ""}`}
+            className={`mt-0.5 h-4 w-4 shrink-0 text-stone-400 transition-transform duration-300 group-hover:text-amber-600 dark:text-stone-500 dark:group-hover:text-amber-400 ${open ? "rotate-45" : ""}`}
           />
         </button>
       </h2>
@@ -61,4 +61,4 @@ export function ExpandableRow({
 
 // Row title text: turns amber when its row is hovered.
 export const rowTitle =
-  "font-medium text-stone-900 transition-colors group-hover:text-amber-700 dark:text-stone-100 dark:group-hover:text-amber-400";
+  "text-sm font-medium text-stone-900 transition-colors group-hover:text-amber-700 dark:text-stone-100 dark:group-hover:text-amber-400";
