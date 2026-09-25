@@ -20,7 +20,9 @@ second-guess them without checking in again:
   the original centered hero + bento grid read as a different site once
   the inner pages became minimal lists; Paco picked this over polishing the
   old one): left-aligned like every other page. Photo beside name + role;
-  one line "Mathematician and Computer Engineer." — Paco explicitly did
+  one line "Mathematician and Computer Scientist." (ES "Matemático e
+  Ingeniero Informático." — in English he wants "Computer Scientist", not
+  "Computer Engineer", since the degree is Computer Science) — Paco explicitly did
   **not** want a narrative sentence there ("building → RedCheck, before →
   Quimify"); a one-line green availability pill; LinkedIn + CV; a
   "Featured project" card; "See all projects →"; the stack as a row of
