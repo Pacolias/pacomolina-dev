@@ -121,12 +121,18 @@ The site grew from one page into five, keeping the same look everywhere:
   `src/data/work.ts`, `src/data/about.ts`. UI strings stay in `i18n.ts`
   (`nav`, `pages.*`). `Dictionary` is the EN shape with literals widened, so
   a key missing in ES is a type error.
-- **Projects: two tiers** via a `featured` flag. Paco wants all his projects
-  shown but said *how* to highlight them "is something we should discuss" —
-  current proposal (not yet confirmed): featured = RedCheck, ShellMate,
-  spotify-mcp, Camper Agent Orchestrator (the strongest AI-Engineer
-  signals); "More from the workshop" (compact expandable rows) =
-  krylov-solvers, Astro Landing Boilerplate. Ariadne still excluded.
+- **Projects and Work are compact lists, not big cards** (Paco: the cards
+  took too much screen; he wanted it readable "de un golpe de vista", like
+  psudokit.live, same content, same style). One card per page holding
+  `ExpandableRow`s: collapsed = one glance (Projects: name, year · status,
+  a short `blurb`; Work: logo, company, role, dates — right-aligned on
+  `sm+`, under the role on phones); "+" opens everything else (gallery,
+  the longer `tagline` in amber, summary, highlights, stack, links / proof).
+  He picked the plain list with no thumbnails. `featured` now means
+  "visible row"; the rest sit behind "Show all projects (n)". Featured =
+  RedCheck, ShellMate, spotify-mcp, Camper Agent Orchestrator (the
+  strongest AI-Engineer signals); behind "show all" = krylov-solvers,
+  Astro Landing Boilerplate. Ariadne still excluded.
   Screenshots are ~1280px WebP in `public/images/projects/` (see the
   theme/language variants below).
 - **Screenshots follow the visitor's theme and language** (Paco's request:
@@ -150,8 +156,7 @@ The site grew from one page into five, keeping the same look everywhere:
   boilerplate = light/dark only (the site is English-only); ShellMate = the
   README's two screenshots as-is (the app only has a Spanish UI and a dark
   theme, so no other variants exist).
-- **Expandable panels** ("Details" on featured cards, rows under "More from
-  the workshop") use `Collapsible.tsx`: animates `grid-template-rows`
+- **Expandable panels** (list rows, "Show all projects") use `Collapsible.tsx`: animates `grid-template-rows`
   0fr↔1fr so opening *and* closing are smooth (the first version toggled
   `hidden`, so closing snapped shut). Closed content is `inert`. Its
   `overflow: hidden` wrapper takes a `bleed` prop so a Gallery strip can

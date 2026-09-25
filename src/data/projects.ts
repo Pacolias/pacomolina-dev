@@ -25,6 +25,8 @@ export type Project = {
   year: string;
   status: "live" | "active" | "complete";
   featured: boolean;
+  // One short line for the collapsed row (the list should read at a glance).
+  blurb: Localized;
   tagline: Localized;
   summary: Localized;
   highlights: Localized[];
@@ -50,6 +52,10 @@ export const projects: Project[] = [
     year: "2026",
     status: "live",
     featured: true,
+    blurb: {
+      en: "AI planner that turns your tasks into a plan for the day.",
+      es: "Planificador con IA que convierte tus tareas en un plan para el día.",
+    },
     tagline: {
       en: "An AI-powered smart planner that turns your task list into a plan for the day.",
       es: "Un planificador inteligente con IA que convierte tu lista de tareas en un plan para el día.",
@@ -123,6 +129,10 @@ export const projects: Project[] = [
     year: "2026",
     status: "active",
     featured: true,
+    blurb: {
+      en: "A real terminal that explains and protects while you learn.",
+      es: "Una terminal real que explica y protege mientras aprendes.",
+    },
     tagline: {
       en: "A real Linux terminal wrapped in scaffolding that explains, protects and teaches — and fades away as you learn.",
       es: "Una terminal Linux real envuelta en un andamiaje que explica, protege y enseña — y que desaparece a medida que aprendes.",
@@ -174,6 +184,10 @@ export const projects: Project[] = [
     year: "2026",
     status: "active",
     featured: true,
+    blurb: {
+      en: "Lets Claude search, control and curate your Spotify.",
+      es: "Deja que Claude busque, controle y organice tu Spotify.",
+    },
     tagline: {
       en: "An MCP server that lets Claude (or any MCP host) search, control and curate your Spotify.",
       es: "Un servidor MCP que permite a Claude (o cualquier host MCP) buscar, controlar y organizar tu Spotify.",
@@ -206,6 +220,10 @@ export const projects: Project[] = [
     year: "2026",
     status: "active",
     featured: true,
+    blurb: {
+      en: "A multi-agent planner for campervan routes.",
+      es: "Un planificador multiagente de rutas en camper.",
+    },
     tagline: {
       en: "A multi-agent system that plans campervan routes — legal constraints, overnight spots and fuel costs.",
       es: "Un sistema multiagente que planifica rutas en camper — restricciones legales, sitios para pernoctar y coste de combustible.",
@@ -234,6 +252,10 @@ export const projects: Project[] = [
     year: "2026",
     status: "complete",
     featured: false,
+    blurb: {
+      en: "Krylov solvers in Python — the code behind my maths thesis.",
+      es: "Solvers de Krylov en Python — el código de mi TFG de matemáticas.",
+    },
     tagline: {
       en: "Matrix-free Krylov subspace solvers in Python — the code behind my maths thesis.",
       es: "Solvers de subespacios de Krylov sin matrices explícitas en Python — el código detrás de mi TFG de matemáticas.",
@@ -299,6 +321,10 @@ export const projects: Project[] = [
     year: "2026",
     status: "live",
     featured: false,
+    blurb: {
+      en: "A fast, SEO-friendly starter for landing pages.",
+      es: "Una plantilla rápida y optimizada para landings.",
+    },
     tagline: {
       en: "A fast, SEO-friendly starter for landing pages and small business sites.",
       es: "Una plantilla rápida y optimizada para SEO para landings y webs de pequeños negocios.",
