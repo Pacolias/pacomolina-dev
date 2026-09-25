@@ -67,6 +67,22 @@ export const dictionary = {
           "Dual degree in Mathematics and Computer Science at the University of Málaga (2021–2026), with two senior theses: numerical linear algebra and a production full-stack AI app.",
         outsideLink: "The longer story",
       },
+      about: {
+        title: "About me",
+        subtitle: "The short version of how I got here.",
+        timelineHeading: "Timeline",
+        languagesHeading: "Languages",
+        languages: [
+          { name: "Spanish", level: "Native" },
+          { name: "English", level: "C1 — British Council" },
+        ],
+        kinds: {
+          education: "Education",
+          work: "Work",
+          project: "Project",
+          milestone: "Milestone",
+        },
+      },
     },
     langToggle: {
       label: "Switch to Spanish",
@@ -142,6 +158,22 @@ export const dictionary = {
         outsideBody:
           "Doble Grado en Matemáticas e Ingeniería Informática en la Universidad de Málaga (2021–2026), con dos TFG: álgebra lineal numérica y una app full stack con IA en producción.",
         outsideLink: "La historia completa",
+      },
+      about: {
+        title: "Sobre mí",
+        subtitle: "La versión corta de cómo he llegado hasta aquí.",
+        timelineHeading: "Trayectoria",
+        languagesHeading: "Idiomas",
+        languages: [
+          { name: "Español", level: "Nativo" },
+          { name: "Inglés", level: "C1 — British Council" },
+        ],
+        kinds: {
+          education: "Formación",
+          work: "Trabajo",
+          project: "Proyecto",
+          milestone: "Hito",
+        },
       },
     },
     langToggle: {

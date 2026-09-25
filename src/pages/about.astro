@@ -1,0 +1,11 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { AboutApp } from "../components/pages/AboutPage";
+import { dictionary } from "../data/i18n";
+
+const copy = dictionary.en.pages.about;
+---
+
+<Layout title={`${copy.title} — Paco Molina`} description={copy.subtitle}>
+	<AboutApp client:load />
+</Layout>
