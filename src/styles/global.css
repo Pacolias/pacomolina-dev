@@ -44,6 +44,14 @@
   html.dark {
     color-scheme: dark;
   }
+
+  /* While a non-English visitor's page hydrates, the prerendered (English)
+     markup is kept invisible so there's no EN→ES flash on every navigation.
+     The inline script in Layout.astro sets the attribute (with a timeout
+     fallback), LanguageProvider removes it once the swap has rendered. */
+  html[data-lang-pending] body {
+    opacity: 0;
+  }
 }
 
 @utility fade-up-1 {

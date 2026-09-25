@@ -78,6 +78,15 @@ const personLd = {
 								: "en";
 					window.__INITIAL_LANG__ = lang;
 					document.documentElement.lang = lang;
+					if (lang !== "en") {
+						// Hide the English prerender until React swaps it (see
+						// global.css); never stay hidden if hydration fails.
+						var root = document.documentElement;
+						root.setAttribute("data-lang-pending", "");
+						setTimeout(function () {
+							root.removeAttribute("data-lang-pending");
+						}, 1500);
+					}
 				} catch (e) {
 					window.__INITIAL_LANG__ = "en";
 				}
