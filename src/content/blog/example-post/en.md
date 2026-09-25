@@ -41,6 +41,9 @@ them relatively — Astro optimizes them at build time:
 ![Alt text, describing the image](./photo.webp "Optional caption")
 ```
 
+The text in quotes becomes a caption under the image (and in the viewer).
+Leave it out for an image without one.
+
 Every image in a post opens in the same full-screen viewer, and you can
 swipe through all of them in order:
 
