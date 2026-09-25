@@ -1,0 +1,11 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { ProjectsApp } from "../components/pages/ProjectsPage";
+import { dictionary } from "../data/i18n";
+
+const copy = dictionary.en.pages.projects;
+---
+
+<Layout title={`${copy.title} — Paco Molina`} description={copy.subtitle}>
+	<ProjectsApp client:load />
+</Layout>
