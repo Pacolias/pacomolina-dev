@@ -16,15 +16,25 @@ CSS v4 (CSS-first config, no `tailwind.config.js`) + Vite.
 These were chosen explicitly with Paco via `AskUserQuestion` — don't
 second-guess them without checking in again:
 
-- **Layout**: hybrid. A simple vertical hero (photo, name, role, tagline, the
-  two main CTAs) on top, mobile-first and read top-to-bottom in one glance.
-  Below it, a small bento-style grid (`src/components/Portfolio.tsx`) with
-  asymmetric card sizes for the project, stack, and contact — gives it more
-  "body" than a flat Linktree list without turning into a full bento.me grid.
-- **Only RedCheck is featured.** Ariadne was explicitly excluded — Paco
+- **Home layout** (`src/components/pages/HomePage.tsx`, redone Sep 25 2026 —
+  the original centered hero + bento grid read as a different site once
+  the inner pages became minimal lists; Paco picked this over polishing the
+  old one): left-aligned like every other page. Photo beside name + role;
+  one line "Mathematician and Computer Engineer." — Paco explicitly did
+  **not** want a narrative sentence there ("building → RedCheck, before →
+  Quimify"); a one-line green availability pill; LinkedIn + CV; a
+  "Featured project" card; "See all projects →"; the stack as a row of
+  small chips (`StackRow.tsx`); then the shared "Let's talk" footer.
+- **Only RedCheck is featured on Home**, on purpose (Paco preferred it to a
+  list of three): one clear thing to try for someone who just scanned the
+  NFC/QR. Its card is light, not the old big one — the landing-hero
+  screenshot (theme/language-aware, opens the lightbox), name, status, the
+  one-line blurb, and three small links in one row: **Live demo** (filled,
+  first), Website, and the GitHub mark alone (text only for screen readers
+  / tooltip) so they fit the narrow column. Stacked on phones, image | text
+  in two equal columns from `sm` up. Ariadne was explicitly excluded — Paco
   considers it too early-stage to show off yet. Don't add it back without
-  asking; if a second project is added later, it belongs as another card in
-  the same grid in `Portfolio.tsx`.
+  asking.
 - **Typography**: warm serif + clean sans. `Fraunces` (via `@fontsource`) for
   the name and headings — `font-display` token — and `Inter` for everything
   else — `font-sans`, the default. Only weights 400/500 are imported (nothing
@@ -40,7 +50,7 @@ second-guess them without checking in again:
   language must be picked, but on first client load it auto-detects from
   `navigator.language` (Spanish → Spanish), remembers the visitor's explicit
   toggle choice in `localStorage`, and there's a manual toggle pill in the
-  hero corner (`LanguageToggle.tsx`). Translated copy lives in
+  nav (`LanguageToggle.tsx`). Translated copy lives in
   `src/data/i18n.ts`; non-translated facts (links, email, project URLs) live
   in `src/data/site.ts`. Known trade-off: the statically prerendered HTML is
   always English, so non-English visitors get a near-instant client-side
@@ -248,27 +258,26 @@ All real content is in as of the second pass:
   API, AI microservice, frontend) — if Paco ever gives more detail on this
   architecture (e.g. how the Java and Python services talk to each other),
   update it there. This is unrelated to — and shouldn't be confused with —
-  the personal "Tech stack" grid in `StackGrid.tsx`, which represents Paco's
+  the personal "Tech stack" row in `StackRow.tsx`, which represents Paco's
   own general toolkit, not RedCheck's internals specifically (though they
   overlap, which is presumably why he's used Python/FastAPI on RedCheck
   himself).
-- RedCheck's card has three CTAs, deliberately reordered from the first
-  pass: **Website** (left, secondary/outline style) → the Astro landing
-  (`redcheckapp.com`); **Live demo** (right, primary/filled style) → the
+- RedCheck's three links: **Live demo** (primary/filled style) → the
   actual React SPA (`my.redcheckapp.com`, where the AI task/priority
   features live — this is the one people should actually play with);
-  **Source code** (full width below) → the GitHub org. "Live demo" pointing
-  at the real app rather than the marketing site is intentional — don't
-  swap them back.
+  **Website** (soft amber) → the Astro landing (`redcheckapp.com`);
+  **Source code** → the GitHub org. "Live demo" pointing at the real app
+  rather than the marketing site is intentional — don't swap them back.
 - **Personal GitHub link** (`site.github`) is inferred as
   `https://github.com/Pacolias` from this very repo's own git remote — never
   independently confirmed by Paco in words. Flag it if he ever says
   otherwise.
-- **Hero availability line** (`hero.availability` in `i18n.ts`): "Based in
-  Málaga, Spain — open to remote, hybrid or on-site AI Engineer roles.
-  Available immediately." Facts came directly from Paco; update this (and
-  the ES version, and the meta description which repeats the gist) if any
-  of those facts change (location, availability, role target).
+- **Availability pill** (`hero.availability` in `i18n.ts`): "Available now ·
+  Málaga · remote, hybrid or on-site" / "Disponible ya · Málaga · remoto,
+  híbrido, presencial". Facts came directly from Paco; update both (and
+  the meta description, which repeats the gist) if they change. The
+  wording is squeezed to fit one line at 360px (11px text) — measure
+  before making it longer.
 - **vCard download** (`public/paco-molina.vcf`, "Save contact" button in
   `ContactCard.tsx`): built for the actual NFC/QR-at-events use case — a
   one-tap way for someone to save Paco's contact, more reliable than
@@ -293,7 +302,8 @@ All real content is in as of the second pass:
 
 - Heading order is now a real outline: `h1` (name) → `h2` (RedCheck title,
   "Tech stack", "Let's talk") — it used to skip straight to `h3` everywhere,
-  fixed across `RedCheckCard.tsx`, `StackGrid.tsx`, `ContactCard.tsx`.
+  fixed across `RedCheckCard.tsx`, `StackGrid.tsx` (both since replaced by
+  the new Home), `ContactCard.tsx`.
 - Every interactive `<a>`/`<button>` has an explicit
   `focus-visible:ring-2 focus-visible:ring-amber-500` state now — there was
   no visible keyboard focus indicator anywhere before this pass.

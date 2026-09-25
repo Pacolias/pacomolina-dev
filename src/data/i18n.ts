@@ -9,24 +9,17 @@ export const dictionary = {
     },
     hero: {
       role: "AI/Software Engineer",
-      tagline:
-        "Mathematician and Computer Scientist, building AI-powered products and agentic architectures.",
-      availability:
-        "Based in Málaga, Spain — open to remote, hybrid or on-site AI/Software Engineer roles. Available immediately.",
+      tagline: "Mathematician and Computer Engineer.",
+      availability: "Available now · Málaga · remote, hybrid or on-site",
     },
     cta: {
       linkedin: "Connect on LinkedIn",
       cv: "Download CV",
     },
-    projects: {
-      redcheck: {
-        tag: "AI-Powered Smart Planner",
-        description:
-          "An AI-powered smart planner that uses Google Gemini — through a dedicated Python/FastAPI microservice — to help you prioritize your day, backed by a Java/Spring Boot core API and a React/TypeScript app.",
-        live: "Live demo",
-        website: "Website",
-        repo: "Source code",
-      },
+    home: {
+      featured: "Featured project",
+      allProjects: "See all projects",
+      links: { live: "Live demo", website: "Website", repo: "Code" },
     },
     stack: {
       heading: "Tech stack",
@@ -117,24 +110,17 @@ export const dictionary = {
     },
     hero: {
       role: "AI/Software Engineer",
-      tagline:
-        "Matemático e Informático, construyendo productos con IA y arquitecturas agénticas.",
-      availability:
-        "Ubicado en Málaga — abierto a puestos de AI/Software Engineer en remoto, híbrido o presencial. Disponibilidad inmediata.",
+      tagline: "Matemático e Ingeniero Informático.",
+      availability: "Disponible ya · Málaga · remoto, híbrido, presencial",
     },
     cta: {
       linkedin: "Conectar en LinkedIn",
       cv: "Descargar CV",
     },
-    projects: {
-      redcheck: {
-        tag: "Planificador Inteligente con IA",
-        description:
-          "Un planificador inteligente con IA que usa Google Gemini — a través de un microservicio dedicado en Python/FastAPI — para ayudarte a priorizar tu día, apoyado en una API core en Java/Spring Boot y una app en React/TypeScript.",
-        live: "Demo en vivo",
-        website: "Sitio web",
-        repo: "Código fuente",
-      },
+    home: {
+      featured: "Proyecto destacado",
+      allProjects: "Ver todos los proyectos",
+      links: { live: "Demo en vivo", website: "Web", repo: "Código" },
     },
     stack: {
       heading: "Stack tecnológico",
