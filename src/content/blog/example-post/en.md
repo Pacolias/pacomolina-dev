@@ -9,6 +9,8 @@ draft: true
 This is a **draft**, so it only shows up while running `astro dev` — the
 production build skips it.
 
+![A warm, blurry test image that just says "Foto de prueba"](./prueba-1.webp "Tap any image in a post to open it full-screen.")
+
 ## Writing a new post
 
 1. Copy `src/content/blog/example-post/` to `src/content/blog/<your-slug>/`.
@@ -30,8 +32,21 @@ links:
   repo: https://github.com/Pacolias/...
 ```
 
-Images go in `public/images/blog/<your-slug>/` and are referenced as
-`![alt text](/images/blog/<your-slug>/photo.webp)`.
+## Images
+
+Drop them in the post's own folder, next to `en.md`/`es.md`, and reference
+them relatively — Astro optimizes them at build time:
+
+```md
+![Alt text, describing the image](./photo.webp "Optional caption")
+```
+
+Every image in a post opens in the same full-screen viewer, and you can
+swipe through all of them in order:
+
+![A tall test image, to check portrait photos](./prueba-2.webp)
+
+![A wide panoramic test image](./prueba-3.webp "The last one — the next arrow wraps back to the first.")
 
 > Quotes, `inline code`, lists and [links](https://pacomolina.dev) are all
 > styled to match the rest of the site.
