@@ -9,7 +9,7 @@ export const dictionary = {
     },
     hero: {
       role: "AI/Software Engineer",
-      tagline: "Mathematician and Computer Engineer.",
+      tagline: "Mathematician and Computer Scientist.",
       availability: "Available now · Málaga · remote, hybrid or on-site",
     },
     cta: {
