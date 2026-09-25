@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode, type RefObject } from "react";
 import { ArrowLeft, ArrowUpRight, Mic, Presentation, Video } from "lucide-react";
 import { SiGithub } from "@icons-pack/react-simple-icons";
 import type { BlogPostSummary } from "../../data/blog";
@@ -8,6 +8,8 @@ import { withBase } from "../../data/site";
 import { useLanguage } from "../LanguageProvider";
 import { SiteShell } from "../SiteShell";
 import { PageHeader } from "../PageHeader";
+import { Lightbox } from "../Lightbox";
+import type { GalleryImage } from "../Gallery";
 import { button, card, focusRing } from "../ui";
 
 // A post may exist in only one language — fall back to the other one.
@@ -115,8 +117,75 @@ export function BlogPostApp({
   );
 }
 
+// Reads what the lightbox needs straight from an <img> Astro rendered. The
+// Markdown title (`![alt](./x.webp "caption")`) becomes the caption. Post
+// bodies are single-language per block, so the same text serves both keys.
+function toGalleryImage(img: HTMLImageElement): GalleryImage {
+  const alt = img.alt;
+  const title = img.getAttribute("title");
+  return {
+    src: img.currentSrc || img.src,
+    alt: { en: alt, es: alt },
+    caption: title ? { en: title, es: title } : undefined,
+    width: img.naturalWidth || img.width,
+    height: img.naturalHeight || img.height,
+  };
+}
+
+// Makes every image in the (static, Astro-rendered) post body open in the
+// Lightbox — click/tap, or Tab + Enter/Space. The viewer steps through the
+// images of the language block that was clicked, in document order.
+function usePostImageViewer(root: RefObject<HTMLElement | null>) {
+  const { t } = useLanguage();
+  const [viewer, setViewer] = useState<{ images: GalleryImage[]; index: number } | null>(null);
+
+  useEffect(() => {
+    const container = root.current;
+    if (!container) return;
+
+    for (const img of container.querySelectorAll("img")) {
+      img.tabIndex = 0;
+      img.setAttribute("role", "button");
+      img.setAttribute("aria-label", `${t.lightbox.open}: ${img.alt}`);
+    }
+
+    const open = (img: HTMLImageElement) => {
+      const block = img.closest("[data-lang]") ?? container;
+      const imgs = [...block.querySelectorAll("img")];
+      setViewer({ images: imgs.map(toGalleryImage), index: imgs.indexOf(img) });
+    };
+    const onClick = (e: MouseEvent) => {
+      const img = (e.target as Element).closest("img");
+      if (img && container.contains(img)) open(img);
+    };
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.key === "Enter" || e.key === " ") && e.target instanceof HTMLImageElement) {
+        e.preventDefault();
+        open(e.target);
+      }
+    };
+    container.addEventListener("click", onClick);
+    container.addEventListener("keydown", onKey);
+    return () => {
+      container.removeEventListener("click", onClick);
+      container.removeEventListener("keydown", onKey);
+    };
+  }, [root, t]);
+
+  return (
+    <Lightbox
+      images={viewer?.images ?? []}
+      index={viewer?.index ?? null}
+      onIndexChange={(index) => setViewer((v) => (v ? { ...v, index } : v))}
+      onClose={() => setViewer(null)}
+    />
+  );
+}
+
 function BlogPost({ post, children }: { post: BlogPostSummary; children?: ReactNode }) {
   const { t, lang } = useLanguage();
+  const proseRef = useRef<HTMLDivElement>(null);
+  const imageViewer = usePostImageViewer(proseRef);
   const copy = t.pages.blog;
   const v = version(post, lang);
   const links = [
@@ -163,11 +232,12 @@ function BlogPost({ post, children }: { post: BlogPostSummary; children?: ReactN
         </header>
 
         <div className="mt-8 border-t border-stone-100 pt-8 dark:border-stone-800">
-          <div className="prose prose-stone max-w-none prose-headings:font-display prose-headings:font-medium prose-a:text-amber-700 prose-a:decoration-amber-300 prose-a:underline-offset-4 hover:prose-a:decoration-amber-600 prose-strong:font-medium prose-code:rounded prose-code:bg-stone-100 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-code:before:content-none prose-code:after:content-none prose-pre:rounded-2xl prose-img:rounded-2xl [&_pre_code]:bg-transparent [&_pre_code]:p-0 dark:prose-invert dark:prose-a:text-amber-400 dark:prose-a:decoration-amber-800 dark:prose-code:bg-stone-800">
+          <div ref={proseRef} className="prose prose-stone max-w-none prose-headings:font-display prose-headings:font-medium prose-a:text-amber-700 prose-a:decoration-amber-300 prose-a:underline-offset-4 hover:prose-a:decoration-amber-600 prose-strong:font-medium prose-code:rounded prose-code:bg-stone-100 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-code:before:content-none prose-code:after:content-none prose-pre:rounded-2xl prose-img:cursor-zoom-in prose-img:rounded-2xl prose-img:transition-opacity hover:prose-img:opacity-90 [&_img:focus-visible]:outline-2 [&_img:focus-visible]:outline-offset-4 [&_img:focus-visible]:outline-amber-500 [&_pre_code]:bg-transparent [&_pre_code]:p-0 dark:prose-invert dark:prose-a:text-amber-400 dark:prose-a:decoration-amber-800 dark:prose-code:bg-stone-800">
             {children}
           </div>
         </div>
       </article>
+      {imageViewer}
     </main>
   );
 }
