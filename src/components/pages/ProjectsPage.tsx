@@ -6,6 +6,7 @@ import { useLanguage } from "../LanguageProvider";
 import { SiteShell } from "../SiteShell";
 import { PageHeader } from "../PageHeader";
 import { Chips } from "../Chips";
+import { Collapsible } from "../Collapsible";
 import { Gallery } from "../Gallery";
 import { button, card, focusRing, sectionHeading } from "../ui";
 
@@ -118,12 +119,12 @@ function FeaturedProject({ project, index }: { project: Project; index: number }
           >
             {open ? t.pages.projects.hideDetails : t.pages.projects.details}
             <ChevronDown
-              className={`h-4 w-4 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+              className={`h-4 w-4 transition-transform duration-300 ${open ? "rotate-180" : ""}`}
             />
           </button>
-          <div id={detailsId} hidden={!open} className="mt-3">
+          <Collapsible id={detailsId} open={open} className="pt-3">
             <Highlights project={project} />
-          </div>
+          </Collapsible>
         </>
       )}
 
@@ -164,10 +165,10 @@ function CompactProject({ project }: { project: Project }) {
         </span>
         <Plus
           aria-hidden="true"
-          className={`mt-1 h-4 w-4 shrink-0 text-stone-400 transition-transform duration-200 dark:text-stone-500 ${open ? "rotate-45" : ""}`}
+          className={`mt-1 h-4 w-4 shrink-0 text-stone-400 transition-transform duration-300 dark:text-stone-500 ${open ? "rotate-45" : ""}`}
         />
       </button>
-      <div id={panelId} hidden={!open} className="space-y-4 pb-6">
+      <Collapsible id={panelId} open={open} bleed className="space-y-4 pb-6">
         <p className="text-sm leading-relaxed text-stone-600 dark:text-stone-400">
           {project.summary[lang]}
         </p>
@@ -175,7 +176,7 @@ function CompactProject({ project }: { project: Project }) {
         <Gallery images={project.images} />
         <Chips items={project.stack} />
         <ProjectLinks links={project.links} />
-      </div>
+      </Collapsible>
     </li>
   );
 }
