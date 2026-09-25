@@ -159,7 +159,11 @@ The site grew from one page into five, keeping the same look everywhere:
 - **About**: short first-person intro + a chronological timeline (oldest →
   "Now") mixing education, work, projects and milestones, + languages. The
   intro copy was drafted from CV facts and **needs Paco's review** — it's
-  the one place with his "voice" that he didn't write.
+  the one place with his "voice" that he didn't write. The languages list
+  lives in `about.ts` (not `i18n.ts`) so an entry can carry an `href`: the
+  English C1 card links to Paco's British Council credential (URL given by
+  him; its `#acc.…` share-tracking fragment was dropped, the `key` param is
+  what grants access).
 - **Blog: every post bilingual.** Content collection (`src/content.config.ts`)
   with one folder per post: `src/content/blog/<slug>/{en,es}.md`. Both
   languages are rendered into the HTML and CSS shows the one matching

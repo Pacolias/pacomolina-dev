@@ -72,10 +72,7 @@ export const dictionary = {
         subtitle: "The short version of how I got here.",
         timelineHeading: "Timeline",
         languagesHeading: "Languages",
-        languages: [
-          { name: "Spanish", level: "Native" },
-          { name: "English", level: "C1 — British Council" },
-        ],
+        viewCertificate: "View certificate",
         kinds: {
           education: "Education",
           work: "Work",
@@ -185,10 +182,7 @@ export const dictionary = {
         subtitle: "La versión corta de cómo he llegado hasta aquí.",
         timelineHeading: "Trayectoria",
         languagesHeading: "Idiomas",
-        languages: [
-          { name: "Español", level: "Nativo" },
-          { name: "Inglés", level: "C1 — British Council" },
-        ],
+        viewCertificate: "Ver certificado",
         kinds: {
           education: "Formación",
           work: "Trabajo",
