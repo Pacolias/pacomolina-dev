@@ -92,6 +92,102 @@ second-guess them without checking in again:
   `ThemeProvider`'s effect (live toggle), so the mobile browser chrome tints
   correctly either way.
 
+## Multi-page structure (Sep 25 2026 pass)
+
+The site grew from one page into five, keeping the same look everywhere:
+`/` (home, unchanged content), `/projects/`, `/work/`, `/blog/` (+
+`/blog/<slug>/`), `/about/`. Choices made with Paco via `AskUserQuestion`:
+
+- **Navigation**: a sticky top text nav (`SiteNav.tsx`) — Home · Projects ·
+  Work · Blog · About, active item marked with a small amber dot — with the
+  language/theme toggles moved from the hero corner to the right of the nav.
+  Sized to fit on one line down to 360px wide in both languages (ES labels
+  are longer; the text drops to 12px under 380px). Single-letter keyboard
+  shortcuts h/p/w/b/a (desktop nicety, ignored with modifiers or in inputs).
+- **Architecture**: each page is **one** React island (`*App` components in
+  `src/components/pages/`) rooted in `SiteShell.tsx` (providers + nav +
+  `ContactCard` as a closing footer), so everything on a page shares the
+  same language/theme state. Page `<title>`/description are passed to
+  `Layout.astro` (English, the prerendered language); canonical URL is
+  per-path now.
+- **No EN→ES flash on navigation**: with multiple pages the old "brief
+  English flash for Spanish visitors" happened on every click, so the
+  inline script now sets `data-lang-pending` on `<html>` when the language
+  isn't English (body stays `opacity: 0`), and `LanguageProvider` removes it
+  once the detected language has rendered. 1.5s timeout fallback so a JS
+  failure never leaves the page blank.
+- **Structured bilingual content** lives in TS data files, each entry with
+  `{ en, es }` fields (`Localized` type in `i18n.ts`): `src/data/projects.ts`,
+  `src/data/work.ts`, `src/data/about.ts`. UI strings stay in `i18n.ts`
+  (`nav`, `pages.*`). `Dictionary` is the EN shape with literals widened, so
+  a key missing in ES is a type error.
+- **Projects: two tiers** via a `featured` flag. Paco wants all his projects
+  shown but said *how* to highlight them "is something we should discuss" —
+  current proposal (not yet confirmed): featured = RedCheck, ShellMate,
+  spotify-mcp, Camper Agent Orchestrator (the strongest AI-Engineer
+  signals); "More from the workshop" (compact expandable rows) =
+  krylov-solvers, Astro Landing Boilerplate. Ariadne still excluded.
+  Screenshots are ~1280px WebP in `public/images/projects/` (ShellMate and
+  krylov from their repos, RedCheck captured from the live demo, the Astro
+  boilerplate from its README).
+- **Work**: RedCheck + Quimify from the CV, each with a "Proof" block of
+  checkable links and an optional `photos` gallery (empty — waiting on
+  Paco's photos). Logos in `public/images/work/` are the companies' own
+  favicons.
+- **About**: short first-person intro + a chronological timeline (oldest →
+  "Now") mixing education, work, projects and milestones, + languages. The
+  intro copy was drafted from CV facts and **needs Paco's review** — it's
+  the one place with his "voice" that he didn't write.
+- **Blog: every post bilingual.** Content collection (`src/content.config.ts`)
+  with one folder per post: `src/content/blog/<slug>/{en,es}.md`. Both
+  languages are rendered into the HTML and CSS shows the one matching
+  `<html lang>` (`[data-lang]` rules in `global.css`) — no flash, no JS for
+  the body. If one language file is missing, both show the other with a
+  short "only available in…" note. `type: talk` + `event` + `links`
+  (slides/video/repo) cover talks. `draft: true` posts show only in
+  `astro dev`; `src/content/blog/example-post/` is a draft that doubles as
+  the writing template. Prose styling via `@tailwindcss/typography` (the
+  only new dependency, dev).
+- **Lightbox** (`Lightbox.tsx`, used by `Gallery.tsx`, so it covers every
+  project/work image): tapping a photo opens it in-page over a blurred
+  page (native `<dialog>` + `showModal()` → top layer, focus trap, Esc;
+  blur/scrim on `::backdrop`), with a counter, caption (the alt text) and
+  wrap-around navigation via arrow keys, buttons or a horizontal swipe.
+  Arrows sit at the image's sides on `sm+`, and next to the dots at the
+  bottom on phones so they don't cover the image. Page scroll is locked
+  while open. The `<a href>` to the file is kept as the no-JS / new-tab
+  fallback. Blog post images use it too: they live in the post's own folder
+  (`![alt](./x.webp "caption")`, optimized by Astro), and
+  `usePostImageViewer` in `BlogPages.tsx` wires click/Enter on the static
+  Astro-rendered `<img>`s via event delegation. It steps through the images of
+  the active language block only.
+- **Post image captions**: `![alt](./x.webp "Caption")` on its own line
+  becomes `<figure><img><figcaption>Caption</figcaption></figure>` (shown
+  under the image and in the lightbox). Astro 7's default Markdown
+  processor is **Sätteri**, not remark/rehype — `markdown.rehypePlugins`
+  errors unless `@astrojs/markdown-remark` is installed. So the plugin is a
+  Sätteri hast plugin (`src/plugins/figure-captions.mjs`, `{ name, element:
+  { filter, visit(node, ctx) } }` + `ctx.replaceNode`) registered via
+  `markdown.processor: satteri({ hastPlugins: [...] })` in
+  `astro.config.mjs`. `@astrojs/markdown-satteri` is a direct dependency,
+  pinned to the version Astro itself ships (0.4.1), so it's deduped — bump
+  it together with Astro. User hast plugins run before Astro's image
+  plugin, so the `<img>` still gets optimized. Changing Markdown config
+  needs a dev server restart, and sometimes clearing the content cache
+  (`node_modules/.astro`).
+  Caveat: a draft post's images still get emitted to `dist/_astro/` (hashed
+  names, unreferenced) even though the page isn't built. Testing note: Playwright's `clip`/beyond-viewport
+  screenshots render `backdrop-filter` wrong (sharp strips) — capture
+  with CDP `Page.captureScreenshot` (`captureBeyondViewport: false`) to
+  see what a real browser shows.
+- Also fixed two pre-existing home layout bugs seen at desktop width: the
+  hero CTAs wrapped onto two lines (`max-w-sm` also applied on `sm+`), and
+  the stack chips wrapped ("Python / / FastAPI") — the bento grid is now
+  3/2 of 5 columns instead of 2/1 of 3.
+
+**Workflow**: Paco wants every change reviewed on localhost at mobile and
+desktop widths before anything is committed or pushed.
+
 ## Content status
 
 All real content is in as of the second pass:
