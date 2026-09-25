@@ -2,19 +2,12 @@ import { Download, MapPin } from "lucide-react";
 import { site } from "../data/site";
 import { useLanguage } from "./LanguageProvider";
 import { LinkedInIcon } from "./icons/LinkedInIcon";
-import { LanguageToggle } from "./LanguageToggle";
-import { ThemeToggle } from "./ThemeToggle";
 
 export function Hero() {
   const { t } = useLanguage();
 
   return (
-    <header className="relative flex flex-col items-center px-6 pt-14 pb-10 text-center sm:pt-20">
-      <div className="absolute right-4 top-4 flex flex-col items-end gap-2 sm:right-6 sm:top-6">
-        <LanguageToggle />
-        <ThemeToggle />
-      </div>
-
+    <header className="flex flex-col items-center px-6 pt-8 pb-10 text-center sm:pt-14">
       <img
         src={site.photo}
         alt={site.name}
