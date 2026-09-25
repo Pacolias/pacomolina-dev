@@ -127,9 +127,31 @@ The site grew from one page into five, keeping the same look everywhere:
   spotify-mcp, Camper Agent Orchestrator (the strongest AI-Engineer
   signals); "More from the workshop" (compact expandable rows) =
   krylov-solvers, Astro Landing Boilerplate. Ariadne still excluded.
-  Screenshots are ~1280px WebP in `public/images/projects/` (ShellMate and
-  krylov from their repos, RedCheck captured from the live demo, the Astro
-  boilerplate from its README).
+  Screenshots are ~1280px WebP in `public/images/projects/` (see the
+  theme/language variants below).
+- **Screenshots follow the visitor's theme and language** (Paco's request:
+  keep the page's "sintonía"). A gallery image's `src` can be one file, one
+  per language, one per theme, or one per theme × language (`ImageSource` in
+  `Gallery.tsx`; helpers `themed()` / `themedLocalized()` in `projects.ts`,
+  naming `<name>-{light,dark}[-{en,es}].webp`). Variant images only get their
+  `src` after hydration (a same-aspect-ratio box holds the space until then)
+  — putting the English/light prerender `src` in the HTML made every other
+  visitor download a variant they never see. Verified: each combination
+  downloads only its own files, and live toggles swap them. Current state:
+  RedCheck = 4 variants captured from the live demo
+  (`scripts/screenshots/redcheck.mjs`); krylov-solvers = 5 plots × 4
+  variants re-rendered from the repo's own solvers/matrices
+  (`scripts/screenshots/krylov-plots.py`; recomputed, so a couple of
+  iteration counts/timings differ slightly from the repo's PNGs); Astro
+  boilerplate = light/dark only (the site is English-only); ShellMate = the
+  README's two screenshots as-is (the app only has a Spanish UI and a dark
+  theme, so no other variants exist).
+- **Expandable panels** ("Details" on featured cards, rows under "More from
+  the workshop") use `Collapsible.tsx`: animates `grid-template-rows`
+  0fr↔1fr so opening *and* closing are smooth (the first version toggled
+  `hidden`, so closing snapped shut). Closed content is `inert`. Its
+  `overflow: hidden` wrapper takes a `bleed` prop so a Gallery strip can
+  still scroll edge-to-edge of the card.
 - **Work**: RedCheck + Quimify from the CV, each with a "Proof" block of
   checkable links and an optional `photos` gallery (empty — waiting on
   Paco's photos). Logos in `public/images/work/` are the companies' own
