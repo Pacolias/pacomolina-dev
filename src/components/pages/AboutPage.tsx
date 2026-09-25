@@ -1,10 +1,17 @@
-import { ArrowRight, Briefcase, GraduationCap, Rocket, Sparkles } from "lucide-react";
-import { intro, timeline, type TimelineItem } from "../../data/about";
+import {
+  ArrowRight,
+  ArrowUpRight,
+  Briefcase,
+  GraduationCap,
+  Rocket,
+  Sparkles,
+} from "lucide-react";
+import { intro, languages, timeline, type TimelineItem } from "../../data/about";
 import { site } from "../../data/site";
 import { useLanguage } from "../LanguageProvider";
 import { SiteShell } from "../SiteShell";
 import { PageHeader } from "../PageHeader";
-import { card, sectionHeading, textLink } from "../ui";
+import { card, focusRing, sectionHeading, textLink } from "../ui";
 
 const KIND_ICONS: Record<TimelineItem["kind"], typeof Briefcase> = {
   education: GraduationCap,
@@ -96,15 +103,43 @@ export function AboutPage() {
         <section className={`${card} fade-up-5 p-6 sm:p-8`}>
           <h2 className={sectionHeading}>{copy.languagesHeading}</h2>
           <ul className="mt-4 grid grid-cols-2 gap-3">
-            {copy.languages.map((l) => (
-              <li
-                key={l.name}
-                className="rounded-2xl border border-stone-100 bg-stone-50/60 px-4 py-3 dark:border-stone-800 dark:bg-stone-800/40"
-              >
-                <p className="text-sm font-medium text-stone-800 dark:text-stone-200">{l.name}</p>
-                <p className="mt-0.5 text-xs text-stone-500 dark:text-stone-400">{l.level}</p>
-              </li>
-            ))}
+            {languages.map((l) => {
+              const body = (
+                <>
+                  <p className="text-sm font-medium text-stone-800 dark:text-stone-200">
+                    {l.name[lang]}
+                  </p>
+                  <p className="mt-0.5 text-xs text-stone-500 dark:text-stone-400">
+                    {l.level[lang]}
+                  </p>
+                </>
+              );
+              const box = "block h-full rounded-2xl border px-4 py-3";
+              return (
+                <li key={l.name.en}>
+                  {l.href ? (
+                    <a
+                      href={l.href}
+                      target="_blank"
+                      rel="noreferrer noopener"
+                      title={copy.viewCertificate}
+                      className={`${box} group relative pr-8 border-amber-100 bg-amber-50/40 transition-colors duration-200 hover:border-amber-300 hover:bg-amber-50 dark:border-stone-700 dark:bg-stone-800/40 dark:hover:border-amber-700 dark:hover:bg-stone-800 ${focusRing}`}
+                    >
+                      {body}
+                      <ArrowUpRight
+                        aria-hidden="true"
+                        className="absolute top-3 right-3 h-3.5 w-3.5 text-amber-600 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 dark:text-amber-400"
+                      />
+                      <span className="sr-only">({copy.viewCertificate})</span>
+                    </a>
+                  ) : (
+                    <div className={`${box} border-stone-100 bg-stone-50/60 dark:border-stone-800 dark:bg-stone-800/40`}>
+                      {body}
+                    </div>
+                  )}
+                </li>
+              );
+            })}
           </ul>
         </section>
       </main>
