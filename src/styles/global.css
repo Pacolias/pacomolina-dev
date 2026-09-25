@@ -5,6 +5,9 @@
    system preference. See the inline theme-detection script in Layout.astro. */
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Prose styling for blog posts (Markdown bodies rendered by Astro). */
+@plugin "@tailwindcss/typography";
+
 /* Only latin + latin-ext (covers English and Spanish incl. accents/ñ),
    and only the weights actually used (400/500 — no bold, no italic). */
 @import "@fontsource/fraunces/latin-400.css";
@@ -51,6 +54,14 @@
      fallback), LanguageProvider removes it once the swap has rendered. */
   html[data-lang-pending] body {
     opacity: 0;
+  }
+
+  /* Static bilingual blocks (blog post bodies rendered by Astro, outside
+     React): both languages are in the HTML, CSS shows the active one. The
+     `lang` attribute is set before first paint, so there's no flash. */
+  html:not([lang="es"]) [data-lang="es"],
+  html[lang="es"] [data-lang="en"] {
+    display: none;
   }
 }
 

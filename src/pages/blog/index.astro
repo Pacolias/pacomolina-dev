@@ -1,0 +1,13 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { BlogIndexApp } from "../../components/pages/BlogPages";
+import { getBlogPosts, summarize } from "../../data/blog";
+import { dictionary } from "../../data/i18n";
+
+const copy = dictionary.en.pages.blog;
+const posts = (await getBlogPosts()).map(summarize);
+---
+
+<Layout title={`Blog — Paco Molina`} description={copy.subtitle}>
+	<BlogIndexApp client:load posts={posts} />
+</Layout>
