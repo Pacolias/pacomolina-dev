@@ -10,8 +10,8 @@ export const intro: Localized[] = [
     es: "Soy Paco, matemático e informático de Málaga. Estudié las dos cosas a la vez — un doble grado en la Universidad de Málaga — y la combinación se quedó: las matemáticas me enseñaron a ser preciso sobre lo que un sistema puede y no puede garantizar, y el software me enseñó lo que cuesta de verdad sacarlo adelante.",
   },
   {
-    en: "Today I build AI products end to end: RAG pipelines, multi-agent systems, MCP servers, and the plain, reliable backend and infrastructure underneath them. I'm most interested in the part where a model becomes something people can depend on.",
-    es: "Hoy construyo productos con IA de principio a fin: pipelines RAG, sistemas multiagente, servidores MCP y el backend y la infraestructura, sencillos y fiables, que hay debajo. Lo que más me interesa es el momento en el que un modelo se convierte en algo en lo que la gente puede confiar.",
+    en: "I love building software that solves real problems and meets real needs.",
+    es: "Me encanta construir software que resuelva problemas y necesidades reales.",
   },
 ];
 
