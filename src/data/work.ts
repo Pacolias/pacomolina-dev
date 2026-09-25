@@ -96,7 +96,7 @@ export const jobs: Job[] = [
         es: "Mantuve servicios de la aplicación y el control de versiones, reduciendo deuda técnica y ordenando la configuración de los repositorios.",
       },
     ],
-    stack: ["Java", "SQL", "Regex", "Git"],
+    stack: ["Java", "Spring Boot", "SQL", "Regex", "Git"],
     links: [{ label: { en: "quimify.com", es: "quimify.com" }, href: "https://quimify.com/" }],
     photos: [],
   },
