@@ -41,7 +41,7 @@ export function Hero() {
         {t.hero.availability}
       </p>
 
-      <div className="fade-up-5 mt-8 flex w-full max-w-sm flex-col gap-3 sm:w-auto sm:flex-row">
+      <div className="fade-up-5 mt-8 flex w-full max-w-sm flex-col gap-3 sm:w-auto sm:max-w-none sm:flex-row">
         <a
           href={site.linkedin}
           target="_blank"
