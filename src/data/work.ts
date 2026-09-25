@@ -5,10 +5,10 @@ import { redCheck, withBase } from "./site";
 // Work page content, newest first. Facts come from the CV
 // (public/cv/CV-Paco.pdf) — keep both in sync.
 //
-// `proof` is the "receipts" block: links anyone can check. `photos` is for
-// pictures (office, team, a demo day, a certificate…) — drop ~1280px-wide
-// WebP files in public/images/work/ and list them here; the gallery only
-// renders when there's at least one.
+// `links` are places anyone can check the work (the live app, the site, the
+// code). `photos` is for pictures (office, team, a demo day, a
+// certificate…) — drop ~1280px-wide WebP files in public/images/work/ and
+// list them here; the gallery only renders when there's at least one.
 
 export type Job = {
   company: string;
@@ -22,7 +22,7 @@ export type Job = {
   summary: Localized;
   highlights: Localized[];
   stack: string[];
-  proof: { label: Localized; href: string }[];
+  links: { label: Localized; href: string }[];
   photos: GalleryImage[];
 };
 
@@ -60,7 +60,7 @@ export const jobs: Job[] = [
       },
     ],
     stack: ["Java", "Spring Boot", "Python", "FastAPI", "Gemini", "ChromaDB", "React", "Docker"],
-    proof: [
+    links: [
       { label: { en: "Live app", es: "App en producción" }, href: redCheck.liveUrl },
       { label: { en: "Website", es: "Sitio web" }, href: redCheck.websiteUrl },
       { label: { en: "GitHub organization", es: "Organización en GitHub" }, href: redCheck.repoUrl },
@@ -97,7 +97,7 @@ export const jobs: Job[] = [
       },
     ],
     stack: ["Java", "SQL", "Regex", "Git"],
-    proof: [{ label: { en: "quimify.com", es: "quimify.com" }, href: "https://quimify.com/" }],
+    links: [{ label: { en: "quimify.com", es: "quimify.com" }, href: "https://quimify.com/" }],
     photos: [],
   },
 ];

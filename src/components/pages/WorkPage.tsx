@@ -52,10 +52,10 @@ function JobRow({ job }: { job: Job }) {
       <Gallery images={job.photos} />
       <div>
         <h3 className="text-xs font-medium uppercase tracking-wider text-stone-500 dark:text-stone-400">
-          {t.pages.work.proof}
+          {t.pages.work.links}
         </h3>
         <ul className="mt-3 flex flex-wrap gap-2">
-          {job.proof.map((p) => (
+          {job.links.map((p) => (
             <li key={p.href}>
               <a
                 href={p.href}

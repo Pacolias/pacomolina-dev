@@ -50,9 +50,9 @@ export const dictionary = {
       },
       work: {
         title: "Where I've worked",
-        subtitle: "Backend, AI and full stack — with the receipts.",
+        subtitle: "Backend, AI and full stack.",
         present: "Present",
-        proof: "Proof",
+        links: "Links",
         outsideHeading: "Outside work",
         outsideBody:
           "Dual degree in Mathematics and Computer Science at the University of Málaga (2021–2026), with two senior theses: numerical linear algebra and a production full-stack AI app.",
@@ -151,9 +151,9 @@ export const dictionary = {
       },
       work: {
         title: "Dónde he trabajado",
-        subtitle: "Backend, IA y full stack — con pruebas.",
+        subtitle: "Backend, IA y full stack.",
         present: "Actualidad",
-        proof: "Pruebas",
+        links: "Enlaces",
         outsideHeading: "Fuera del trabajo",
         outsideBody:
           "Doble Grado en Matemáticas e Ingeniería Informática en la Universidad de Málaga (2021–2026), con dos TFG: álgebra lineal numérica y una app full stack con IA en producción.",

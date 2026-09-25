@@ -139,7 +139,7 @@ The site grew from one page into five, keeping the same look everywhere:
   `ExpandableRow`s: collapsed = one glance (Projects: name, year · status,
   a short `blurb`; Work: logo, company, role, dates — right-aligned on
   `sm+`, under the role on phones); "+" opens everything else (gallery,
-  the longer `tagline` in amber, summary, highlights, stack, links / proof).
+  the longer `tagline` in amber, summary, highlights, stack, links).
   He picked the plain list with no thumbnails. Rows are deliberately small
   (14px title, 12px blurb/role, 11px status, no year — it moved inside the
   panel) and **every blurb/role must fit on one line at 360px in both
@@ -179,7 +179,7 @@ The site grew from one page into five, keeping the same look everywhere:
   `hidden`, so closing snapped shut). Closed content is `inert`. Its
   `overflow: hidden` wrapper takes a `bleed` prop so a Gallery strip can
   still scroll edge-to-edge of the card.
-- **Work**: RedCheck + Quimify from the CV, each with a "Proof" block of
+- **Work**: RedCheck + Quimify from the CV, each with a "Links" block of
   checkable links and an optional `photos` gallery (empty — waiting on
   Paco's photos). Logos in `public/images/work/` are the companies' own
   favicons.
