@@ -6,11 +6,11 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { dictionary, type Lang } from "../data/i18n";
+import { dictionary, type Dictionary, type Lang } from "../data/i18n";
 
 type LanguageContextValue = {
   lang: Lang;
-  t: (typeof dictionary)["en"];
+  t: Dictionary;
   toggle: () => void;
 };
 

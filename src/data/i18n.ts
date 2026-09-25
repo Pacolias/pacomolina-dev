@@ -93,4 +93,13 @@ export const dictionary = {
   },
 } as const;
 
-export type Dictionary = (typeof dictionary)["en"];
+// The English copy's shape with its string literals widened to `string`, so
+// both languages are assignable to it (and a key missing from one of them is
+// a type error).
+type Widen<T> = T extends string
+  ? string
+  : T extends readonly (infer U)[]
+    ? readonly Widen<U>[]
+    : { readonly [K in keyof T]: Widen<T[K]> };
+
+export type Dictionary = Widen<(typeof dictionary)["en"]>;
