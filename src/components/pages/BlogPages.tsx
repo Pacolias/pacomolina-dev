@@ -9,7 +9,7 @@ import { useLanguage } from "../LanguageProvider";
 import { SiteShell } from "../SiteShell";
 import { PageHeader } from "../PageHeader";
 import { Lightbox } from "../Lightbox";
-import type { GalleryImage } from "../Gallery";
+import type { LightboxImage } from "../Gallery";
 import { button, card, focusRing } from "../ui";
 
 // A post may exist in only one language — fall back to the other one.
@@ -121,7 +121,7 @@ export function BlogPostApp({
 // caption comes from the <figcaption> the figure-captions Markdown plugin
 // builds out of `![alt](./x.webp "Caption")`. Post bodies are single-language
 // per block, so the same text serves both keys.
-function toGalleryImage(img: HTMLImageElement): GalleryImage {
+function toLightboxImage(img: HTMLImageElement): LightboxImage {
   const alt = img.alt;
   const caption = img.closest("figure")?.querySelector("figcaption")?.textContent;
   return {
@@ -138,7 +138,7 @@ function toGalleryImage(img: HTMLImageElement): GalleryImage {
 // images of the language block that was clicked, in document order.
 function usePostImageViewer(root: RefObject<HTMLElement | null>) {
   const { t } = useLanguage();
-  const [viewer, setViewer] = useState<{ images: GalleryImage[]; index: number } | null>(null);
+  const [viewer, setViewer] = useState<{ images: LightboxImage[]; index: number } | null>(null);
 
   useEffect(() => {
     const container = root.current;
@@ -153,7 +153,7 @@ function usePostImageViewer(root: RefObject<HTMLElement | null>) {
     const open = (img: HTMLImageElement) => {
       const block = img.closest("[data-lang]") ?? container;
       const imgs = [...block.querySelectorAll("img")];
-      setViewer({ images: imgs.map(toGalleryImage), index: imgs.indexOf(img) });
+      setViewer({ images: imgs.map(toLightboxImage), index: imgs.indexOf(img) });
     };
     const onClick = (e: MouseEvent) => {
       const img = (e.target as Element).closest("img");

@@ -1,7 +1,7 @@
 import { useEffect, useRef, type TouchEvent } from "react";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { useLanguage } from "./LanguageProvider";
-import type { GalleryImage } from "./Gallery";
+import type { LightboxImage } from "./Gallery";
 
 // Full-screen image viewer. A native <dialog> opened with showModal() gives
 // the top layer (escapes any card's overflow/stacking), a focus trap, Esc to
@@ -14,7 +14,7 @@ export function Lightbox({
   onIndexChange,
   onClose,
 }: {
-  images: GalleryImage[];
+  images: LightboxImage[];
   index: number | null;
   onIndexChange: (index: number) => void;
   onClose: () => void;

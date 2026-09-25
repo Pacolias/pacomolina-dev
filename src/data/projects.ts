@@ -1,4 +1,5 @@
 import type { Localized } from "./i18n";
+import type { GalleryImage } from "../components/Gallery";
 import { redCheck, withBase } from "./site";
 
 // Projects page content. Two tiers:
@@ -7,18 +8,15 @@ import { redCheck, withBase } from "./site";
 //   workshop". Flip the flag to move a project between tiers.
 // Order within each tier is the order of this array.
 //
-// Images live in public/images/projects/ as ~1280px-wide WebP.
+// Images live in public/images/projects/ as ~1280px-wide WebP. When the
+// project itself has languages and/or themes, give one file per variant
+// (see `ImageSource` in Gallery.tsx) so the screenshot matches how the
+// visitor is viewing this site — e.g. `themedLocalized("redcheck-app")`
+// expects redcheck-app-{light,dark}-{en,es}.webp.
 
 export type ProjectLink = {
   kind: "live" | "website" | "repo";
   href: string;
-};
-
-export type ProjectImage = {
-  src: string;
-  alt: Localized;
-  width: number;
-  height: number;
 };
 
 export type Project = {
@@ -31,11 +29,19 @@ export type Project = {
   summary: Localized;
   highlights: Localized[];
   stack: string[];
-  images: ProjectImage[];
+  images: GalleryImage[];
   links: ProjectLink[];
 };
 
 const img = (file: string) => withBase(`/images/projects/${file}`);
+const themed = (name: string) => ({
+  light: img(`${name}-light.webp`),
+  dark: img(`${name}-dark.webp`),
+});
+const themedLocalized = (name: string) => ({
+  light: { en: img(`${name}-light-en.webp`), es: img(`${name}-light-es.webp`) },
+  dark: { en: img(`${name}-dark-en.webp`), es: img(`${name}-dark-es.webp`) },
+});
 
 export const projects: Project[] = [
   {
@@ -69,7 +75,7 @@ export const projects: Project[] = [
     stack: ["Java", "Spring Boot", "Python", "FastAPI", "Gemini", "ChromaDB", "React", "TypeScript", "Docker", "NGINX"],
     images: [
       {
-        src: img("redcheck-app.webp"),
+        src: themedLocalized("redcheck-app"),
         alt: {
           en: "RedCheck's app: a monthly calendar colored by workload, task balance per subject, and the SmartCheck AI panel.",
           es: "La app de RedCheck: un calendario mensual coloreado por carga de trabajo, el balance de tareas por asignatura y el panel de SmartCheck AI.",
@@ -242,19 +248,10 @@ export const projects: Project[] = [
     stack: ["Astro", "React", "Tailwind CSS", "TypeScript"],
     images: [
       {
-        src: img("astro-landing-light.webp"),
+        src: themed("astro-landing"),
         alt: {
-          en: "The boilerplate's landing page hero in light mode.",
-          es: "El hero de la landing de la plantilla en modo claro.",
-        },
-        width: 1280,
-        height: 620,
-      },
-      {
-        src: img("astro-landing-dark.webp"),
-        alt: {
-          en: "The same page in dark mode.",
-          es: "La misma página en modo oscuro.",
+          en: "The boilerplate's landing page hero.",
+          es: "El hero de la landing de la plantilla.",
         },
         width: 1280,
         height: 620,
