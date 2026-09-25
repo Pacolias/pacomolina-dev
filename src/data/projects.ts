@@ -219,13 +219,49 @@ export const projects: Project[] = [
     stack: ["Python", "NumPy", "SciPy", "Matplotlib"],
     images: [
       {
-        src: img("krylov-convergence.webp"),
+        src: themedLocalized("krylov-asym-sherman1"),
         alt: {
-          en: "Convergence history on the asymmetric sherman1 matrix: BiCGSTAB and GMRES converge smoothly, CGS oscillates wildly.",
-          es: "Historial de convergencia sobre la matriz asimétrica sherman1: BiCGSTAB y GMRES convergen de forma estable, CGS oscila muchísimo.",
+          en: "Convergence on the asymmetric sherman1 matrix: BiCGSTAB and GMRES converge smoothly, CGS oscillates wildly.",
+          es: "Convergencia sobre la matriz asimétrica sherman1: BiCGSTAB y GMRES convergen de forma estable, CGS oscila muchísimo.",
         },
         width: 1280,
-        height: 812,
+        height: 814,
+      },
+      {
+        src: themedLocalized("krylov-asym-pores_2"),
+        alt: {
+          en: "On the harder pores_2 matrix, BiCG and CGS never converge in 2,000 iterations, while GMRES gets there in 420.",
+          es: "Con la matriz pores_2, más difícil, BiCG y CGS no convergen en 2.000 iteraciones, mientras que GMRES lo consigue en 420.",
+        },
+        width: 1280,
+        height: 814,
+      },
+      {
+        src: themedLocalized("krylov-efficiency-pores_2"),
+        alt: {
+          en: "Same matrix, plotted against time: BiCGSTAB's cheap iterations reach a low residual far sooner than GMRES, whose cost per iteration keeps growing.",
+          es: "La misma matriz frente al tiempo: las iteraciones baratas de BiCGSTAB alcanzan un residuo bajo mucho antes que GMRES, cuyo coste por iteración no para de crecer.",
+        },
+        width: 1280,
+        height: 814,
+      },
+      {
+        src: themedLocalized("krylov-spd-nos6"),
+        alt: {
+          en: "Symmetric positive-definite nos6 matrix: a Jacobi preconditioner cuts CG from 292 iterations to 75.",
+          es: "Matriz simétrica definida positiva nos6: un precondicionador de Jacobi reduce CG de 292 iteraciones a 75.",
+        },
+        width: 1280,
+        height: 813,
+      },
+      {
+        src: themedLocalized("krylov-spd-bcsstk14"),
+        alt: {
+          en: "On bcsstk14, plain CG stalls at the 1,000-iteration cap while Jacobi-preconditioned CG converges in 195.",
+          es: "Con bcsstk14, CG sin precondicionar se atasca en el límite de 1.000 iteraciones, y con Jacobi converge en 195.",
+        },
+        width: 1280,
+        height: 813,
       },
     ],
     links: [{ kind: "repo", href: "https://github.com/Pacolias/krylov-solvers" }],
