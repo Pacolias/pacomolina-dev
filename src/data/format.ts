@@ -9,3 +9,13 @@ export function formatMonth(yearMonth: string, lang: Lang) {
     timeZone: "UTC",
   }).format(new Date(Date.UTC(y, m - 1, 1)));
 }
+
+// Full date for blog posts: "25 Sep 2026" / "25 sept 2026".
+export function formatDate(date: Date | string, lang: Lang) {
+  return new Intl.DateTimeFormat(lang, {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    timeZone: "UTC",
+  }).format(new Date(date));
+}

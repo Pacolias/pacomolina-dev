@@ -27,6 +27,7 @@
     "esbuild": true
   },
   "devDependencies": {
+    "@tailwindcss/typography": "^0.5.20",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0"
   }

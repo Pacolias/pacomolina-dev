@@ -83,6 +83,20 @@ export const dictionary = {
           milestone: "Milestone",
         },
       },
+      blog: {
+        title: "Notes along the way",
+        subtitle:
+          "What I'm learning, building and talking about — written down so it doesn't get lost.",
+        empty: "No posts yet — the first one is on its way.",
+        talk: "Talk",
+        draft: "Draft",
+        back: "All posts",
+        onlyIn: "This post is only available in Spanish.",
+        slides: "Slides",
+        video: "Video",
+        repo: "Code",
+        event: "Event",
+      },
     },
     langToggle: {
       label: "Switch to Spanish",
@@ -174,6 +188,20 @@ export const dictionary = {
           project: "Proyecto",
           milestone: "Hito",
         },
+      },
+      blog: {
+        title: "Notas por el camino",
+        subtitle:
+          "Lo que voy aprendiendo, construyendo y contando — por escrito, para que no se pierda.",
+        empty: "Todavía no hay entradas — la primera está en camino.",
+        talk: "Charla",
+        draft: "Borrador",
+        back: "Todas las entradas",
+        onlyIn: "Esta entrada solo está disponible en inglés.",
+        slides: "Diapositivas",
+        video: "Vídeo",
+        repo: "Código",
+        event: "Evento",
       },
     },
     langToggle: {
