@@ -1,0 +1,11 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { WorkApp } from "../components/pages/WorkPage";
+import { dictionary } from "../data/i18n";
+
+const copy = dictionary.en.pages.work;
+---
+
+<Layout title={`${copy.title} — Paco Molina`} description={copy.subtitle}>
+	<WorkApp client:load />
+</Layout>

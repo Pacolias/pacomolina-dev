@@ -57,6 +57,16 @@ export const dictionary = {
         links: { live: "Live demo", website: "Website", repo: "Source code" },
         status: { live: "Live", active: "Active", complete: "Complete" },
       },
+      work: {
+        title: "Where I've worked",
+        subtitle: "Backend, AI and full stack — with the receipts.",
+        present: "Present",
+        proof: "Proof",
+        outsideHeading: "Outside work",
+        outsideBody:
+          "Dual degree in Mathematics and Computer Science at the University of Málaga (2021–2026), with two senior theses: numerical linear algebra and a production full-stack AI app.",
+        outsideLink: "The longer story",
+      },
     },
     langToggle: {
       label: "Switch to Spanish",
@@ -122,6 +132,16 @@ export const dictionary = {
         hideDetails: "Ocultar detalles",
         links: { live: "Demo en vivo", website: "Sitio web", repo: "Código fuente" },
         status: { live: "En vivo", active: "Activo", complete: "Completado" },
+      },
+      work: {
+        title: "Dónde he trabajado",
+        subtitle: "Backend, IA y full stack — con pruebas.",
+        present: "Actualidad",
+        proof: "Pruebas",
+        outsideHeading: "Fuera del trabajo",
+        outsideBody:
+          "Doble Grado en Matemáticas e Ingeniería Informática en la Universidad de Málaga (2021–2026), con dos TFG: álgebra lineal numérica y una app full stack con IA en producción.",
+        outsideLink: "La historia completa",
       },
     },
     langToggle: {
