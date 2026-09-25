@@ -118,15 +118,16 @@ export function BlogPostApp({
 }
 
 // Reads what the lightbox needs straight from an <img> Astro rendered. The
-// Markdown title (`![alt](./x.webp "caption")`) becomes the caption. Post
-// bodies are single-language per block, so the same text serves both keys.
+// caption comes from the <figcaption> the figure-captions Markdown plugin
+// builds out of `![alt](./x.webp "Caption")`. Post bodies are single-language
+// per block, so the same text serves both keys.
 function toGalleryImage(img: HTMLImageElement): GalleryImage {
   const alt = img.alt;
-  const title = img.getAttribute("title");
+  const caption = img.closest("figure")?.querySelector("figcaption")?.textContent;
   return {
     src: img.currentSrc || img.src,
     alt: { en: alt, es: alt },
-    caption: title ? { en: title, es: title } : undefined,
+    caption: caption ? { en: caption, es: caption } : undefined,
     width: img.naturalWidth || img.width,
     height: img.naturalHeight || img.height,
   };
@@ -232,7 +233,7 @@ function BlogPost({ post, children }: { post: BlogPostSummary; children?: ReactN
         </header>
 
         <div className="mt-8 border-t border-stone-100 pt-8 dark:border-stone-800">
-          <div ref={proseRef} className="prose prose-stone max-w-none prose-headings:font-display prose-headings:font-medium prose-a:text-amber-700 prose-a:decoration-amber-300 prose-a:underline-offset-4 hover:prose-a:decoration-amber-600 prose-strong:font-medium prose-code:rounded prose-code:bg-stone-100 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-code:before:content-none prose-code:after:content-none prose-pre:rounded-2xl prose-img:cursor-zoom-in prose-img:rounded-2xl prose-img:transition-opacity hover:prose-img:opacity-90 [&_img:focus-visible]:outline-2 [&_img:focus-visible]:outline-offset-4 [&_img:focus-visible]:outline-amber-500 [&_pre_code]:bg-transparent [&_pre_code]:p-0 dark:prose-invert dark:prose-a:text-amber-400 dark:prose-a:decoration-amber-800 dark:prose-code:bg-stone-800">
+          <div ref={proseRef} className="prose prose-stone max-w-none prose-headings:font-display prose-headings:font-medium prose-a:text-amber-700 prose-a:decoration-amber-300 prose-a:underline-offset-4 hover:prose-a:decoration-amber-600 prose-strong:font-medium prose-code:rounded prose-code:bg-stone-100 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-code:before:content-none prose-code:after:content-none prose-pre:rounded-2xl prose-figcaption:mt-3 prose-figcaption:text-center prose-figcaption:text-sm prose-figcaption:text-pretty prose-figcaption:text-stone-500 dark:prose-figcaption:text-stone-400 prose-img:cursor-zoom-in prose-img:rounded-2xl prose-img:transition-opacity hover:prose-img:opacity-90 [&_img:focus-visible]:outline-2 [&_img:focus-visible]:outline-offset-4 [&_img:focus-visible]:outline-amber-500 [&_pre_code]:bg-transparent [&_pre_code]:p-0 dark:prose-invert dark:prose-a:text-amber-400 dark:prose-a:decoration-amber-800 dark:prose-code:bg-stone-800">
             {children}
           </div>
         </div>

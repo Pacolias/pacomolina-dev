@@ -41,6 +41,9 @@ enlázalas con ruta relativa — Astro las optimiza al hacer el build:
 ![Texto alternativo, describiendo la imagen](./foto.webp "Pie de foto opcional")
 ```
 
+El texto entre comillas se convierte en un pie de foto bajo la imagen (y en
+el visor). Quítalo si la imagen no necesita pie.
+
 Todas las imágenes de una entrada se abren en el mismo visor a pantalla
 completa, y se pueden ir pasando en orden:
 
