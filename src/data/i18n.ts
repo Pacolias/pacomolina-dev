@@ -45,6 +45,19 @@ export const dictionary = {
       blog: "Blog",
       about: "About",
     },
+    pages: {
+      projects: {
+        title: "Things I've built",
+        subtitle:
+          "AI products, agent systems and developer tools — plus a detour into numerical maths. Open one for the story behind it.",
+        moreHeading: "More from the workshop",
+        moreSubtitle: "Smaller or older projects, still worth a look.",
+        details: "Details",
+        hideDetails: "Hide details",
+        links: { live: "Live demo", website: "Website", repo: "Source code" },
+        status: { live: "Live", active: "Active", complete: "Complete" },
+      },
+    },
     langToggle: {
       label: "Switch to Spanish",
       short: "ES",
@@ -98,6 +111,19 @@ export const dictionary = {
       blog: "Blog",
       about: "Sobre mí",
     },
+    pages: {
+      projects: {
+        title: "Cosas que he construido",
+        subtitle:
+          "Productos con IA, sistemas de agentes y herramientas para desarrolladores — y un desvío por las matemáticas numéricas. Abre uno para ver la historia detrás.",
+        moreHeading: "Más del taller",
+        moreSubtitle: "Proyectos más pequeños o antiguos que merece la pena ver.",
+        details: "Detalles",
+        hideDetails: "Ocultar detalles",
+        links: { live: "Demo en vivo", website: "Sitio web", repo: "Código fuente" },
+        status: { live: "En vivo", active: "Activo", complete: "Completado" },
+      },
+    },
     langToggle: {
       label: "Cambiar a inglés",
       short: "EN",
@@ -119,3 +145,8 @@ type Widen<T> = T extends string
     : { readonly [K in keyof T]: Widen<T[K]> };
 
 export type Dictionary = Widen<(typeof dictionary)["en"]>;
+
+// A piece of copy that exists in both languages — used by the structured
+// content files (projects, work, timeline) so each entry keeps its EN/ES
+// text side by side instead of being split across the dictionary above.
+export type Localized = Record<Lang, string>;
