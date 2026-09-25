@@ -34,6 +34,11 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     document.documentElement.lang = lang;
+    // The detected language has now rendered — reveal the page (the inline
+    // script in Layout.astro hid it to avoid an EN→ES flash).
+    if (lang === detectInitialLang()) {
+      document.documentElement.removeAttribute("data-lang-pending");
+    }
   }, [lang]);
 
   const value = useMemo<LanguageContextValue>(
