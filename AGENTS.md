@@ -135,10 +135,10 @@ The site grew from one page into five, keeping the same look everywhere:
   avoid): keep blurbs ≲35 characters. The Work logo is 36px and the row
   gap 10px on phones because "Fundador y AI/Software Engineer" needed
   exactly that at 360px. `featured` now means
-  "visible row"; the rest sit behind "Show all projects (n)". Featured =
-  RedCheck, ShellMate, spotify-mcp, Camper Agent Orchestrator (the
-  strongest AI-Engineer signals); behind "show all" = krylov-solvers,
-  Astro Landing Boilerplate. Ariadne still excluded.
+  "visible row"; the rest sit behind "Show all projects (n)". Order chosen
+  by Paco: RedCheck, krylov-solvers, spotify-mcp, ShellMate, Camper Agent
+  Orchestrator, Astro Landing Boilerplate — the first four visible, the
+  last two behind "show all". Ariadne still excluded.
   Screenshots are ~1280px WebP in `public/images/projects/` (see the
   theme/language variants below).
 - **Screenshots follow the visitor's theme and language** (Paco's request:

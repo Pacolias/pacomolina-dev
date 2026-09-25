@@ -2,11 +2,11 @@ import type { Localized } from "./i18n";
 import type { GalleryImage } from "../components/Gallery";
 import { redCheck, withBase } from "./site";
 
-// Projects page content. Two tiers:
-// - `featured: true`  → a full card with screenshots, near the top.
-// - `featured: false` → a compact expandable row under "More from the
-//   workshop". Flip the flag to move a project between tiers.
-// Order within each tier is the order of this array.
+// Projects page content, one expandable row per project, in this order.
+// - `featured: true`  → visible from the start.
+// - `featured: false` → behind "Show all projects (n)".
+// Featured rows are always listed first, so keep them at the top of the
+// array to keep the page order matching it.
 //
 // Images live in public/images/projects/ as ~1280px-wide WebP. When the
 // project itself has languages and/or themes, give one file per variant
@@ -124,134 +124,11 @@ export const projects: Project[] = [
     ],
   },
   {
-    slug: "shellmate",
-    name: "ShellMate",
-    year: "2026",
-    status: "active",
-    featured: true,
-    blurb: {
-      en: "A real terminal that teaches you.",
-      es: "Una terminal real que te enseña.",
-    },
-    tagline: {
-      en: "A real Linux terminal wrapped in scaffolding that explains, protects and teaches — and fades away as you learn.",
-      es: "Una terminal Linux real envuelta en un andamiaje que explica, protege y enseña — y que desaparece a medida que aprendes.",
-    },
-    summary: {
-      en: "Not a simulated terminal and not a chatbot with a command box: it runs your actual bash/zsh and adds a live danger semaphore, plain-language subtitles, translated errors, a filesystem map, a command diary and an optional AI copilot — each one something you can dial down as you outgrow it.",
-      es: "Ni una terminal simulada ni un chatbot con una caja de comandos: ejecuta tu bash/zsh real y le añade un semáforo de peligro en vivo, subtítulos en lenguaje llano, errores traducidos, un mapa del sistema de archivos, un diario de comandos y un copiloto de IA opcional — cada pieza se puede ir apagando según dejas de necesitarla.",
-    },
-    highlights: [
-      {
-        en: "The danger semaphore is deterministic rules, never AI: commands are parsed with tree-sitter-bash and classified by an exhaustively unit-tested classifier.",
-        es: "El semáforo de peligro son reglas deterministas, nunca IA: los comandos se parsean con tree-sitter-bash y los clasifica un clasificador con tests exhaustivos.",
-      },
-      {
-        en: "The AI copilot (Gemini by default, Claude as a drop-in) turns natural language into commands — and every suggestion is re-validated by the same local rules before you see it.",
-        es: "El copiloto de IA (Gemini por defecto, Claude como alternativa) convierte lenguaje natural en comandos — y cada sugerencia se revalida con las mismas reglas locales antes de mostrártela.",
-      },
-      {
-        en: "A real pty (node-pty) instrumented via OSC 133/OSC 7, `rm` previews with a freedesktop.org trash and undo, and 122 unit tests on strict TypeScript.",
-        es: "Una pty real (node-pty) instrumentada con OSC 133/OSC 7, previsualización de `rm` con papelera freedesktop.org y deshacer, y 122 tests unitarios sobre TypeScript estricto.",
-      },
-    ],
-    stack: ["TypeScript", "Electron", "React", "xterm.js", "tree-sitter", "Gemini", "Claude"],
-    images: [
-      {
-        src: img("shellmate-overview.webp"),
-        alt: {
-          en: "ShellMate's three-column layout: filesystem map and command diary, the real terminal, and the explanation panels.",
-          es: "El diseño de tres columnas de ShellMate: mapa de archivos y diario de comandos, la terminal real y los paneles de explicación.",
-        },
-        width: 1280,
-        height: 800,
-      },
-      {
-        src: img("shellmate-semaphore.webp"),
-        alt: {
-          en: "A destructive command caught live by ShellMate's danger semaphore, asking for confirmation.",
-          es: "Un comando destructivo detectado en vivo por el semáforo de ShellMate, pidiendo confirmación.",
-        },
-        width: 1280,
-        height: 800,
-      },
-    ],
-    links: [{ kind: "repo", href: "https://github.com/Pacolias/shellmate" }],
-  },
-  {
-    slug: "spotify-mcp",
-    name: "spotify-mcp",
-    year: "2026",
-    status: "active",
-    featured: true,
-    blurb: {
-      en: "Lets Claude run your Spotify.",
-      es: "Deja que Claude maneje tu Spotify.",
-    },
-    tagline: {
-      en: "An MCP server that lets Claude (or any MCP host) search, control and curate your Spotify.",
-      es: "Un servidor MCP que permite a Claude (o cualquier host MCP) buscar, controlar y organizar tu Spotify.",
-    },
-    summary: {
-      en: "A local Model Context Protocol server exposing the Spotify Web API as tools, resources and prompts — from “what am I listening to” to building a playlist from a YouTube mix's tracklist. Every architecture decision is logged in a public decision journal.",
-      es: "Un servidor local del Model Context Protocol que expone la API web de Spotify como tools, resources y prompts — desde “qué estoy escuchando” hasta crear una playlist a partir del tracklist de un mix de YouTube. Cada decisión de arquitectura está documentada en un diario público.",
-    },
-    highlights: [
-      {
-        en: "20+ typed MCP tools (search, playback, playlists, top tracks…) plus URI-addressed resources and reusable prompts, served over stdio.",
-        es: "Más de 20 tools MCP tipadas (búsqueda, reproducción, playlists, top tracks…) además de resources direccionados por URI y prompts reutilizables, servidos por stdio.",
-      },
-      {
-        en: "A separate FastAPI login helper for the OAuth2 Authorization Code + PKCE flow, with tokens in SQLite and transparent refresh.",
-        es: "Un helper de login aparte en FastAPI para el flujo OAuth2 Authorization Code + PKCE, con tokens en SQLite y refresco transparente.",
-      },
-      {
-        en: "Honest about limits: known Spotify-side bugs and quota restrictions are documented per tool instead of hidden.",
-        es: "Honesto con los límites: los bugs conocidos de Spotify y las restricciones de cuota están documentados en cada tool en lugar de ocultarse.",
-      },
-    ],
-    stack: ["Python", "FastAPI", "MCP", "OAuth2 PKCE", "SQLModel"],
-    images: [],
-    links: [{ kind: "repo", href: "https://github.com/Pacolias/spotify-mcp" }],
-  },
-  {
-    slug: "camper-agent-orchestrator",
-    name: "Camper Agent Orchestrator",
-    year: "2026",
-    status: "active",
-    featured: true,
-    blurb: {
-      en: "Multi-agent campervan route planner.",
-      es: "Rutas en camper con agentes de IA.",
-    },
-    tagline: {
-      en: "A multi-agent system that plans campervan routes — legal constraints, overnight spots and fuel costs.",
-      es: "Un sistema multiagente que planifica rutas en camper — restricciones legales, sitios para pernoctar y coste de combustible.",
-    },
-    summary: {
-      en: "A hub-and-spoke architecture built with LangGraph: a Gemini-based supervisor reads a shared route state and delegates to specialized agents until every field is filled, then returns a structured plan through a FastAPI endpoint.",
-      es: "Una arquitectura hub-and-spoke construida con LangGraph: un supervisor basado en Gemini lee un estado de ruta compartido y delega en agentes especializados hasta completar todos los campos, y devuelve un plan estructurado a través de un endpoint de FastAPI.",
-    },
-    highlights: [
-      {
-        en: "Supervisor with Pydantic structured outputs and conditional routing over a shared RouteState.",
-        es: "Supervisor con salidas estructuradas en Pydantic y enrutado condicional sobre un RouteState compartido.",
-      },
-      {
-        en: "RAG legal agent (ChromaDB over regulation PDFs), SQL agent for campsites and points of interest, and a math agent (NumPy/SciPy) for fuel and driving-time estimates.",
-        es: "Agente legal con RAG (ChromaDB sobre PDFs de normativa), agente SQL para áreas y puntos de interés, y un agente matemático (NumPy/SciPy) para estimar combustible y tiempos.",
-      },
-    ],
-    stack: ["Python", "LangGraph", "Gemini", "FastAPI", "ChromaDB", "Docker"],
-    images: [],
-    links: [{ kind: "repo", href: "https://github.com/Pacolias/camper-agent-orchestrator" }],
-  },
-  {
     slug: "krylov-solvers",
     name: "krylov-solvers",
     year: "2026",
     status: "complete",
-    featured: false,
+    featured: true,
     blurb: {
       en: "Krylov solvers from my maths thesis.",
       es: "Solvers de Krylov de mi TFG.",
@@ -314,6 +191,129 @@ export const projects: Project[] = [
       },
     ],
     links: [{ kind: "repo", href: "https://github.com/Pacolias/krylov-solvers" }],
+  },
+  {
+    slug: "spotify-mcp",
+    name: "spotify-mcp",
+    year: "2026",
+    status: "active",
+    featured: true,
+    blurb: {
+      en: "Lets Claude run your Spotify.",
+      es: "Deja que Claude maneje tu Spotify.",
+    },
+    tagline: {
+      en: "An MCP server that lets Claude (or any MCP host) search, control and curate your Spotify.",
+      es: "Un servidor MCP que permite a Claude (o cualquier host MCP) buscar, controlar y organizar tu Spotify.",
+    },
+    summary: {
+      en: "A local Model Context Protocol server exposing the Spotify Web API as tools, resources and prompts — from “what am I listening to” to building a playlist from a YouTube mix's tracklist. Every architecture decision is logged in a public decision journal.",
+      es: "Un servidor local del Model Context Protocol que expone la API web de Spotify como tools, resources y prompts — desde “qué estoy escuchando” hasta crear una playlist a partir del tracklist de un mix de YouTube. Cada decisión de arquitectura está documentada en un diario público.",
+    },
+    highlights: [
+      {
+        en: "20+ typed MCP tools (search, playback, playlists, top tracks…) plus URI-addressed resources and reusable prompts, served over stdio.",
+        es: "Más de 20 tools MCP tipadas (búsqueda, reproducción, playlists, top tracks…) además de resources direccionados por URI y prompts reutilizables, servidos por stdio.",
+      },
+      {
+        en: "A separate FastAPI login helper for the OAuth2 Authorization Code + PKCE flow, with tokens in SQLite and transparent refresh.",
+        es: "Un helper de login aparte en FastAPI para el flujo OAuth2 Authorization Code + PKCE, con tokens en SQLite y refresco transparente.",
+      },
+      {
+        en: "Honest about limits: known Spotify-side bugs and quota restrictions are documented per tool instead of hidden.",
+        es: "Honesto con los límites: los bugs conocidos de Spotify y las restricciones de cuota están documentados en cada tool en lugar de ocultarse.",
+      },
+    ],
+    stack: ["Python", "FastAPI", "MCP", "OAuth2 PKCE", "SQLModel"],
+    images: [],
+    links: [{ kind: "repo", href: "https://github.com/Pacolias/spotify-mcp" }],
+  },
+  {
+    slug: "shellmate",
+    name: "ShellMate",
+    year: "2026",
+    status: "active",
+    featured: true,
+    blurb: {
+      en: "A real terminal that teaches you.",
+      es: "Una terminal real que te enseña.",
+    },
+    tagline: {
+      en: "A real Linux terminal wrapped in scaffolding that explains, protects and teaches — and fades away as you learn.",
+      es: "Una terminal Linux real envuelta en un andamiaje que explica, protege y enseña — y que desaparece a medida que aprendes.",
+    },
+    summary: {
+      en: "Not a simulated terminal and not a chatbot with a command box: it runs your actual bash/zsh and adds a live danger semaphore, plain-language subtitles, translated errors, a filesystem map, a command diary and an optional AI copilot — each one something you can dial down as you outgrow it.",
+      es: "Ni una terminal simulada ni un chatbot con una caja de comandos: ejecuta tu bash/zsh real y le añade un semáforo de peligro en vivo, subtítulos en lenguaje llano, errores traducidos, un mapa del sistema de archivos, un diario de comandos y un copiloto de IA opcional — cada pieza se puede ir apagando según dejas de necesitarla.",
+    },
+    highlights: [
+      {
+        en: "The danger semaphore is deterministic rules, never AI: commands are parsed with tree-sitter-bash and classified by an exhaustively unit-tested classifier.",
+        es: "El semáforo de peligro son reglas deterministas, nunca IA: los comandos se parsean con tree-sitter-bash y los clasifica un clasificador con tests exhaustivos.",
+      },
+      {
+        en: "The AI copilot (Gemini by default, Claude as a drop-in) turns natural language into commands — and every suggestion is re-validated by the same local rules before you see it.",
+        es: "El copiloto de IA (Gemini por defecto, Claude como alternativa) convierte lenguaje natural en comandos — y cada sugerencia se revalida con las mismas reglas locales antes de mostrártela.",
+      },
+      {
+        en: "A real pty (node-pty) instrumented via OSC 133/OSC 7, `rm` previews with a freedesktop.org trash and undo, and 122 unit tests on strict TypeScript.",
+        es: "Una pty real (node-pty) instrumentada con OSC 133/OSC 7, previsualización de `rm` con papelera freedesktop.org y deshacer, y 122 tests unitarios sobre TypeScript estricto.",
+      },
+    ],
+    stack: ["TypeScript", "Electron", "React", "xterm.js", "tree-sitter", "Gemini", "Claude"],
+    images: [
+      {
+        src: img("shellmate-overview.webp"),
+        alt: {
+          en: "ShellMate's three-column layout: filesystem map and command diary, the real terminal, and the explanation panels.",
+          es: "El diseño de tres columnas de ShellMate: mapa de archivos y diario de comandos, la terminal real y los paneles de explicación.",
+        },
+        width: 1280,
+        height: 800,
+      },
+      {
+        src: img("shellmate-semaphore.webp"),
+        alt: {
+          en: "A destructive command caught live by ShellMate's danger semaphore, asking for confirmation.",
+          es: "Un comando destructivo detectado en vivo por el semáforo de ShellMate, pidiendo confirmación.",
+        },
+        width: 1280,
+        height: 800,
+      },
+    ],
+    links: [{ kind: "repo", href: "https://github.com/Pacolias/shellmate" }],
+  },
+  {
+    slug: "camper-agent-orchestrator",
+    name: "Camper Agent Orchestrator",
+    year: "2026",
+    status: "active",
+    featured: false,
+    blurb: {
+      en: "Multi-agent campervan route planner.",
+      es: "Rutas en camper con agentes de IA.",
+    },
+    tagline: {
+      en: "A multi-agent system that plans campervan routes — legal constraints, overnight spots and fuel costs.",
+      es: "Un sistema multiagente que planifica rutas en camper — restricciones legales, sitios para pernoctar y coste de combustible.",
+    },
+    summary: {
+      en: "A hub-and-spoke architecture built with LangGraph: a Gemini-based supervisor reads a shared route state and delegates to specialized agents until every field is filled, then returns a structured plan through a FastAPI endpoint.",
+      es: "Una arquitectura hub-and-spoke construida con LangGraph: un supervisor basado en Gemini lee un estado de ruta compartido y delega en agentes especializados hasta completar todos los campos, y devuelve un plan estructurado a través de un endpoint de FastAPI.",
+    },
+    highlights: [
+      {
+        en: "Supervisor with Pydantic structured outputs and conditional routing over a shared RouteState.",
+        es: "Supervisor con salidas estructuradas en Pydantic y enrutado condicional sobre un RouteState compartido.",
+      },
+      {
+        en: "RAG legal agent (ChromaDB over regulation PDFs), SQL agent for campsites and points of interest, and a math agent (NumPy/SciPy) for fuel and driving-time estimates.",
+        es: "Agente legal con RAG (ChromaDB sobre PDFs de normativa), agente SQL para áreas y puntos de interés, y un agente matemático (NumPy/SciPy) para estimar combustible y tiempos.",
+      },
+    ],
+    stack: ["Python", "LangGraph", "Gemini", "FastAPI", "ChromaDB", "Docker"],
+    images: [],
+    links: [{ kind: "repo", href: "https://github.com/Pacolias/camper-agent-orchestrator" }],
   },
   {
     slug: "astro-landing-boilerplate",
