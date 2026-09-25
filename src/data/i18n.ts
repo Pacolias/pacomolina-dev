@@ -106,6 +106,13 @@ export const dictionary = {
       toDark: "Switch to dark mode",
       toLight: "Switch to light mode",
     },
+    lightbox: {
+      open: "Open image",
+      close: "Close",
+      prev: "Previous image",
+      next: "Next image",
+      of: "of",
+    },
   },
   es: {
     meta: {
@@ -211,6 +218,13 @@ export const dictionary = {
     themeToggle: {
       toDark: "Cambiar a modo oscuro",
       toLight: "Cambiar a modo claro",
+    },
+    lightbox: {
+      open: "Abrir imagen",
+      close: "Cerrar",
+      prev: "Imagen anterior",
+      next: "Imagen siguiente",
+      of: "de",
     },
   },
 } as const;
