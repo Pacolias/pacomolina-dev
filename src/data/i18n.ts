@@ -37,6 +37,14 @@ export const dictionary = {
       vcard: "Save contact",
       github: "GitHub profile",
     },
+    nav: {
+      label: "Main",
+      home: "Home",
+      projects: "Projects",
+      work: "Work",
+      blog: "Blog",
+      about: "About",
+    },
     langToggle: {
       label: "Switch to Spanish",
       short: "ES",
@@ -81,6 +89,14 @@ export const dictionary = {
       button: "Enviar un email",
       vcard: "Guardar contacto",
       github: "Perfil de GitHub",
+    },
+    nav: {
+      label: "Principal",
+      home: "Inicio",
+      projects: "Proyectos",
+      work: "Trabajo",
+      blog: "Blog",
+      about: "Sobre mí",
     },
     langToggle: {
       label: "Cambiar a inglés",

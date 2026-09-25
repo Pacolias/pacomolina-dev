@@ -3,7 +3,7 @@
 // Prefixes a root-relative public/ path with the configured base path, so
 // asset links keep working whether the site is served from a GitHub Pages
 // project path or later from the pacomolina.dev root.
-function withBase(path: string) {
+export function withBase(path: string) {
   const base = import.meta.env.BASE_URL.replace(/\/$/, "");
   return `${base}${path.startsWith("/") ? path : `/${path}`}`;
 }
@@ -52,3 +52,15 @@ export const stack: StackItem[] = [
   { name: "Gemini API", icon: "gemini" },
   { name: "Docker / NGINX", icon: "docker" },
 ];
+
+// Top-level sections, in nav order. `key` is the single-letter keyboard
+// shortcut (desktop only, see SiteNav.tsx).
+export const sections = [
+  { id: "home", path: "/", key: "h" },
+  { id: "projects", path: "/projects/", key: "p" },
+  { id: "work", path: "/work/", key: "w" },
+  { id: "blog", path: "/blog/", key: "b" },
+  { id: "about", path: "/about/", key: "a" },
+] as const;
+
+export type SectionId = (typeof sections)[number]["id"];
