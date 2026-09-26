@@ -465,6 +465,24 @@ All real content is in as of the second pass:
   `import.meta.env.BASE_URL`), so its paths and its `name` (which repeats
   the job title) have to be kept in sync by hand — it still said "Junior
   AI & Backend Engineer" until Sep 2026.
+- **Offline support (service worker)**: `src/integrations/service-worker.mjs`
+  (an Astro integration, `astro:build:done`) writes `dist/sw.js` on every
+  build, registered from `Layout.astro` after `load` + idle, production
+  only. Precaches every page's HTML, all `_astro` JS/CSS and the latin
+  400/500 woff2 files (~1MB raw, ~300KB over the wire, once, in the
+  background) — not the images (~2MB of screenshot variants), which are
+  cached as they're seen. Pages: network-first with a 4s timeout, then
+  cache (unknown URLs fall back to the cached home page). `_astro` assets
+  and images: cache-first. Only same-origin GETs are handled (GoatCounter
+  passes through). Cache name = hash of the precache list, old caches
+  deleted on activate. Lookups use **`ignoreVary: true`** — servers send
+  `Vary` (Origin, Accept-Encoding) and module/font requests carry headers
+  the precache request didn't, so strict matching missed the cached JS and
+  nothing hydrated offline. Verified: after visiting only `/`, going
+  offline, every page renders in Spanish and hydrates, deep links open
+  rows; with the network, view transitions and swipes are unaffected.
+  Gallery images that fail to load (offline, never seen) show a quiet
+  `ImageOff` placeholder instead of broken alt text.
 - **Sitemap**: `src/pages/sitemap.xml.ts`, a small hand-written endpoint
   (sections from `site.ts` + published blog posts via `getBlogPosts`, so
   drafts never appear) — no `@astrojs/sitemap` dependency.
