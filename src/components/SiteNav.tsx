@@ -4,7 +4,8 @@ import { useLanguage } from "./LanguageProvider";
 import { LanguageToggle } from "./LanguageToggle";
 import { ThemeToggle } from "./ThemeToggle";
 
-export function SiteNav({ current }: { current: SectionId }) {
+// `current` is null on pages outside the sections (e.g. the 404).
+export function SiteNav({ current }: { current: SectionId | null }) {
   const { t } = useLanguage();
 
   // Single-letter shortcuts (h/p/w/b/a) — a small desktop nicety, ignored

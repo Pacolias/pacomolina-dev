@@ -71,6 +71,12 @@ export const dictionary = {
           milestone: "Milestone",
         },
       },
+      notFound: {
+        title: "Page not found",
+        subtitle: "This page doesn't exist, or it has moved.",
+        home: "Back to home",
+        orTry: "Or go to",
+      },
       blog: {
         title: "Notes along the way",
         subtitle:
@@ -171,6 +177,12 @@ export const dictionary = {
           project: "Proyecto",
           milestone: "Hito",
         },
+      },
+      notFound: {
+        title: "Página no encontrada",
+        subtitle: "Esta página no existe, o se ha movido.",
+        home: "Volver al inicio",
+        orTry: "O ve a",
       },
       blog: {
         title: "Notas por el camino",

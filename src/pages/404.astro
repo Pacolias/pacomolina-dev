@@ -1,0 +1,11 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { NotFoundApp } from "../components/pages/NotFoundPage";
+import { dictionary } from "../data/i18n";
+
+const copy = dictionary.en.pages.notFound;
+---
+
+<Layout title={`${copy.title} — Paco Molina`} description={copy.subtitle} noindex>
+	<NotFoundApp client:load />
+</Layout>

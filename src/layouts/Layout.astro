@@ -9,6 +9,8 @@ interface Props {
 	title?: string;
 	description?: string;
 	ogType?: "website" | "article";
+	// Pages that shouldn't be indexed (the 404): no canonical, robots noindex.
+	noindex?: boolean;
 }
 
 const meta = dictionary.en.meta;
@@ -16,6 +18,7 @@ const {
 	title = meta.title,
 	description = meta.description,
 	ogType = "website",
+	noindex = false,
 } = Astro.props;
 const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 const ogImage = new URL(`${base}/og-image.jpg`, Astro.site).toString();
@@ -65,7 +68,7 @@ const personLd = {
 		<link rel="icon" href={`${base}/favicon.ico`} />
 		<link rel="apple-touch-icon" href={`${base}/apple-touch-icon.png`} />
 		<link rel="manifest" href={`${base}/manifest.webmanifest`} />
-		<link rel="canonical" href={canonicalUrl} />
+		{noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonicalUrl} />}
 		<meta name="theme-color" content="#fdba74" id="theme-color-meta" />
 		<meta name="generator" content={Astro.generator} />
 
