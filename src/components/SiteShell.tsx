@@ -5,6 +5,7 @@ import { ThemeProvider } from "./ThemeProvider";
 import { SiteNav } from "./SiteNav";
 import { ContactCard } from "./ContactCard";
 import { useSwipeNavigation } from "./useSwipeNavigation";
+import { CommandPalette } from "./CommandPalette";
 
 // Shared chrome for every page: providers, the sticky top nav, and the
 // "Let's talk" card as a closing footer. Each page is a single React island
@@ -26,6 +27,7 @@ export function SiteShell({
       <LanguageProvider>
         <div className="flex min-h-screen flex-col overflow-x-clip">
           <SiteNav current={current} />
+          <CommandPalette />
           <div ref={contentRef} className="mx-auto flex w-full max-w-2xl flex-1 flex-col will-change-transform">
             {children}
             {footer && (

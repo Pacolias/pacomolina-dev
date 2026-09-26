@@ -185,6 +185,18 @@ The site grew from one page into five, keeping the same look everywhere:
   `Layout.astro`). Verified with real CDP touch events: 20 cases incl. both
   non-circular ends, Work↔Blog↔About, mid-drag previews, spring-back, the
   gallery strip and the lightbox.
+- **Search / command palette** (`CommandPalette.tsx`, mounted in
+  `SiteShell`): Ctrl/⌘+K anywhere, or the "Ctrl K / ⌘K" button in the nav
+  (shown from `sm` up only — no room on phones). Searches pages (incl.
+  /now), projects (name, blurb, tagline, stack), jobs (company, role,
+  stack) and blog entries (both languages' titles, description, project),
+  accent- and case-insensitive, grouped; ↑↓/Enter/Esc; plus actions:
+  toggle theme, switch language, download CV, copy email. Results deep-link
+  to rows (`/projects/#slug`, `/work/#company`, `/blog/#slug`). The item
+  list is only built while open: blog entries come from the client-only
+  `#blog-index` JSON, and rendering them in the prerender caused a React
+  #418 hydration mismatch. Typing in it doesn't fire the h/p/w/b/a nav
+  shortcuts (they ignore inputs).
 - **/now page** (`src/pages/now.astro`, `NowPage.tsx`, content in
   `src/data/now.ts` with a `nowUpdated` date shown on the page): what Paco
   is focused on — looking for, building, out and about. **Not in the top

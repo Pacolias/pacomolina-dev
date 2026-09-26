@@ -1,4 +1,5 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { Search } from "lucide-react";
 import { sections, withBase, type SectionId } from "../data/site";
 import { useLanguage } from "./LanguageProvider";
 import { LanguageToggle } from "./LanguageToggle";
@@ -60,10 +61,31 @@ export function SiteNav({ current }: { current: SectionId | null }) {
           </ul>
         </nav>
         <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
+          <SearchButton label={t.search.open} />
           <LanguageToggle />
           <ThemeToggle />
         </div>
       </div>
     </header>
+  );
+}
+
+// Opens the CommandPalette. Desktop only (no room in the phone nav); shows
+// the platform's shortcut so it gets discovered.
+function SearchButton({ label }: { label: string }) {
+  const [mac, setMac] = useState(false);
+  useEffect(() => setMac(/Mac|iPhone|iPad/.test(navigator.platform)), []);
+  return (
+    <button
+      type="button"
+      onClick={() => window.dispatchEvent(new Event("open-search"))}
+      aria-label={label}
+      aria-keyshortcuts={mac ? "Meta+K" : "Control+K"}
+      title={label}
+      className="hidden h-8 items-center gap-1.5 rounded-full border border-stone-200 bg-white/80 px-2.5 text-xs font-medium text-stone-500 backdrop-blur transition-colors duration-200 hover:border-amber-300 hover:text-amber-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 sm:inline-flex dark:border-stone-700 dark:bg-stone-900/80 dark:text-stone-400 dark:hover:border-amber-700 dark:hover:text-amber-400"
+    >
+      <Search className="h-3.5 w-3.5" />
+      <kbd className="font-sans">{mac ? "⌘K" : "Ctrl K"}</kbd>
+    </button>
   );
 }
