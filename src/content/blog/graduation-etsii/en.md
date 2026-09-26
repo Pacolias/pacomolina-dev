@@ -4,6 +4,9 @@ description: "Graduation ceremony for my dual degree in Mathematics and Computer
 date: 2026-06-20
 type: milestone
 topics: [career]
+images:
+  - src: ./credential.webp
+    alt: "Me at the ETSII graduation ceremony, holding my graduation credential in front of the School of Computer Engineering banners."
 ---
 
 Graduation ceremony for my dual degree in Mathematics and Computer Science (2021–2026) with the **School of Computer Engineering (ETSII)** of the University of Málaga — the first of the two schools behind the degree — held at the **Palacio de Ferias y Congresos de Málaga**.
