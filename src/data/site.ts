@@ -23,7 +23,7 @@ export const site = {
   // cookie-less, no consent banner. null = analytics off. Once set, point
   // the NFC sticker at https://pacomolina.dev/?ref=nfc and printed QRs at
   // ?ref=qr: GoatCounter records `ref` as the visit's source.
-  goatcounter: null as string | null,
+  goatcounter: "pacomolina" as string | null,
 } as const;
 
 export const redCheck = {
