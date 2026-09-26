@@ -44,6 +44,23 @@ const personLd = {
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<!--
+			Cross-page fade opt-in, inline and first in <head>: it has to be in
+			place the moment the next page decides whether to accept the
+			transition; from the bundled stylesheet (end of <head>) Chrome
+			often missed it and skipped the fade on slower phones. The fade's
+			timing lives in global.css.
+		-->
+		<style is:inline>
+			@view-transition {
+				navigation: auto;
+			}
+			@media (prefers-reduced-motion: reduce) {
+				@view-transition {
+					navigation: none;
+				}
+			}
+		</style>
 		<link rel="icon" type="image/svg+xml" href={`${base}/favicon.svg`} />
 		<link rel="icon" href={`${base}/favicon.ico`} />
 		<link rel="apple-touch-icon" href={`${base}/apple-touch-icon.png`} />
@@ -94,6 +111,37 @@ const personLd = {
 		</script>
 
 		<script is:inline>
+			// Page-to-page cross-fade for non-English visitors: the new page is
+			// still hidden while React swaps in their language, so fading to it
+			// right away would fade into an empty page. Instead, pause the view
+			// transition on its first frame (the old page, fully visible) and
+			// play it once LanguageProvider fires "lang-ready" — capped at 1s so
+			// a JS failure can't leave it stuck.
+			window.addEventListener("pagereveal", function (event) {
+				var transition = event.viewTransition;
+				var root = document.documentElement;
+				if (!transition || !root.hasAttribute("data-lang-pending")) return;
+				transition.ready.then(function () {
+					if (!root.hasAttribute("data-lang-pending")) return;
+					var animations = document.getAnimations().filter(function (a) {
+						var pseudo = a.effect && a.effect.pseudoElement;
+						return pseudo && pseudo.indexOf("::view-transition") === 0;
+					});
+					animations.forEach(function (a) {
+						a.pause();
+					});
+					var resume = function () {
+						animations.forEach(function (a) {
+							a.play();
+						});
+					};
+					window.addEventListener("lang-ready", resume, { once: true });
+					setTimeout(resume, 1000);
+				});
+			});
+		</script>
+
+		<script is:inline>
 			(function () {
 				try {
 					var stored = localStorage.getItem("theme");
@@ -116,6 +164,20 @@ const personLd = {
 				} catch (e) {
 					window.__INITIAL_THEME__ = "light";
 				}
+			})();
+		</script>
+
+		<script is:inline>
+			// The fade-up intro only plays on the first page of a visit; later
+			// navigations rely on the view transition (see global.css).
+			(function () {
+				try {
+					if (sessionStorage.getItem("intro-seen")) {
+						document.documentElement.classList.add("no-intro");
+					} else {
+						sessionStorage.setItem("intro-seen", "1");
+					}
+				} catch (e) {}
 			})();
 		</script>
 
