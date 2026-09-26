@@ -5,6 +5,10 @@ date: 2026-06-02
 type: linkedin
 linkedin: https://www.linkedin.com/feed/update/urn:li:activity:7467504912843702272/
 project: redcheck
+series:
+  id: building-redcheck
+  title: "Construyendo RedCheck"
+  part: 1
 topics: [backend, devops, ai]
 images:
   - src: ./dashboard.webp
