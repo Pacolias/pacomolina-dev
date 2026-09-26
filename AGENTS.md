@@ -344,38 +344,46 @@ All real content is in as of the second pass:
   If Paco ever swaps in a new photo, re-run something like:
   `magick <source> -resize 400x400^ -gravity center -extent 400x400 -strip
   -quality 82 public/images/paco.jpg`.
-- Added `public/robots.txt` (allow-all, no sitemap — one page doesn't need
-  one), `public/manifest.webmanifest` (so saving the page to an Android home
+- Added `public/robots.txt` (allow-all, pointing at the sitemap),
+  `public/manifest.webmanifest` (so saving the page to an Android home
   screen from the NFC/QR flow gets a proper name/icon/theme color), a
   `<link rel="canonical">`, a `theme-color` meta tag, and a JSON-LD `Person`
   block (name/jobTitle/sameAs LinkedIn+GitHub) in `Layout.astro` for
   richer search/share results.
-- **`manifest.webmanifest` has hardcoded `/pacomolina-dev/` paths** (it's a
-  static file in `public/`, can't read `import.meta.env.BASE_URL` the way
-  `.astro`/`.ts` files can) — when the custom domain migration below
-  happens, this file needs `start_url`, `scope`, and the two icon `src`
-  values updated too, not just `astro.config.mjs`.
+- `manifest.webmanifest` is a static file (it can't read
+  `import.meta.env.BASE_URL`), so its paths and its `name` (which repeats
+  the job title) have to be kept in sync by hand — it still said "Junior
+  AI & Backend Engineer" until Sep 2026.
+- **Sitemap**: `src/pages/sitemap.xml.ts`, a small hand-written endpoint
+  (sections from `site.ts` + published blog posts via `getBlogPosts`, so
+  drafts never appear) — no `@astrojs/sitemap` dependency.
+  `public/robots.txt` points at it with an absolute URL.
+- **404**: `src/pages/404.astro` → `dist/404.html`, which GitHub Pages
+  serves for any unknown URL. Same shell as every page (nav with nothing
+  active: `SiteShell`/`SiteNav` take `current: null`), "Back to home" +
+  links to each section; `Layout`'s `noindex` prop adds `robots: noindex`
+  and drops the canonical link. Note: in `astro dev`, a brand-new island
+  can fail to hydrate once with "504 Outdated Optimize Dep" (Vite
+  re-optimizing) — a dev-server artifact; check against `astro build` +
+  `astro preview` before assuming a bug.
 
 ## GitHub Pages / custom domain
 
-Repo is `Pacolias/pacomolina-dev` (not a `*.github.io` user-page repo), so it
-deploys as a **project page**. `astro.config.mjs` is currently set for that:
+Repo is `Pacolias/pacomolina-dev` (a project-page repo, not
+`*.github.io`), deployed by `.github/workflows/deploy.yml` on every push to
+`main`, and served at the custom domain **`pacomolina.dev`** (live since
+Sep 2026): `public/CNAME` contains `pacomolina.dev`, and
+`astro.config.mjs` has
 
 ```js
-site: 'https://pacolias.github.io',
-base: '/pacomolina-dev',
+site: 'https://pacomolina.dev',
+base: '/',
 ```
 
-When the `pacomolina.dev` domain is bought and DNS is pointed at GitHub
-Pages, this needs to change together, in one deploy:
-
-1. Add a `public/CNAME` file containing `pacomolina.dev`.
-2. Change `base` to `/` and `site` to `https://pacomolina.dev` in
-   `astro.config.mjs`.
-
-All internal asset paths (`site.ts`, `Layout.astro`) already read
-`import.meta.env.BASE_URL` rather than hardcoding `/pacomolina-dev/`, so
-that's the only place this needs to change.
+Internal asset paths (`site.ts`, `Layout.astro`) read
+`import.meta.env.BASE_URL` rather than hardcoding a prefix; the static
+files in `public/` (`manifest.webmanifest`, `robots.txt`) can't, so they
+use root paths / the absolute domain directly.
 
 ## Development
 
