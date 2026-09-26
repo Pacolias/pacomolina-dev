@@ -1,46 +1,196 @@
 import { useEffect, useRef, useState, type ReactNode, type RefObject } from "react";
-import { ArrowLeft, ArrowUpRight, Mic, Presentation, Video } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  ArrowUpRight,
+  FileText,
+  Flag,
+  Lightbulb,
+  Mic,
+  Presentation,
+  Video,
+} from "lucide-react";
 import { SiGithub } from "@icons-pack/react-simple-icons";
-import type { BlogPostSummary } from "../../data/blog";
+import type { BlogPostSummary, BlogType } from "../../data/blog";
 import type { Lang } from "../../data/i18n";
 import { formatDate } from "../../data/format";
+import { readBlogIndex } from "../../data/blogIndex";
 import { withBase } from "../../data/site";
 import { useLanguage } from "../LanguageProvider";
 import { SiteShell } from "../SiteShell";
 import { PageHeader } from "../PageHeader";
 import { Lightbox } from "../Lightbox";
-import type { LightboxImage } from "../Gallery";
-import { button, card, focusRing } from "../ui";
+import { Gallery, type LightboxImage } from "../Gallery";
+import { Chips } from "../Chips";
+import { ExpandableRow, rowTitle } from "../ExpandableRow";
+import { LinkedInIcon } from "../icons/LinkedInIcon";
+import { button, buttonSm, card, focusRing, textLink } from "../ui";
 
 // A post may exist in only one language — fall back to the other one.
 function version(post: BlogPostSummary, lang: Lang) {
   return (post.versions[lang] ?? post.versions[lang === "en" ? "es" : "en"])!;
 }
 
+// Client-side twin of entryHref() in data/blog.ts (which can't be imported
+// here: it pulls in astro:content).
+function hrefOf(post: BlogPostSummary) {
+  return withBase(post.hasPage ? `/blog/${post.slug}/` : `/blog/#${post.slug}`);
+}
+
+const TYPE_ICONS: Record<BlogType, typeof FileText> = {
+  article: FileText,
+  talk: Mic,
+  linkedin: LinkedInIcon as unknown as typeof FileText,
+  milestone: Flag,
+  til: Lightbulb,
+};
+const TYPE_ORDER: BlogType[] = ["linkedin", "article", "talk", "milestone", "til"];
+
+function TypeBadge({ type }: { type: BlogType }) {
+  const Icon = TYPE_ICONS[type];
+  return (
+    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-amber-50 text-amber-700 dark:bg-amber-950/40 dark:text-amber-400">
+      <Icon className="h-4 w-4" aria-hidden="true" />
+    </span>
+  );
+}
+
 function PostMeta({ post }: { post: BlogPostSummary }) {
   const { t, lang } = useLanguage();
+  const copy = t.pages.blog;
+  // The type is already shown by the row's icon: screen readers get it as
+  // text, the visible line stays short (date · event / reading time).
+  const extra =
+    post.type === "talk" && post.event
+      ? post.event
+      : post.type === "article"
+        ? `${post.readingMinutes} ${copy.minRead}`
+        : null;
   return (
-    <span className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-stone-500 dark:text-stone-400">
+    <span className="text-xs text-stone-500 dark:text-stone-400">
+      <span className="sr-only">{copy.types[post.type]}, </span>
       <time dateTime={post.date}>{formatDate(post.date, lang)}</time>
-      {post.type === "talk" && (
-        <>
-          <span aria-hidden="true">·</span>
-          <span className="inline-flex items-center gap-1 font-medium text-amber-700 dark:text-amber-400">
-            <Mic className="h-3 w-3" aria-hidden="true" />
-            {t.pages.blog.talk}
-            {post.event && ` — ${post.event}`}
-          </span>
-        </>
-      )}
+      {extra && <> · {extra}</>}
       {post.draft && (
-        <>
-          <span aria-hidden="true">·</span>
-          <span className="rounded-full bg-stone-200 px-2 py-0.5 font-medium text-stone-700 dark:bg-stone-800 dark:text-stone-300">
-            {t.pages.blog.draft}
-          </span>
-        </>
+        <span className="ml-1.5 rounded-full bg-stone-200 px-2 py-0.5 font-medium text-stone-700 dark:bg-stone-800 dark:text-stone-300">
+          {copy.draft}
+        </span>
       )}
     </span>
+  );
+}
+
+function TopicChips({ post }: { post: BlogPostSummary }) {
+  const { t } = useLanguage();
+  if (post.topics.length === 0) return null;
+  return <Chips items={post.topics.map((topic) => t.pages.blog.topics[topic])} />;
+}
+
+// "Part 2 of 3" + links to the other parts, for entries in a series.
+function SeriesNav({ post, all }: { post: BlogPostSummary; all: BlogPostSummary[] }) {
+  const { t, lang } = useLanguage();
+  if (!post.series) return null;
+  const parts = all
+    .filter((p) => p.series?.id === post.series!.id)
+    .sort((a, b) => a.series!.part - b.series!.part);
+  const label = t.pages.blog.seriesPart
+    .replace("{part}", String(post.series.part))
+    .replace("{total}", String(parts.length));
+  return (
+    <div className="rounded-2xl border border-stone-100 px-4 py-3 text-sm dark:border-stone-800">
+      <p className="text-xs text-stone-500 dark:text-stone-400">
+        {version(post, lang).seriesTitle} · {label}
+      </p>
+      <ol className="mt-2 space-y-1">
+        {parts.map((p) => (
+          <li key={p.slug} className="flex gap-2">
+            <span className="text-stone-400 tabular-nums dark:text-stone-500">{p.series!.part}.</span>
+            {p.slug === post.slug ? (
+              <span className="font-medium text-stone-800 dark:text-stone-200">{version(p, lang).title}</span>
+            ) : (
+              <a href={hrefOf(p)} className={textLink}>
+                {version(p, lang).title}
+              </a>
+            )}
+          </li>
+        ))}
+      </ol>
+    </div>
+  );
+}
+
+function EntryLinks({ post }: { post: BlogPostSummary }) {
+  const { t } = useLanguage();
+  const copy = t.pages.blog;
+  if (!post.linkedin && !post.project) return null;
+  return (
+    <div className="flex flex-wrap items-center gap-x-4 gap-y-3">
+      {post.linkedin && (
+        <a href={post.linkedin} target="_blank" rel="noreferrer noopener" className={buttonSm.accent}>
+          <LinkedInIcon className="h-3.5 w-3.5" />
+          {copy.viewOnLinkedIn}
+          <ArrowUpRight className="h-3 w-3" />
+        </a>
+      )}
+      {post.project && (
+        <a href={withBase(`/projects/#${post.project.slug}`)} className={textLink}>
+          {copy.project}: {post.project.name}
+          <ArrowRight className="h-3.5 w-3.5" />
+        </a>
+      )}
+    </div>
+  );
+}
+
+// An inline entry's body (LinkedIn post, milestone, TIL): Astro-rendered
+// Markdown from our own content files.
+function InlineBody({ post, all }: { post: BlogPostSummary; all: BlogPostSummary[] }) {
+  const { lang } = useLanguage();
+  const v = version(post, lang);
+  const images = (v.images ?? []).map((img) => ({
+    src: img.src,
+    alt: { en: img.alt, es: img.alt },
+    width: img.width,
+    height: img.height,
+  }));
+  return (
+    <>
+      <Gallery images={images} />
+      {v.html && (
+        <div
+          className="prose prose-sm prose-stone max-w-none prose-p:leading-relaxed prose-a:text-amber-700 prose-a:decoration-amber-300 prose-a:underline-offset-4 prose-strong:font-medium prose-li:my-1 dark:prose-invert dark:prose-a:text-amber-400 dark:prose-a:decoration-amber-800"
+          dangerouslySetInnerHTML={{ __html: v.html }}
+        />
+      )}
+      <SeriesNav post={post} all={all} />
+      <TopicChips post={post} />
+      <EntryLinks post={post} />
+    </>
+  );
+}
+
+// A row that opens the entry's own page (articles, talks, director's cuts).
+function PageRow({ post }: { post: BlogPostSummary }) {
+  const { lang } = useLanguage();
+  return (
+    <li className="border-t border-stone-100 first:border-t-0 dark:border-stone-800">
+      <a
+        href={hrefOf(post)}
+        className={`group flex w-full items-start gap-2.5 rounded-2xl py-3.5 sm:gap-4 ${focusRing}`}
+      >
+        <TypeBadge type={post.type} />
+        <span className="min-w-0 flex-1">
+          <span className={`block ${rowTitle}`}>{version(post, lang).title}</span>
+          <span className="mt-0.5 block">
+            <PostMeta post={post} />
+          </span>
+        </span>
+        <ArrowUpRight
+          aria-hidden="true"
+          className="mt-0.5 h-4 w-4 shrink-0 text-stone-400 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-amber-600 dark:text-stone-500"
+        />
+      </a>
+    </li>
   );
 }
 
@@ -53,17 +203,27 @@ export function BlogIndexApp({ posts }: { posts: BlogPostSummary[] }) {
 }
 
 // The blog index as the swipe preview on neighbouring pages: those pages
-// don't get `posts` as a prop, so it reads the summaries Layout.astro
+// don't get `posts` as a prop, so it reads the (light) summaries Layout.astro
 // embeds on every page.
 export function BlogIndexPreview() {
-  const el = typeof document !== "undefined" ? document.getElementById("blog-index") : null;
-  const posts: BlogPostSummary[] = el?.textContent ? JSON.parse(el.textContent) : [];
-  return <BlogIndex posts={posts} />;
+  return <BlogIndex posts={readBlogIndex()} />;
 }
 
+// The "bitácora": every kind of entry in one chronological list, with type
+// filters on top (only when there's more than one type to filter by).
 function BlogIndex({ posts }: { posts: BlogPostSummary[] }) {
   const { t, lang } = useLanguage();
   const copy = t.pages.blog;
+  const [filter, setFilter] = useState<BlogType | "all">("all");
+  const types = TYPE_ORDER.filter((type) => posts.some((p) => p.type === type));
+  const shown = filter === "all" ? posts : posts.filter((p) => p.type === filter);
+
+  const chip = (active: boolean) =>
+    `rounded-full border px-3 py-1 text-xs font-medium transition-colors duration-200 ${focusRing} ${
+      active
+        ? "border-amber-300 bg-amber-50 text-amber-800 dark:border-amber-700 dark:bg-amber-950/40 dark:text-amber-300"
+        : "border-stone-200 text-stone-600 hover:border-amber-200 hover:text-amber-700 dark:border-stone-800 dark:text-stone-400 dark:hover:border-amber-800 dark:hover:text-amber-400"
+    }`;
 
   return (
     <>
@@ -74,36 +234,42 @@ function BlogIndex({ posts }: { posts: BlogPostSummary[] }) {
             {copy.empty}
           </p>
         ) : (
-          <ul className={`${card} fade-up-3 px-2 py-2 sm:px-3`}>
-            {posts.map((post) => {
-              const v = version(post, lang);
-              return (
-                <li
-                  key={post.slug}
-                  className="border-t border-stone-100 first:border-t-0 dark:border-stone-800"
-                >
-                  <a
-                    href={withBase(`/blog/${post.slug}/`)}
-                    className={`group flex items-start gap-4 rounded-2xl px-4 py-4 transition-colors hover:bg-amber-50/50 sm:px-5 dark:hover:bg-stone-800/50 ${focusRing}`}
+          <>
+            {types.length > 1 && (
+              <div className="fade-up-3 mb-3 flex flex-wrap gap-2" role="group" aria-label={copy.title}>
+                {(["all", ...types] as const).map((type) => (
+                  <button
+                    key={type}
+                    type="button"
+                    aria-pressed={filter === type}
+                    onClick={() => setFilter(type)}
+                    className={chip(filter === type)}
                   >
-                    <span className="min-w-0 flex-1">
-                      <PostMeta post={post} />
-                      <span className="mt-1 block font-display text-lg font-medium leading-snug text-stone-900 dark:text-stone-100">
-                        {v.title}
-                      </span>
-                      <span className="mt-1 block text-sm leading-relaxed text-stone-600 dark:text-stone-400">
-                        {v.description}
-                      </span>
-                    </span>
-                    <ArrowUpRight
-                      aria-hidden="true"
-                      className="mt-6 h-4 w-4 shrink-0 text-stone-400 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-amber-600 dark:text-stone-500"
-                    />
-                  </a>
-                </li>
-              );
-            })}
-          </ul>
+                    {type === "all" ? copy.all : copy.filters[type]}
+                  </button>
+                ))}
+              </div>
+            )}
+            <section className={`${card} fade-up-3 px-6 py-2 sm:px-8`}>
+              <ul>
+                {shown.map((post) =>
+                  post.hasPage ? (
+                    <PageRow key={post.slug} post={post} />
+                  ) : (
+                    <ExpandableRow
+                      key={post.slug}
+                      anchor={post.slug}
+                      leading={<TypeBadge type={post.type} />}
+                      title={<span className={rowTitle}>{version(post, lang).title}</span>}
+                      subtitle={<PostMeta post={post} />}
+                    >
+                      <InlineBody post={post} all={posts} />
+                    </ExpandableRow>
+                  )
+                )}
+              </ul>
+            </section>
+          </>
         )}
       </main>
     </>
@@ -192,6 +358,22 @@ function usePostImageViewer(root: RefObject<HTMLElement | null>) {
   );
 }
 
+// Series navigation, topics and LinkedIn/project links under an article.
+// Series parts come from the summaries embedded on every page, read after
+// hydration (they aren't in the prerendered HTML).
+function PostExtras({ post }: { post: BlogPostSummary }) {
+  const [all, setAll] = useState<BlogPostSummary[]>([]);
+  useEffect(() => setAll(readBlogIndex()), []);
+  if (!post.series && post.topics.length === 0 && !post.linkedin && !post.project) return null;
+  return (
+    <div className="mt-8 space-y-4 border-t border-stone-100 pt-6 dark:border-stone-800">
+      {all.length > 0 && <SeriesNav post={post} all={all} />}
+      <TopicChips post={post} />
+      <EntryLinks post={post} />
+    </div>
+  );
+}
+
 function BlogPost({ post, children }: { post: BlogPostSummary; children?: ReactNode }) {
   const { t, lang } = useLanguage();
   const proseRef = useRef<HTMLDivElement>(null);
@@ -246,6 +428,7 @@ function BlogPost({ post, children }: { post: BlogPostSummary; children?: ReactN
             {children}
           </div>
         </div>
+        <PostExtras post={post} />
       </article>
       {imageViewer}
     </main>

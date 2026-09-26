@@ -1,4 +1,4 @@
-import { useId, useState, type ReactNode } from "react";
+import { useEffect, useId, useRef, useState, type ReactNode } from "react";
 import { Plus } from "lucide-react";
 import { Collapsible } from "./Collapsible";
 import { focusRing } from "./ui";
@@ -9,6 +9,7 @@ import { focusRing } from "./ui";
 // outline. Meant to sit in a card padded px-6 sm:px-8 (the panel bleeds to
 // its edges so galleries can scroll edge to edge).
 export function ExpandableRow({
+  anchor,
   leading,
   title,
   subtitle,
@@ -21,13 +22,35 @@ export function ExpandableRow({
   // Right-aligned, before the "+" (e.g. dates). Callers hide it on phones
   // and repeat it under the subtitle if it matters there.
   aside?: ReactNode;
+  // Deep link: the row gets this id, and arriving at #anchor (e.g.
+  // /projects/#redcheck from a blog entry, or a shared /blog/#post link)
+  // opens it and scrolls it into view.
+  anchor?: string;
   children: ReactNode;
 }) {
   const [open, setOpen] = useState(false);
   const panelId = useId();
+  const rowRef = useRef<HTMLLIElement>(null);
+
+  useEffect(() => {
+    if (!anchor) return;
+    const openIfTargeted = () => {
+      if (decodeURIComponent(window.location.hash.slice(1)) !== anchor) return;
+      setOpen(true);
+      // After the panel has started opening (and the page has laid out).
+      window.setTimeout(() => rowRef.current?.scrollIntoView({ block: "start", behavior: "smooth" }), 150);
+    };
+    openIfTargeted();
+    window.addEventListener("hashchange", openIfTargeted);
+    return () => window.removeEventListener("hashchange", openIfTargeted);
+  }, [anchor]);
 
   return (
-    <li className="border-t border-stone-100 first:border-t-0 dark:border-stone-800">
+    <li
+      ref={rowRef}
+      id={anchor}
+      className="scroll-mt-20 border-t border-stone-100 first:border-t-0 dark:border-stone-800"
+    >
       <h2>
         <button
           type="button"

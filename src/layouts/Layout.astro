@@ -34,7 +34,7 @@ const ogImage = new URL(`${base}${ogImagePath}`, Astro.site).toString();
 const personImage = new URL(`${base}/og-image.jpg`, Astro.site).toString();
 // Blog summaries for the swipe preview of the blog index (BlogIndexPreview),
 // which neighbouring pages render without having the posts as a prop.
-const blogIndex = (await getBlogPosts()).map(summarize);
+const blogIndex = (await getBlogPosts()).map((post) => summarize(post));
 const homeUrl = new URL(`${base}/`, Astro.site).toString();
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site).toString();
 

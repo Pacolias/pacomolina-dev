@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro";
-import { getBlogPosts } from "../data/blog";
+import { entryHref, getBlogPosts, hasOwnPage } from "../data/blog";
 
 // RSS for the blog, hand-written like the sitemap (no @astrojs/rss). Posts
 // are bilingual; the feed carries the English version (or the Spanish one
@@ -14,7 +14,8 @@ export const GET: APIRoute = async ({ site }) => {
 
   const items = posts.map((post) => {
     const entry = post.entries.en ?? post.entries.es!;
-    const link = url(`/blog/${post.slug}/`);
+    // Inline entries (LinkedIn posts, milestones, TILs) link to their row.
+    const link = url(entryHref({ slug: post.slug, hasPage: hasOwnPage(post.primary) }));
     return [
       "    <item>",
       `      <title>${escape(entry.data.title)}</title>`,

@@ -248,16 +248,48 @@ The site grew from one page into five, keeping the same look everywhere:
   English C1 card links to Paco's British Council credential (URL given by
   him; its `#acc.…` share-tracking fragment was dropped, the `key` param is
   what grants access).
-- **Blog: every post bilingual.** Content collection (`src/content.config.ts`)
-  with one folder per post: `src/content/blog/<slug>/{en,es}.md`. Both
-  languages are rendered into the HTML and CSS shows the one matching
-  `<html lang>` (`[data-lang]` rules in `global.css`) — no flash, no JS for
-  the body. If one language file is missing, both show the other with a
-  short "only available in…" note. `type: talk` + `event` + `links`
-  (slides/video/repo) cover talks. `draft: true` posts show only in
-  `astro dev`; `src/content/blog/example-post/` is a draft that doubles as
-  the writing template. Prose styling via `@tailwindcss/typography` (the
-  only new dependency, dev).
+- **Blog = "bitácora"** (design chosen by Paco, Sep 26 2026 — see the
+  memory note too): one chronological list of typed entries, same compact
+  `ExpandableRow` style as Projects/Work, a type icon per row, and type
+  filter chips on top (only when there's more than one type). Content
+  collection (`src/content.config.ts`), one folder per entry with
+  `{en,es}.md` (both rendered, the active one shown; one file = both
+  languages fall back to it). Types:
+  - `article`: its own page, with reading time.
+  - `talk`: its own page, with `event` + slides/video/repo links.
+  - `linkedin`: a LinkedIn post brought in — text faithful, hashtags →
+    `topics`, bilingual. It **expands inline** and has a "View on
+    LinkedIn ↗" link (`linkedin:` URL). `page: true` gives it its own page
+    once it grows into its "director's cut".
+  - `milestone` and `til`: inline too.
+
+  Other frontmatter:
+  - `project` (a projects.ts slug; the build fails on an unknown one): the
+    entry shows "Project: X →" linking to `/projects/#slug`, which opens
+    that row; the project's panel lists "Written about this" entries.
+  - `series {id,title,part}`: navigation between parts.
+  - `topics`: chips.
+  - `images [{src, alt}]`: a gallery with the lightbox. Put images in
+    frontmatter rather than the Markdown body for inline entries: the list
+    renders `entry.rendered.html`, where body images wouldn't be processed.
+
+  Deep links: rows have `anchor` ids, and arriving at `#slug` opens and
+  scrolls to the row (`/blog/#slug`, `/projects/#slug`).
+
+  `data/blog.ts` builds summaries: full ones (HTML + images) only for
+  `/blog/`, light ones embedded on every page as `<script id="blog-index">`
+  (read via `data/blogIndex.ts`) for the swipe preview, series nav and
+  project ↔ entry links.
+
+  Only entries with a page get routes and sitemap entries; RSS links inline
+  entries to `/blog/#slug`. `draft: true` entries show only in `astro dev`;
+  `example-post/` is a draft article that doubles as the writing template.
+
+  **Row titles must fit one line at 360px in both languages**, like the
+  other lists (≈25 chars). The meta line is date · reading time/event; the
+  type is carried by the icon (plus an sr-only label).
+
+  Prose styling via `@tailwindcss/typography`.
 - **Lightbox** (`Lightbox.tsx`, used by `Gallery.tsx`, so it covers every
   project/work image): tapping a photo opens it in-page over a blurred
   page (native `<dialog>` + `showModal()` → top layer, focus trap, Esc;
