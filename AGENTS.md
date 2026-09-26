@@ -404,6 +404,14 @@ All real content is in as of the second pass:
   which channel works at events, the NFC sticker points at
   `https://pacomolina.dev/?ref=nfc` and QRs at `?ref=qr`: GoatCounter
   records `ref` as the campaign/source.
+- **"Let's talk" card** (`ContactCard.tsx`, the footer of every page):
+  heading on top, buttons centered below at every width (a side-by-side
+  heading pushed the QR icon onto its own line once the copy button was
+  added). "Send an email" is a split button with a copy-address half
+  (clipboard API, hidden-textarea fallback; icon turns into a check and an
+  aria-live "Email copied" for 2s) — for visitors with no mail app set up,
+  where mailto: does nothing. Two rows on phones down to 360px (email;
+  save contact + GitHub + QR), one row on desktop.
 - **On-screen QR** (the QR icon in the "Let's talk" card, on every page):
   for someone without NFC, Paco opens it on his phone and they scan it.
   It's a static pre-generated SVG (`public/images/qr-pacomolina.svg`, dark
