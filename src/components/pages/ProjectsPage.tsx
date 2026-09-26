@@ -1,7 +1,11 @@
-import { useId, useState } from "react";
-import { AppWindow, ChevronDown, Globe } from "lucide-react";
+import { useEffect, useId, useState } from "react";
+import { AppWindow, ArrowRight, ChevronDown, Globe } from "lucide-react";
 import { SiGithub } from "@icons-pack/react-simple-icons";
 import { projects, type Project, type ProjectLink } from "../../data/projects";
+import type { BlogPostSummary } from "../../data/blog";
+import { readBlogIndex } from "../../data/blogIndex";
+import { formatDate } from "../../data/format";
+import { withBase } from "../../data/site";
 import { useLanguage } from "../LanguageProvider";
 import { SiteShell } from "../SiteShell";
 import { PageHeader } from "../PageHeader";
@@ -10,7 +14,7 @@ import { Chips } from "../Chips";
 import { Collapsible } from "../Collapsible";
 import { ExpandableRow, rowTitle } from "../ExpandableRow";
 import { Gallery } from "../Gallery";
-import { button, card, focusRing } from "../ui";
+import { button, card, focusRing, textLink } from "../ui";
 
 const LINK_ICONS: Record<ProjectLink["kind"], typeof Globe> = {
   live: AppWindow,
@@ -60,10 +64,48 @@ function StatusBadge({ project }: { project: Project }) {
   );
 }
 
+// Blog entries that point at this project (their `project` frontmatter),
+// newest first — the "Written about this" list in the project's panel.
+function RelatedEntries({ project }: { project: Project }) {
+  const { t, lang } = useLanguage();
+  const [entries, setEntries] = useState<BlogPostSummary[]>([]);
+  useEffect(() => {
+    setEntries(readBlogIndex().filter((p) => p.project?.slug === project.slug));
+  }, [project.slug]);
+  if (entries.length === 0) return null;
+  return (
+    <div>
+      <h3 className="text-xs font-medium uppercase tracking-wider text-stone-500 dark:text-stone-400">
+        {t.pages.projects.writtenAbout}
+      </h3>
+      <ul className="mt-2 space-y-1.5">
+        {entries.map((entry) => {
+          const v = entry.versions[lang] ?? entry.versions.en ?? entry.versions.es;
+          return (
+            <li key={entry.slug} className="text-sm">
+              <a
+                href={withBase(entry.hasPage ? `/blog/${entry.slug}/` : `/blog/#${entry.slug}`)}
+                className={textLink}
+              >
+                {v?.title}
+                <ArrowRight className="h-3.5 w-3.5" />
+              </a>
+              <span className="ml-2 text-xs text-stone-500 dark:text-stone-400">
+                {t.pages.blog.types[entry.type]} · {formatDate(entry.date, lang)}
+              </span>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  );
+}
+
 function ProjectRow({ project }: { project: Project }) {
   const { lang } = useLanguage();
   return (
     <ExpandableRow
+      anchor={project.slug}
       title={
         <span className="flex flex-wrap items-baseline gap-x-2">
           <span className={rowTitle}>{project.name}</span>
@@ -85,6 +127,7 @@ function ProjectRow({ project }: { project: Project }) {
       <Bullets items={project.highlights} />
       <Chips items={project.stack} />
       <ProjectLinks links={project.links} />
+      <RelatedEntries project={project} />
     </ExpandableRow>
   );
 }
