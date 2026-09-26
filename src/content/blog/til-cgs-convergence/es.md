@@ -5,8 +5,6 @@ date: 2026-03-14
 type: til
 project: krylov-solvers
 topics: [maths]
-# Draft until Paco approves the wording.
-draft: true
 ---
 
 CGS (Gradiente Conjugado Cuadrado) puede alcanzar la tolerancia y aun así parecer un caos por el camino: con la matriz sherman1 su residuo salta órdenes de magnitud de una iteración a otra, mientras que BiCGSTAB — su primo estabilizado — baja con suavidad.

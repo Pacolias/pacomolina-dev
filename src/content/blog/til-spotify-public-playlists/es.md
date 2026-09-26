@@ -5,8 +5,6 @@ date: 2026-09-21
 type: til
 project: spotify-mcp
 topics: [backend]
-# Draft until Paco approves the wording.
-draft: true
 ---
 
 La API web de Spotify ignora `public: false` al crear una playlist — sale pública igualmente. Es un bug confirmado de Spotify, así que spotify-mcp lo avisa en la propia descripción de la tool en lugar de fingir que funciona.
