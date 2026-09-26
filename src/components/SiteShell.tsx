@@ -13,7 +13,7 @@ export function SiteShell({
   children,
   footer = true,
 }: {
-  current: SectionId;
+  current: SectionId | null;
   children: ReactNode;
   // Home already has the contact card inside its bento grid.
   footer?: boolean;
