@@ -77,6 +77,12 @@ export const dictionary = {
           milestone: "Milestone",
         },
       },
+      now: {
+        title: "Now",
+        subtitle: "What I'm focused on at the moment.",
+        updated: "Last updated",
+        link: "What I'm doing now",
+      },
       notFound: {
         title: "Page not found",
         subtitle: "This page doesn't exist, or it has moved.",
@@ -225,6 +231,12 @@ export const dictionary = {
           project: "Proyecto",
           milestone: "Hito",
         },
+      },
+      now: {
+        title: "Ahora",
+        subtitle: "En qué ando ahora mismo.",
+        updated: "Actualizado el",
+        link: "Qué estoy haciendo ahora",
       },
       notFound: {
         title: "Página no encontrada",

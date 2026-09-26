@@ -185,6 +185,12 @@ The site grew from one page into five, keeping the same look everywhere:
   `Layout.astro`). Verified with real CDP touch events: 20 cases incl. both
   non-circular ends, Work↔Blog↔About, mid-drag previews, spring-back, the
   gallery strip and the lightbox.
+- **/now page** (`src/pages/now.astro`, `NowPage.tsx`, content in
+  `src/data/now.ts` with a `nowUpdated` date shown on the page): what Paco
+  is focused on — looking for, building, out and about. **Not in the top
+  nav** (a sixth item doesn't fit at 360px in Spanish); linked from Home
+  (under the CTAs) and About (at the end), and listed in the sitemap.
+  Only facts he has given; ask him before adding "reading/learning".
 - **Structured bilingual content** lives in TS data files, each entry with
   `{ en, es }` fields (`Localized` type in `i18n.ts`): `src/data/projects.ts`,
   `src/data/work.ts`, `src/data/about.ts`. UI strings stay in `i18n.ts`

@@ -13,6 +13,7 @@ export const GET: APIRoute = async ({ site }) => {
 
   const entries = [
     ...sections.map((s) => `  <url><loc>${url(s.path)}</loc></url>`),
+    `  <url><loc>${url("/now/")}</loc></url>`,
     ...posts.map(
       (p) =>
         `  <url><loc>${url(`/blog/${p.slug}/`)}</loc><lastmod>${p.primary.data.date
