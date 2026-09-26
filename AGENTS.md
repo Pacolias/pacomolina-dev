@@ -90,9 +90,13 @@ second-guess them without checking in again:
   exactly (same architecture, same trade-off: prerendered HTML is always
   light, the inline bootstrap script in `Layout.astro` applies `.dark`
   before first paint client-side so there's no flash, same as the language
-  swap). `ThemeToggle.tsx` sits stacked directly under `LanguageToggle.tsx`
-  in the hero's top-right corner — sun/moon icon only, no text, showing the
+  swap). `ThemeToggle.tsx` sits next to `LanguageToggle.tsx` at the right
+  of the top nav — sun/moon icon only, no text, showing the
   mode you'd switch *to* (same convention as the language toggle's EN/ES).
+  Both providers keep a `detected` flag and don't touch `<html>` until the
+  detected value is in state: syncing React's initial "light"/"en"
+  placeholder used to strip the `.dark` class the inline script had set,
+  which flashed the page light — white, in dark mode — on every load.
   The dark palette isn't a simple invert: warm surfaces
   (`bg-white`/`border-amber-100` cards) become `bg-stone-900`/
   `border-stone-800`; the amber accent shifts from `amber-700` to `amber-400`
@@ -126,8 +130,29 @@ The site grew from one page into five, keeping the same look everywhere:
   English flash for Spanish visitors" happened on every click, so the
   inline script now sets `data-lang-pending` on `<html>` when the language
   isn't English (body stays `opacity: 0`), and `LanguageProvider` removes it
-  once the detected language has rendered. 1.5s timeout fallback so a JS
-  failure never leaves the page blank.
+  (and fires a `lang-ready` event) once the detected language has rendered.
+  1.5s timeout fallback so a JS failure never leaves the page blank.
+- **Page-to-page transitions: a cross-fade, never a flash** (Paco reported
+  a white flash between pages on his phone). Pieces, all verified by
+  recording navigations frame by frame (CDP screencast, 4× CPU throttle):
+  (1) native cross-document View Transitions — the `@view-transition {
+  navigation: auto }` opt-in is an **inline `<style>` first in
+  `Layout.astro`'s `<head>`**: in the bundled CSS (which lands at the end
+  of `<head>`) Chrome skipped the transition on about half of slower
+  navigations; inline it held 24/24. Fade timing (0.25s) is in
+  `global.css`; the nav has `view-transition-name: site-nav` so it stays
+  put. (2) For non-English visitors the new page is still hidden while
+  React translates it, so a `pagereveal` handler (inline script in
+  `Layout.astro`) pauses the transition's animations on the old page's
+  frame and resumes them on `lang-ready` (1s cap). A `<script
+  blocking="render">` with a top-level await was tried first and does
+  **not** work — Chrome unblocks rendering when the script starts, not
+  when its await finishes. (3) The fade-up intro only plays on the first
+  page of a visit (`no-intro` class via sessionStorage), otherwise every
+  page began invisible. (4) `<html>` gets the page background colour, so
+  anything hidden shows the site's background, never browser white.
+  Browsers without cross-document view transitions (Firefox for now) just
+  navigate normally, without the white frame.
 - **Structured bilingual content** lives in TS data files, each entry with
   `{ en, es }` fields (`Localized` type in `i18n.ts`): `src/data/projects.ts`,
   `src/data/work.ts`, `src/data/about.ts`. UI strings stay in `i18n.ts`

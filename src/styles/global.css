@@ -71,6 +71,21 @@
     color-scheme: dark;
   }
 
+  /* Paint the page colour on <html> itself (not just <body>), so anything
+     that's briefly hidden during a page load shows the site's background —
+     never the browser's default white. */
+  html {
+    background-color: var(--color-stone-50);
+  }
+  html.dark {
+    background-color: var(--color-stone-950);
+  }
+
+  /* The language-pending reveal (below) fades in instead of popping. */
+  body {
+    transition: opacity 0.2s ease-out;
+  }
+
   /* While a non-English visitor's page hydrates, the prerendered (English)
      markup is kept invisible so there's no EN→ES flash on every navigation.
      The inline script in Layout.astro sets the attribute (with a timeout
@@ -120,6 +135,26 @@
   &::-webkit-scrollbar {
     display: none;
   }
+}
+
+/* Moving between pages: a native cross-document view transition. The
+   browser keeps the old page on screen and cross-fades to the new one
+   instead of blanking in between (Chrome/Android, Safari 18.2+; other
+   browsers just navigate normally). The opt-in (`@view-transition`) is an
+   inline <style> at the top of Layout.astro's <head>, not here — see the
+   comment there. The nav has its own view-transition-name so it stays put
+   instead of fading. */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.25s;
+}
+
+/* The staggered fade-up intro plays on the first page of a visit only
+   (Layout.astro sets .no-intro afterwards): on later navigations the
+   cross-fade is the transition, and replaying the intro meant every page
+   started out invisible. Unlayered on purpose, so it beats the utilities. */
+html.no-intro [class*="fade-up-"] {
+  animation: none;
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -24,7 +24,9 @@ export function SiteNav({ current }: { current: SectionId }) {
   }, [current]);
 
   return (
-    <header className="sticky top-0 z-20 border-b border-transparent bg-stone-50/85 backdrop-blur-md supports-[backdrop-filter]:bg-stone-50/70 dark:bg-stone-950/85 dark:supports-[backdrop-filter]:bg-stone-950/70">
+    <header
+      style={{ viewTransitionName: "site-nav" }}
+      className="sticky top-0 z-20 border-b border-transparent bg-stone-50/85 backdrop-blur-md supports-[backdrop-filter]:bg-stone-50/70 dark:bg-stone-950/85 dark:supports-[backdrop-filter]:bg-stone-950/70">
       <div className="mx-auto flex max-w-2xl items-center gap-2 px-3 py-3 sm:gap-3 sm:px-6">
         <nav aria-label={t.nav.label} className="min-w-0 flex-1">
           <ul className="no-scrollbar flex items-center overflow-x-auto sm:gap-1">

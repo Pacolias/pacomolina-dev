@@ -44,6 +44,8 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
     // script in Layout.astro hid it to avoid an EN→ES flash).
     if (lang === detectInitialLang()) {
       document.documentElement.removeAttribute("data-lang-pending");
+      // Lets the page-transition handler in Layout.astro play its fade.
+      window.dispatchEvent(new Event("lang-ready"));
     }
   }, [lang, detected]);
 
