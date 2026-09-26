@@ -32,6 +32,8 @@ export const dictionary = {
       qr: "Show QR code",
       qrAlt: "QR code linking to pacomolina.dev",
       qrCaption: "Scan to open pacomolina.dev",
+      copyEmail: "Copy email address",
+      emailCopied: "Email copied",
     },
     nav: {
       label: "Main",
@@ -177,6 +179,8 @@ export const dictionary = {
       qr: "Mostrar código QR",
       qrAlt: "Código QR que enlaza a pacomolina.dev",
       qrCaption: "Escanea para abrir pacomolina.dev",
+      copyEmail: "Copiar dirección de email",
+      emailCopied: "Email copiado",
     },
     nav: {
       label: "Principal",
