@@ -8,16 +8,16 @@
 /* Prose styling for blog posts (Markdown bodies rendered by Astro). */
 @plugin "@tailwindcss/typography";
 
-/* Only latin + latin-ext (covers English and Spanish incl. accents/ñ),
-   and only the weights actually used (400/500 — no bold, no italic). */
-@import "@fontsource/fraunces/latin-400.css";
-@import "@fontsource/fraunces/latin-ext-400.css";
-@import "@fontsource/fraunces/latin-500.css";
-@import "@fontsource/fraunces/latin-ext-500.css";
-@import "@fontsource/inter/latin-400.css";
-@import "@fontsource/inter/latin-ext-400.css";
-@import "@fontsource/inter/latin-500.css";
-@import "@fontsource/inter/latin-ext-500.css";
+/* Only the weights actually used (400/500 — no bold, no italic). The
+   per-weight files declare every subset with its unicode-range, so a visitor
+   only downloads the subsets their text needs — in practice just "latin",
+   which already covers Spanish (ñ, á…). The per-subset files (latin-400.css,
+   latin-ext-400.css…) have no unicode-range: importing those made every
+   page download latin-ext too, ~70KB for nothing. */
+@import "@fontsource/fraunces/400.css";
+@import "@fontsource/fraunces/500.css";
+@import "@fontsource/inter/400.css";
+@import "@fontsource/inter/500.css";
 
 @theme {
   --font-display: "Fraunces", ui-serif, Georgia, serif;
