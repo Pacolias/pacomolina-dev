@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { ImageOff } from "lucide-react";
 import type { Lang, Localized } from "../data/i18n";
 import { useLanguage } from "./LanguageProvider";
 import { useTheme } from "./ThemeProvider";
@@ -62,6 +63,10 @@ export function Gallery({
   const { t, lang } = useLanguage();
   const { theme } = useTheme();
   const [openIndex, setOpenIndex] = useState<number | null>(null);
+  // Images that failed to load (typically: offline, never seen before, so
+  // not in the service worker's cache) show a quiet placeholder instead of
+  // the browser's broken-image alt text.
+  const [failed, setFailed] = useState<Set<string>>(() => new Set());
   const hydrated = useHydrated();
   // Inside a panel that was never opened: keep the space, skip the download.
   const revealed = useRevealed();
@@ -104,11 +109,23 @@ export function Gallery({
                   }}
                   className={`block cursor-zoom-in overflow-hidden rounded-2xl border border-stone-200 bg-stone-100 dark:border-stone-800 dark:bg-stone-800 ${focusRing}`}
                 >
-                  {revealed && (typeof image.src === "string" || hydrated) ? (
+                  {failed.has(resolveImageSrc(image.src, theme, lang)) ? (
+                    <div
+                      style={{ aspectRatio: `${image.width} / ${image.height}` }}
+                      className="flex w-full items-center justify-center text-stone-400 dark:text-stone-600"
+                    >
+                      <ImageOff className="h-6 w-6" aria-hidden="true" />
+                      <span className="sr-only">{image.alt[lang]}</span>
+                    </div>
+                  ) : revealed && (typeof image.src === "string" || hydrated) ? (
                     <img
                       {...common}
                       src={resolveImageSrc(image.src, theme, lang)}
                       loading={eager && i === 0 ? "eager" : "lazy"}
+                      onError={() => {
+                        const src = resolveImageSrc(image.src, theme, lang);
+                        setFailed((prev) => new Set(prev).add(src));
+                      }}
                       className={imgClass}
                     />
                   ) : (

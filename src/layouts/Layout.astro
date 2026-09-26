@@ -229,6 +229,25 @@ const personLd = {
 		{
 			/* Analytics: only in production builds, only once a GoatCounter
 			   code is set in site.ts (so local visits are never counted). */
+			/* Offline support (dist/sw.js, generated at build time by
+			   src/integrations/service-worker.mjs). Registered once the page
+			   has loaded and the browser is idle, so it never competes with
+			   the first visit. Production only. */
+			import.meta.env.PROD && (
+				<script is:inline>
+					if ("serviceWorker" in navigator) {
+						window.addEventListener("load", function () {
+							var register = function () {
+								navigator.serviceWorker.register("/sw.js").catch(function () {});
+							};
+							if ("requestIdleCallback" in window) requestIdleCallback(register);
+							else setTimeout(register, 2000);
+						});
+					}
+				</script>
+			)
+		}
+		{
 			import.meta.env.PROD && site.goatcounter && (
 				<>
 					{/* Visiting any page with #toggle-goatcounter stops (or
