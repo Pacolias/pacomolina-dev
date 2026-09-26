@@ -319,7 +319,7 @@ function BlogIndex({ posts }: { posts: BlogPostSummary[] }) {
   return (
     <>
       <PageHeader title={copy.title} subtitle={copy.subtitle} />
-      <main className="px-6 pb-4">
+      <div className="px-6 pb-4">
         {posts.length === 0 ? (
           <p className={`${card} fade-up-3 p-6 text-sm text-stone-600 sm:p-8 dark:text-stone-400`}>
             {copy.empty}
@@ -362,7 +362,7 @@ function BlogIndex({ posts }: { posts: BlogPostSummary[] }) {
             </section>
           </>
         )}
-      </main>
+      </div>
     </>
   );
 }
@@ -477,7 +477,7 @@ function BlogPost({ post, children }: { post: BlogPostSummary; children?: ReactN
   ].filter((l): l is typeof l & { href: string } => Boolean(l.href));
 
   return (
-    <main className="px-6 pt-8 pb-4 sm:pt-12">
+    <div className="px-6 pt-8 pb-4 sm:pt-12">
       <a
         href={withBase("/blog/")}
         className={`fade-up-1 inline-flex items-center gap-1.5 rounded-full text-sm font-medium text-stone-500 transition-colors hover:text-amber-700 dark:text-stone-400 dark:hover:text-amber-400 ${focusRing}`}
@@ -521,6 +521,6 @@ function BlogPost({ post, children }: { post: BlogPostSummary; children?: ReactN
         <PostExtras post={post} />
       </article>
       {imageViewer}
-    </main>
+    </div>
   );
 }

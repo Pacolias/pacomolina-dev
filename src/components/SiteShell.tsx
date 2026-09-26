@@ -29,7 +29,9 @@ export function SiteShell({
           <SiteNav current={current} />
           <CommandPalette />
           <div ref={contentRef} className="mx-auto flex w-full max-w-2xl flex-1 flex-col will-change-transform">
-            {children}
+            {/* The one <main> per page: the page's title and content (pages
+                render plain blocks); the contact footer stays outside. */}
+            <main className="flex flex-col">{children}</main>
             {footer && (
               <footer className="px-6 pb-16">
                 <ContactCard />

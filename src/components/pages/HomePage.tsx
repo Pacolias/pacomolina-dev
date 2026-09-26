@@ -29,7 +29,7 @@ const LINK_STYLES: Record<ProjectLink["kind"], string> = {
 function Intro() {
   const { t } = useLanguage();
   return (
-    <header className="px-6 pt-10 pb-8 sm:pt-14">
+    <div className="px-6 pt-10 pb-8 sm:pt-14">
       <div className="fade-up-1 flex items-center gap-4">
         <img
           src={site.photo}
@@ -85,7 +85,7 @@ function Intro() {
         {t.pages.now.link}
         <ArrowRight className="h-3.5 w-3.5" />
       </a>
-    </header>
+    </div>
   );
 }
 
@@ -152,12 +152,12 @@ export function HomePage() {
   return (
     <>
       <Intro />
-      <main className="flex flex-col gap-10 px-6 pb-10">
+      <div className="flex flex-col gap-10 px-6 pb-10">
         <FeaturedProject />
         <div className="fade-up-5">
           <StackRow />
         </div>
-      </main>
+      </div>
     </>
   );
 }
