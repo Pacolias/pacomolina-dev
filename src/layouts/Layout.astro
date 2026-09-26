@@ -67,6 +67,25 @@ const personLd = {
 			@view-transition {
 				navigation: auto;
 			}
+			/* After a swipe between sections (useSwipeNavigation), the page
+			   slides the way the finger went instead of cross-fading. Inline
+			   too, so the CSS pipeline never touches these newer selectors. */
+			@keyframes swipe-out-left { to { transform: translateX(-25%); opacity: 0; } }
+			@keyframes swipe-in-right { from { transform: translateX(25%); opacity: 0; } }
+			@keyframes swipe-out-right { to { transform: translateX(25%); opacity: 0; } }
+			@keyframes swipe-in-left { from { transform: translateX(-25%); opacity: 0; } }
+			html:active-view-transition-type(swipe-next)::view-transition-old(root) {
+				animation: 0.3s cubic-bezier(0.16, 1, 0.3, 1) both swipe-out-left;
+			}
+			html:active-view-transition-type(swipe-next)::view-transition-new(root) {
+				animation: 0.3s cubic-bezier(0.16, 1, 0.3, 1) both swipe-in-right;
+			}
+			html:active-view-transition-type(swipe-prev)::view-transition-old(root) {
+				animation: 0.3s cubic-bezier(0.16, 1, 0.3, 1) both swipe-out-right;
+			}
+			html:active-view-transition-type(swipe-prev)::view-transition-new(root) {
+				animation: 0.3s cubic-bezier(0.16, 1, 0.3, 1) both swipe-in-left;
+			}
 			@media (prefers-reduced-motion: reduce) {
 				@view-transition {
 					navigation: none;
@@ -136,6 +155,20 @@ const personLd = {
 			// transition on its first frame (the old page, fully visible) and
 			// play it once LanguageProvider fires "lang-ready" — capped at 1s so
 			// a JS failure can't leave it stuck.
+			// Arrived by swiping? Tag the transition so the slide rules in the
+			// inline <style> above apply (plain cross-fade otherwise).
+			window.addEventListener("pagereveal", function (event) {
+				var direction = null;
+				try {
+					direction = sessionStorage.getItem("swipe-nav");
+					sessionStorage.removeItem("swipe-nav");
+				} catch (e) {}
+				var transition = event.viewTransition;
+				if (transition && transition.types && direction) {
+					transition.types.add("swipe-" + direction);
+				}
+			});
+
 			window.addEventListener("pagereveal", function (event) {
 				var transition = event.viewTransition;
 				var root = document.documentElement;

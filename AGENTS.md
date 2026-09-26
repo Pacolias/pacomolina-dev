@@ -153,6 +153,22 @@ The site grew from one page into five, keeping the same look everywhere:
   anything hidden shows the site's background, never browser white.
   Browsers without cross-document view transitions (Firefox for now) just
   navigate normally, without the white frame.
+- **Swipe between sections** (`useSwipeNavigation.ts`, used by
+  `SiteShell`): a horizontal swipe goes to the previous/next section in nav
+  order, **not circular** (Paco: swiping right on Home must not jump to
+  About; nothing after About either). It stays out of the way: ignores
+  gestures starting in anything that already scrolls horizontally (a
+  gallery strip), in an open `<dialog>` (the lightbox has its own swipe),
+  in form fields, in the outer 24px (iOS/Android "back" edge gestures),
+  multi-touch / pinch-zoomed pages, short (<70px), slow (>800ms) or
+  mostly-vertical gestures. The direction goes to the next page in
+  sessionStorage (`swipe-nav`); a `pagereveal` handler adds a
+  `swipe-next`/`swipe-prev` view-transition type, and inline rules in
+  `Layout.astro` (`:active-view-transition-type()` — kept inline so the
+  CSS pipeline never touches them) slide the page that way instead of the
+  cross-fade. Nav taps keep the cross-fade. Verified with real CDP touch
+  events (13 cases incl. both non-circular ends, the gallery strip and the
+  lightbox) and a slowed-down screencast (no blank frames).
 - **Structured bilingual content** lives in TS data files, each entry with
   `{ en, es }` fields (`Localized` type in `i18n.ts`): `src/data/projects.ts`,
   `src/data/work.ts`, `src/data/about.ts`. UI strings stay in `i18n.ts`
