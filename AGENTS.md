@@ -323,11 +323,22 @@ All real content is in as of the second pass:
   `magick <svg> -resize 1200x630 -background "#fafaf9" -flatten -strip
   -quality 87 public/og-image.jpg`; the source SVG itself wasn't kept in the
   repo (only the rendered JPG).
-- **Analytics: not wired in yet, needs Paco's action.** He picked GoatCounter
-  (free, cookie-less, no consent banner). There's a commented `<script>`
-  block at the bottom of `Layout.astro`'s `<head>` with instructions — he
-  needs to create a free account at goatcounter.com, get his site code, and
-  either he or a future session fills it in and uncomments it.
+- **Analytics: wired, switched off until Paco creates the account.** He
+  picked GoatCounter (free, cookie-less, no consent banner). Set
+  `site.goatcounter` in `site.ts` to the account's code (the `xxx` of
+  `xxx.goatcounter.com`) and `Layout.astro` adds the script — production
+  builds only, so local visits never count. To see which channel works at
+  events, the NFC sticker should point at `https://pacomolina.dev/?ref=nfc`
+  and printed QRs at `?ref=qr`: GoatCounter records `ref` as the source.
+- **On-screen QR** (the QR icon in the "Let's talk" card, on every page):
+  for someone without NFC, Paco opens it on his phone and they scan it.
+  It's a static pre-generated SVG (`public/images/qr-pacomolina.svg`, dark
+  modules on white with a quiet zone so it scans in both themes) for
+  `https://pacomolina.dev/?ref=qr`, shown in the shared `Lightbox`. Verified
+  by decoding it (jsQR) from a screenshot of the open viewer, on a phone
+  in dark mode and on desktop. If the URL changes, regenerate with the
+  `qrcode` npm package (`errorCorrectionLevel: 'M'`, `margin: 4`) and
+  re-check it scans.
 
 ## Technical polish pass (accessibility, SEO, perf)
 

@@ -1,10 +1,22 @@
-import { Mail, Contact } from "lucide-react";
+import { useState } from "react";
+import { Mail, Contact, QrCode } from "lucide-react";
 import { SiGithub } from "@icons-pack/react-simple-icons";
-import { site } from "../data/site";
+import { site, withBase } from "../data/site";
 import { useLanguage } from "./LanguageProvider";
+import { Lightbox } from "./Lightbox";
+
+// Pre-generated (static SVG, no QR library at runtime) for
+// https://pacomolina.dev/?ref=qr — dark modules on white with a quiet zone,
+// so it scans in either theme. Regenerate with the `qrcode` npm package if
+// the URL ever changes.
+const QR_SRC = withBase("/images/qr-pacomolina.svg");
 
 export function ContactCard() {
   const { t } = useLanguage();
+  // At an event without NFC: open this on the phone, the other person scans it.
+  const [qrOpen, setQrOpen] = useState(false);
+  const iconButton =
+    "inline-flex h-10 w-10 items-center justify-center rounded-full border border-stone-300 text-stone-700 transition-colors duration-200 hover:border-amber-300 hover:bg-amber-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:border-stone-700 dark:text-stone-300 dark:hover:border-amber-700 dark:hover:bg-stone-800 dark:focus-visible:ring-offset-stone-900";
 
   return (
     <section className="fade-up-5 flex flex-col items-center gap-4 rounded-3xl border border-amber-100 bg-white p-6 text-center shadow-sm shadow-stone-200/50 sm:flex-row sm:justify-between sm:p-8 sm:text-left dark:border-stone-800 dark:bg-stone-900 dark:shadow-none">
@@ -33,11 +45,34 @@ export function ContactCard() {
           rel="noreferrer noopener"
           aria-label={t.contact.github}
           title={t.contact.github}
-          className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-stone-300 text-stone-700 transition-colors duration-200 hover:border-amber-300 hover:bg-amber-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:border-stone-700 dark:text-stone-300 dark:hover:border-amber-700 dark:hover:bg-stone-800 dark:focus-visible:ring-offset-stone-900"
+          className={iconButton}
         >
           <SiGithub className="h-4 w-4" />
         </a>
+        <button
+          type="button"
+          onClick={() => setQrOpen(true)}
+          aria-label={t.contact.qr}
+          title={t.contact.qr}
+          className={iconButton}
+        >
+          <QrCode className="h-4 w-4" />
+        </button>
       </div>
+      <Lightbox
+        images={[
+          {
+            src: QR_SRC,
+            alt: { en: t.contact.qrAlt, es: t.contact.qrAlt },
+            caption: { en: t.contact.qrCaption, es: t.contact.qrCaption },
+            width: 740,
+            height: 740,
+          },
+        ]}
+        index={qrOpen ? 0 : null}
+        onIndexChange={() => {}}
+        onClose={() => setQrOpen(false)}
+      />
     </section>
   );
 }
