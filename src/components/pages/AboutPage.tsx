@@ -7,7 +7,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { intro, languages, timeline, type TimelineItem } from "../../data/about";
-import { site } from "../../data/site";
+import { site, withBase } from "../../data/site";
 import { useLanguage } from "../LanguageProvider";
 import { SiteShell } from "../SiteShell";
 import { PageHeader } from "../PageHeader";
@@ -142,6 +142,11 @@ export function AboutPage() {
             })}
           </ul>
         </section>
+
+        <a href={withBase("/now/")} className={`${textLink} fade-up-6 mt-2 self-start`}>
+          {t.pages.now.link}
+          <ArrowRight className="h-3.5 w-3.5" />
+        </a>
       </main>
     </>
   );

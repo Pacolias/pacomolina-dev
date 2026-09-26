@@ -1,0 +1,11 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { NowApp } from "../components/pages/NowPage";
+import { dictionary } from "../data/i18n";
+
+const copy = dictionary.en.pages.now;
+---
+
+<Layout title={`${copy.title} — Paco Molina`} description={copy.subtitle}>
+	<NowApp client:load />
+</Layout>

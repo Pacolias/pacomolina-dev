@@ -80,6 +80,11 @@ function Intro() {
           {t.cta.cv}
         </a>
       </div>
+
+      <a href={withBase("/now/")} className={`${textLink} fade-up-3 mt-4`}>
+        {t.pages.now.link}
+        <ArrowRight className="h-3.5 w-3.5" />
+      </a>
     </header>
   );
 }
