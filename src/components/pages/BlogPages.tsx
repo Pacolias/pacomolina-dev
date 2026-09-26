@@ -220,6 +220,18 @@ function BlogIndex({ posts }: { posts: BlogPostSummary[] }) {
   const types = TYPE_ORDER.filter((type) => posts.some((p) => p.type === type));
   const shown = filter === "all" ? posts : posts.filter((p) => p.type === filter);
 
+  // A #slug link to an entry the current filter hides: show everything, so
+  // the row exists and can open itself (ExpandableRow's anchor handling).
+  useEffect(() => {
+    const reveal = () => {
+      const slug = decodeURIComponent(window.location.hash.slice(1));
+      const target = posts.find((p) => p.slug === slug);
+      if (target && filter !== "all" && target.type !== filter) setFilter("all");
+    };
+    window.addEventListener("hashchange", reveal);
+    return () => window.removeEventListener("hashchange", reveal);
+  }, [posts, filter]);
+
   const chip = (active: boolean) =>
     `rounded-full border px-3 py-1 text-xs font-medium transition-colors duration-200 ${focusRing} ${
       active
