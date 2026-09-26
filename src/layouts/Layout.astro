@@ -230,12 +230,30 @@ const personLd = {
 			/* Analytics: only in production builds, only once a GoatCounter
 			   code is set in site.ts (so local visits are never counted). */
 			import.meta.env.PROD && site.goatcounter && (
-				<script
-					is:inline
-					async
-					data-goatcounter={`https://${site.goatcounter}.goatcounter.com/count`}
-					src="https://gc.zgo.at/count.js"
-				/>
+				<>
+					{/* Visiting any page with #toggle-goatcounter stops (or
+					    resumes) counting this browser's own visits: count.js
+					    skips counting while localStorage "skipgc" is "t". */}
+					<script is:inline>
+						if (window.location.hash === "#toggle-goatcounter") {
+							try {
+								if (localStorage.getItem("skipgc") === "t") {
+									localStorage.removeItem("skipgc");
+									alert("GoatCounter: las visitas de este navegador vuelven a contarse.");
+								} else {
+									localStorage.setItem("skipgc", "t");
+									alert("GoatCounter: las visitas de este navegador ya no se cuentan.");
+								}
+							} catch (e) {}
+						}
+					</script>
+					<script
+						is:inline
+						async
+						data-goatcounter={`https://${site.goatcounter}.goatcounter.com/count`}
+						src="https://gc.zgo.at/count.js"
+					/>
+				</>
 			)
 		}
 	</head>

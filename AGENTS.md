@@ -390,13 +390,16 @@ All real content is in as of the second pass:
   via `<link rel="alternate">` in every page's `<head>`; each post also
   gets a `BlogPosting` JSON-LD block (`Event` for talks) through
   `Layout`'s `jsonLd` prop.
-- **Analytics: wired, switched off until Paco creates the account.** He
-  picked GoatCounter (free, cookie-less, no consent banner). Set
-  `site.goatcounter` in `site.ts` to the account's code (the `xxx` of
-  `xxx.goatcounter.com`) and `Layout.astro` adds the script — production
-  builds only, so local visits never count. To see which channel works at
-  events, the NFC sticker should point at `https://pacomolina.dev/?ref=nfc`
-  and printed QRs at `?ref=qr`: GoatCounter records `ref` as the source.
+- **Analytics: live** (GoatCounter — free, cookie-less, no consent
+  banner). `site.goatcounter = "pacomolina"` (dashboard:
+  `https://pacomolina.goatcounter.com`); `Layout.astro` adds the script
+  in production builds only, so local visits never count. Opening any
+  page with `#toggle-goatcounter` stops/resumes counting that browser
+  (inline script toggling `localStorage.skipgc`, which count.js
+  respects; shows a Spanish `alert` since only Paco uses it). To see
+  which channel works at events, the NFC sticker points at
+  `https://pacomolina.dev/?ref=nfc` and QRs at `?ref=qr`: GoatCounter
+  records `ref` as the campaign/source.
 - **On-screen QR** (the QR icon in the "Let's talk" card, on every page):
   for someone without NFC, Paco opens it on his phone and they scan it.
   It's a static pre-generated SVG (`public/images/qr-pacomolina.svg`, dark
