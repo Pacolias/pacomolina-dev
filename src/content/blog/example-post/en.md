@@ -1,5 +1,5 @@
 ---
-title: "Example post — how to write one"
+title: "Example post (template)"
 description: "A draft template: only visible in dev mode, never published. Copy this folder to start a new post."
 date: 2026-09-25
 type: article
