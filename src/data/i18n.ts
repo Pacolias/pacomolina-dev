@@ -101,6 +101,7 @@ export const dictionary = {
           linkedin: "LinkedIn",
           milestone: "Milestone",
           release: "Release",
+          event: "Event",
           til: "Today I learned",
         },
         filters: {
@@ -109,6 +110,7 @@ export const dictionary = {
           linkedin: "LinkedIn",
           milestone: "Milestones",
           release: "Releases",
+          event: "Events",
           til: "TIL",
         },
         topics: {
@@ -120,6 +122,8 @@ export const dictionary = {
           career: "Career",
         },
         viewOnLinkedIn: "View on LinkedIn",
+        eventPage: "Event page",
+        recap: "Photos & recap",
         project: "Project",
         minRead: "min read",
         seriesPart: "Part {part} of {total}",
@@ -242,6 +246,7 @@ export const dictionary = {
           linkedin: "LinkedIn",
           milestone: "Hito",
           release: "Lanzamiento",
+          event: "Evento",
           til: "Aprendido hoy",
         },
         filters: {
@@ -250,6 +255,7 @@ export const dictionary = {
           linkedin: "LinkedIn",
           milestone: "Hitos",
           release: "Lanzamientos",
+          event: "Eventos",
           til: "Aprendido hoy",
         },
         topics: {
@@ -261,6 +267,8 @@ export const dictionary = {
           career: "Carrera",
         },
         viewOnLinkedIn: "Ver en LinkedIn",
+        eventPage: "Página del evento",
+        recap: "Fotos y crónica",
         project: "Proyecto",
         minRead: "min de lectura",
         seriesPart: "Parte {part} de {total}",
