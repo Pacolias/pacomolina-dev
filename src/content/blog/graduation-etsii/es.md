@@ -1,7 +1,7 @@
 ---
 title: "Graduación con la ETSII"
 description: "Acto de graduación de mi doble grado en Matemáticas e Ingeniería Informática con la Escuela Técnica Superior de Ingeniería Informática (ETSII) de la Universidad de Málaga, en el Palacio de Ferias y Congresos de Málaga."
-date: 2026-06-20
+date: 2026-06-30
 type: milestone
 topics: [career]
 images:

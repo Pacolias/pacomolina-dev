@@ -1,7 +1,7 @@
 ---
 title: "Graduation with the ETSII"
 description: "Graduation ceremony for my dual degree in Mathematics and Computer Science with the School of Computer Engineering (ETSII) of the University of Málaga, at the Palacio de Ferias y Congresos de Málaga."
-date: 2026-06-20
+date: 2026-06-30
 type: milestone
 topics: [career]
 images:
