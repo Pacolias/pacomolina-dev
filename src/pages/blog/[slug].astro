@@ -21,12 +21,29 @@ const { Content: EnContent } = await render(enEntry);
 const { Content: EsContent } = await render(esEntry);
 const enFallback = !post.entries.en;
 const esFallback = !post.entries.es;
+
+const postUrl = new URL(`${import.meta.env.BASE_URL.replace(/\/$/, "")}/blog/${post.slug}/`, Astro.site).toString();
+const articleLd = {
+	"@context": "https://schema.org",
+	"@type": post.primary.data.type === "talk" ? "Event" : "BlogPosting",
+	...(post.primary.data.type === "talk"
+		? { name: enEntry.data.title, startDate: post.primary.data.date.toISOString(), description: enEntry.data.description }
+		: {
+				headline: enEntry.data.title,
+				description: enEntry.data.description,
+				datePublished: post.primary.data.date.toISOString(),
+				inLanguage: Object.keys(post.entries),
+			}),
+	url: postUrl,
+	author: { "@type": "Person", name: "Paco Molina", url: new URL("/", Astro.site).toString() },
+};
 ---
 
 <Layout
 	title={`${enEntry.data.title} — Paco Molina`}
 	description={enEntry.data.description}
 	ogType="article"
+	jsonLd={articleLd}
 >
 	<BlogPostApp client:load post={summary}>
 		<div data-lang="en" lang={enFallback ? "es" : "en"}>
