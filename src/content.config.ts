@@ -17,7 +17,8 @@ import { z } from "astro/zod";
 //               Expands inline in the list; set `page: true` once it has
 //               grown into its "director's cut" (longer than LinkedIn
 //               allowed) to give it its own page too.
-// - milestone — a career moment (a launch, a defence…); inline.
+// - milestone — a career moment (a defence, a first job…); inline.
+// - release   — a project going public (usually with `project:`); inline.
 // - til       — "today I learned": a 2–3 sentence note; inline.
 const blog = defineCollection({
   loader: glob({ pattern: "[^_]*/{en,es}.md", base: "./src/content/blog" }),
@@ -26,7 +27,9 @@ const blog = defineCollection({
       title: z.string(),
       description: z.string(),
       date: z.coerce.date(),
-      type: z.enum(["article", "talk", "linkedin", "milestone", "til"]).default("article"),
+      type: z
+        .enum(["article", "talk", "linkedin", "milestone", "release", "til"])
+        .default("article"),
       // The original LinkedIn post (type: linkedin).
       linkedin: z.url().optional(),
       // Give an inline type its own page too (a LinkedIn "director's cut").

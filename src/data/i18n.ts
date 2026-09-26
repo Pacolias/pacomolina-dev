@@ -100,6 +100,7 @@ export const dictionary = {
           talk: "Talk",
           linkedin: "LinkedIn",
           milestone: "Milestone",
+          release: "Release",
           til: "Today I learned",
         },
         filters: {
@@ -107,6 +108,7 @@ export const dictionary = {
           talk: "Talks",
           linkedin: "LinkedIn",
           milestone: "Milestones",
+          release: "Releases",
           til: "TIL",
         },
         topics: {
@@ -239,6 +241,7 @@ export const dictionary = {
           talk: "Charla",
           linkedin: "LinkedIn",
           milestone: "Hito",
+          release: "Lanzamiento",
           til: "Aprendido hoy",
         },
         filters: {
@@ -246,6 +249,7 @@ export const dictionary = {
           talk: "Charlas",
           linkedin: "LinkedIn",
           milestone: "Hitos",
+          release: "Lanzamientos",
           til: "Aprendido hoy",
         },
         topics: {
