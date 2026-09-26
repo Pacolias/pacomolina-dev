@@ -7,6 +7,7 @@ import {
   Flag,
   Lightbulb,
   Mic,
+  Rocket,
   Presentation,
   Video,
 } from "lucide-react";
@@ -42,9 +43,10 @@ const TYPE_ICONS: Record<BlogType, typeof FileText> = {
   talk: Mic,
   linkedin: LinkedInIcon as unknown as typeof FileText,
   milestone: Flag,
+  release: Rocket,
   til: Lightbulb,
 };
-const TYPE_ORDER: BlogType[] = ["linkedin", "article", "talk", "milestone", "til"];
+const TYPE_ORDER: BlogType[] = ["linkedin", "article", "talk", "milestone", "release", "til"];
 
 function TypeBadge({ type }: { type: BlogType }) {
   const Icon = TYPE_ICONS[type];

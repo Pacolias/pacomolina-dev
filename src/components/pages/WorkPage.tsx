@@ -19,6 +19,7 @@ function JobRow({ job }: { job: Job }) {
 
   return (
     <ExpandableRow
+      anchor={job.company.toLowerCase()}
       leading={
         <img
           src={job.logo}
