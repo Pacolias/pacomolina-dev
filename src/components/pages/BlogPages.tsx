@@ -5,6 +5,8 @@ import {
   ArrowUpRight,
   CalendarDays,
   Camera,
+  Check,
+  Share2,
   FileText,
   Flag,
   Lightbulb,
@@ -134,6 +136,51 @@ function SeriesNav({ post, all }: { post: BlogPostSummary; all: BlogPostSummary[
   );
 }
 
+// Share an entry: the native share sheet where there is one (phones), else
+// copy the link. Deep link to the entry: its page, or its row in the list.
+function ShareButton({ post }: { post: BlogPostSummary }) {
+  const { t, lang } = useLanguage();
+  const copy = t.pages.blog;
+  const [copied, setCopied] = useState(false);
+  useEffect(() => {
+    if (!copied) return;
+    const timer = window.setTimeout(() => setCopied(false), 2000);
+    return () => window.clearTimeout(timer);
+  }, [copied]);
+
+  const share = async () => {
+    const url = new URL(hrefOf(post), window.location.origin).toString();
+    const title = version(post, lang).title;
+    if (navigator.share) {
+      try {
+        await navigator.share({ title, url });
+        return;
+      } catch (err) {
+        // Closing the share sheet isn't an error worth a fallback.
+        if ((err as DOMException)?.name === "AbortError") return;
+      }
+    }
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+    } catch {
+      // Neither available: nothing sensible left to do.
+    }
+  };
+
+  return (
+    <>
+      <button type="button" onClick={share} className={buttonSm.outline}>
+        {copied ? <Check className="h-3.5 w-3.5" /> : <Share2 className="h-3.5 w-3.5" />}
+        {copied ? copy.linkCopied : copy.share}
+      </button>
+      <span role="status" aria-live="polite" className="sr-only">
+        {copied ? copy.linkCopied : ""}
+      </span>
+    </>
+  );
+}
+
 // `external: false` on article/talk pages, whose header already shows the
 // slides/video/code links.
 function EntryLinks({ post, external: withExternal = true }: { post: BlogPostSummary; external?: boolean }) {
@@ -147,7 +194,6 @@ function EntryLinks({ post, external: withExternal = true }: { post: BlogPostSum
     { href: post.links?.video, label: copy.video, Icon: Video },
     { href: post.links?.repo, label: copy.repo, Icon: SiGithub as unknown as typeof Video },
   ].filter((l): l is typeof l & { href: string } => Boolean(l.href));
-  if (!post.linkedin && !post.project && external.length === 0) return null;
   return (
     <div className="flex flex-wrap items-center gap-x-4 gap-y-3">
       {external.map(({ href, label, Icon }) => (
@@ -170,6 +216,7 @@ function EntryLinks({ post, external: withExternal = true }: { post: BlogPostSum
           <ArrowRight className="h-3.5 w-3.5" />
         </a>
       )}
+      <ShareButton post={post} />
     </div>
   );
 }
@@ -408,7 +455,6 @@ function usePostImageViewer(root: RefObject<HTMLElement | null>) {
 function PostExtras({ post }: { post: BlogPostSummary }) {
   const [all, setAll] = useState<BlogPostSummary[]>([]);
   useEffect(() => setAll(readBlogIndex()), []);
-  if (!post.series && post.topics.length === 0 && !post.linkedin && !post.project) return null;
   return (
     <div className="mt-8 space-y-4 border-t border-stone-100 pt-6 dark:border-stone-800">
       {all.length > 0 && <SeriesNav post={post} all={all} />}
