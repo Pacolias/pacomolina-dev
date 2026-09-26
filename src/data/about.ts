@@ -86,8 +86,8 @@ export const timeline: TimelineItem[] = [
     date: { en: "Jul 2026", es: "Jul 2026" },
     title: { en: "Graduated, with two theses", es: "Graduado, con dos TFG" },
     body: {
-      en: "Maths: numerical linear algebra and Krylov subspace methods (GMRES, BiCGSTAB), implemented in Python — defended with 9.0/10. Computer Science: a production-ready full-stack application integrating AI microservices. Final GPA 8.03/10.",
-      es: "Matemáticas: álgebra lineal numérica y métodos de subespacios de Krylov (GMRES, BiCGSTAB), implementados en Python — defendido con un 9,0/10. Informática: una aplicación full stack lista para producción que integra microservicios de IA. Nota media final: 8,03/10.",
+      en: "Maths: numerical linear algebra and Krylov subspace methods (GMRES, BiCGSTAB), implemented in Python — defended with 9.0/10. Computer Science: a production-ready full-stack application integrating AI microservices — defended with 8.0/10. Final GPA 8.03/10.",
+      es: "Matemáticas: álgebra lineal numérica y métodos de subespacios de Krylov (GMRES, BiCGSTAB), implementados en Python — defendido con un 9,0/10. Informática: una aplicación full stack lista para producción que integra microservicios de IA — defendido con un 8,0/10. Nota media final: 8,03/10.",
     },
   },
   {
