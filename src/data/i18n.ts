@@ -29,6 +29,9 @@ export const dictionary = {
       button: "Send an email",
       vcard: "Save contact",
       github: "GitHub profile",
+      qr: "Show QR code",
+      qrAlt: "QR code linking to pacomolina.dev",
+      qrCaption: "Scan to open pacomolina.dev",
     },
     nav: {
       label: "Main",
@@ -136,6 +139,9 @@ export const dictionary = {
       button: "Enviar un email",
       vcard: "Guardar contacto",
       github: "Perfil de GitHub",
+      qr: "Mostrar código QR",
+      qrAlt: "Código QR que enlaza a pacomolina.dev",
+      qrCaption: "Escanea para abrir pacomolina.dev",
     },
     nav: {
       label: "Principal",
