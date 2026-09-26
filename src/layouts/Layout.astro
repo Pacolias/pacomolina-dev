@@ -2,6 +2,7 @@
 import "../styles/global.css";
 import { dictionary } from "../data/i18n";
 import { site } from "../data/site";
+import { getBlogPosts, summarize } from "../data/blog";
 
 interface Props {
 	// Per-page title/description (English — the prerendered language). Home
@@ -31,6 +32,9 @@ const {
 const base = import.meta.env.BASE_URL.replace(/\/$/, "");
 const ogImage = new URL(`${base}${ogImagePath}`, Astro.site).toString();
 const personImage = new URL(`${base}/og-image.jpg`, Astro.site).toString();
+// Blog summaries for the swipe preview of the blog index (BlogIndexPreview),
+// which neighbouring pages render without having the posts as a prop.
+const blogIndex = (await getBlogPosts()).map(summarize);
 const homeUrl = new URL(`${base}/`, Astro.site).toString();
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site).toString();
 
@@ -67,24 +71,13 @@ const personLd = {
 			@view-transition {
 				navigation: auto;
 			}
-			/* After a swipe between sections (useSwipeNavigation), the page
-			   slides the way the finger went instead of cross-fading. Inline
-			   too, so the CSS pipeline never touches these newer selectors. */
-			@keyframes swipe-out-left { to { transform: translateX(-25%); opacity: 0; } }
-			@keyframes swipe-in-right { from { transform: translateX(25%); opacity: 0; } }
-			@keyframes swipe-out-right { to { transform: translateX(25%); opacity: 0; } }
-			@keyframes swipe-in-left { from { transform: translateX(-25%); opacity: 0; } }
-			html:active-view-transition-type(swipe-next)::view-transition-old(root) {
-				animation: 0.3s cubic-bezier(0.16, 1, 0.3, 1) both swipe-out-left;
-			}
-			html:active-view-transition-type(swipe-next)::view-transition-new(root) {
-				animation: 0.3s cubic-bezier(0.16, 1, 0.3, 1) both swipe-in-right;
-			}
-			html:active-view-transition-type(swipe-prev)::view-transition-old(root) {
-				animation: 0.3s cubic-bezier(0.16, 1, 0.3, 1) both swipe-out-right;
-			}
-			html:active-view-transition-type(swipe-prev)::view-transition-new(root) {
-				animation: 0.3s cubic-bezier(0.16, 1, 0.3, 1) both swipe-in-left;
+			/* After a swipe between sections (useSwipeNavigation) the next page
+			   is already on screen as the swipe preview, so the transition only
+			   settles into the real page with a very short fade. Inline too, so
+			   the CSS pipeline never touches this newer selector. */
+			html:active-view-transition-type(swipe-commit)::view-transition-old(root),
+			html:active-view-transition-type(swipe-commit)::view-transition-new(root) {
+				animation-duration: 0.12s;
 			}
 			@media (prefers-reduced-motion: reduce) {
 				@view-transition {
@@ -248,5 +241,6 @@ const personLd = {
 	</head>
 	<body class="bg-stone-50 text-stone-800 dark:bg-stone-950 dark:text-stone-200">
 		<slot />
+		<script type="application/json" id="blog-index" set:html={JSON.stringify(blogIndex)} />
 	</body>
 </html>

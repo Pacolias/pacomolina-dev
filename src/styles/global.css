@@ -163,3 +163,9 @@ html.no-intro [class*="fade-up-"] {
     animation-delay: 0ms !important;
   }
 }
+
+/* The neighbour page shown while swiping between sections is a static
+   preview: no intro animation in it. */
+.swipe-preview [class*="fade-up-"] {
+  animation: none;
+}

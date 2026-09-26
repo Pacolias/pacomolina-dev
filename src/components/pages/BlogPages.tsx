@@ -52,6 +52,15 @@ export function BlogIndexApp({ posts }: { posts: BlogPostSummary[] }) {
   );
 }
 
+// The blog index as the swipe preview on neighbouring pages: those pages
+// don't get `posts` as a prop, so it reads the summaries Layout.astro
+// embeds on every page.
+export function BlogIndexPreview() {
+  const el = typeof document !== "undefined" ? document.getElementById("blog-index") : null;
+  const posts: BlogPostSummary[] = el?.textContent ? JSON.parse(el.textContent) : [];
+  return <BlogIndex posts={posts} />;
+}
+
 function BlogIndex({ posts }: { posts: BlogPostSummary[] }) {
   const { t, lang } = useLanguage();
   const copy = t.pages.blog;

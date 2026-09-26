@@ -26,6 +26,7 @@ export function SiteNav({ current }: { current: SectionId | null }) {
 
   return (
     <header
+      id="site-nav"
       style={{ viewTransitionName: "site-nav" }}
       className="sticky top-0 z-20 border-b border-transparent bg-stone-50/85 backdrop-blur-md supports-[backdrop-filter]:bg-stone-50/70 dark:bg-stone-950/85 dark:supports-[backdrop-filter]:bg-stone-950/70">
       <div className="mx-auto flex max-w-2xl items-center gap-2 px-3 py-3 sm:gap-3 sm:px-6">

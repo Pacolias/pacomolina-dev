@@ -156,19 +156,31 @@ The site grew from one page into five, keeping the same look everywhere:
 - **Swipe between sections** (`useSwipeNavigation.ts`, used by
   `SiteShell`): a horizontal swipe goes to the previous/next section in nav
   order, **not circular** (Paco: swiping right on Home must not jump to
-  About; nothing after About either). It stays out of the way: ignores
-  gestures starting in anything that already scrolls horizontally (a
-  gallery strip), in an open `<dialog>` (the lightbox has its own swipe),
-  in form fields, in the outer 24px (iOS/Android "back" edge gestures),
-  multi-touch / pinch-zoomed pages, short (<70px), slow (>800ms) or
-  mostly-vertical gestures. The direction goes to the next page in
-  sessionStorage (`swipe-nav`); a `pagereveal` handler adds a
-  `swipe-next`/`swipe-prev` view-transition type, and inline rules in
-  `Layout.astro` (`:active-view-transition-type()` — kept inline so the
-  CSS pipeline never touches them) slide the page that way instead of the
-  cross-fade. Nav taps keep the cross-fade. Verified with real CDP touch
-  events (13 cases incl. both non-circular ends, the gallery strip and the
-  lightbox) and a slowed-down screencast (no blank frames).
+  About; nothing after About either — at the ends the page gives a little
+  and springs back). **Interactive** (Paco asked to see the next page while
+  dragging): the page content follows the finger and the *real* neighbour
+  page component (lazy-loaded on idle, rendered in the visitor's language
+  and theme inside a fixed, inert, aria-hidden `.swipe-preview` layer under
+  the nav) slides in beside it. Released past ~28% of the width or
+  flicked → it finishes the slide and navigates; otherwise it springs back.
+  The blog index preview reads post summaries from a JSON `<script
+  id="blog-index">` that `Layout.astro` embeds on every page.
+  It claims the gesture (non-passive `touchmove` + `preventDefault`) only
+  once it's clearly horizontal: the first version listened passively and
+  only measured at the end, and on Paco's real phone it didn't work on Work
+  and Blog (short pages) — the browser could take over the touch and
+  cancel it. It ignores gestures starting in anything that already scrolls
+  horizontally (a gallery strip), an open `<dialog>` (the lightbox), form
+  fields, the outer 24px (OS "back" edge gestures), multi-touch and
+  pinch-zoomed pages, and vertical drags. The content wrapper is
+  `overflow-x: clip`ped so the slide never creates horizontal scroll; a
+  bfcache restore (`pageshow` persisted) resets it. After a committed
+  swipe, the next page's view transition gets a `swipe-commit` type
+  (sessionStorage `swipe-nav` → `pagereveal`) and just settles from the
+  preview into the real page with a 0.12s fade (inline rule in
+  `Layout.astro`). Verified with real CDP touch events: 20 cases incl. both
+  non-circular ends, Work↔Blog↔About, mid-drag previews, spring-back, the
+  gallery strip and the lightbox.
 - **Structured bilingual content** lives in TS data files, each entry with
   `{ en, es }` fields (`Localized` type in `i18n.ts`): `src/data/projects.ts`,
   `src/data/work.ts`, `src/data/about.ts`. UI strings stay in `i18n.ts`
