@@ -98,6 +98,16 @@ export const jobs: Job[] = [
     ],
     stack: ["Java", "Spring Boot", "SQL", "Regex", "Git"],
     links: [{ label: { en: "quimify.com", es: "quimify.com" }, href: "https://quimify.com/" }],
-    photos: [],
+    photos: [
+      {
+        src: withBase("/images/work/quimify-team.webp"),
+        alt: {
+          en: "Me with the Quimify team at our stand at a tech fair, with the app on a laptop: “Formulate thousands of compounds”.",
+          es: "Yo con el equipo de Quimify en nuestro stand de una feria tecnológica, con la app en un portátil: «Formula miles de compuestos».",
+        },
+        width: 1080,
+        height: 858,
+      },
+    ],
   },
 ];
