@@ -158,7 +158,7 @@ function InlineBody({ post, all }: { post: BlogPostSummary; all: BlogPostSummary
       <Gallery images={images} />
       {v.html && (
         <div
-          className="prose prose-sm prose-stone max-w-none prose-p:leading-relaxed prose-a:text-amber-700 prose-a:decoration-amber-300 prose-a:underline-offset-4 prose-strong:font-medium prose-li:my-1 dark:prose-invert dark:prose-a:text-amber-400 dark:prose-a:decoration-amber-800"
+          className="prose prose-sm prose-stone max-w-none prose-p:leading-relaxed prose-a:text-amber-700 prose-a:decoration-amber-300 prose-a:underline-offset-4 prose-strong:font-medium prose-li:my-1 prose-code:rounded prose-code:bg-stone-100 prose-code:px-1 prose-code:py-0.5 prose-code:font-normal prose-code:before:content-none prose-code:after:content-none dark:prose-invert dark:prose-a:text-amber-400 dark:prose-a:decoration-amber-800 dark:prose-code:bg-stone-800"
           dangerouslySetInnerHTML={{ __html: v.html }}
         />
       )}
