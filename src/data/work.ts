@@ -102,8 +102,8 @@ export const jobs: Job[] = [
       {
         src: withBase("/images/work/quimify-team.webp"),
         alt: {
-          en: "Me with the Quimify team at our stand at a tech fair, with the app on a laptop: “Formulate thousands of compounds”.",
-          es: "Yo con el equipo de Quimify en nuestro stand de una feria tecnológica, con la app en un portátil: «Formula miles de compuestos».",
+          en: "Me with the Quimify team at our stand at Alhambra Venture 2022 in Granada, with the app on a laptop: “Formulate thousands of compounds”.",
+          es: "Yo con el equipo de Quimify en nuestro stand del Alhambra Venture 2022 en Granada, con la app en un portátil: «Formula miles de compuestos».",
         },
         width: 1080,
         height: 858,
