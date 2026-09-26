@@ -3,6 +3,7 @@ import type { Lang, Localized } from "../data/i18n";
 import { useLanguage } from "./LanguageProvider";
 import { useTheme } from "./ThemeProvider";
 import { Lightbox } from "./Lightbox";
+import { useRevealed } from "./Collapsible";
 import { focusRing } from "./ui";
 
 type Theme = "light" | "dark";
@@ -62,6 +63,8 @@ export function Gallery({
   const { theme } = useTheme();
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const hydrated = useHydrated();
+  // Inside a panel that was never opened: keep the space, skip the download.
+  const revealed = useRevealed();
   if (images.length === 0) return null;
   const single = images.length === 1;
   const imgClass = "h-auto w-full transition-transform duration-500 hover:scale-[1.02]";
@@ -101,7 +104,7 @@ export function Gallery({
                   }}
                   className={`block cursor-zoom-in overflow-hidden rounded-2xl border border-stone-200 bg-stone-100 dark:border-stone-800 dark:bg-stone-800 ${focusRing}`}
                 >
-                  {typeof image.src === "string" || hydrated ? (
+                  {revealed && (typeof image.src === "string" || hydrated) ? (
                     <img
                       {...common}
                       src={resolveImageSrc(image.src, theme, lang)}
