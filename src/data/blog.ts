@@ -41,8 +41,9 @@ export type BlogPostSummary = {
   topics: BlogTopic[];
   readingMinutes: number;
   event?: string;
+  location?: string;
   draft: boolean;
-  links?: { slides?: string; video?: string; repo?: string };
+  links?: { slides?: string; video?: string; repo?: string; event?: string; recap?: string };
   versions: Partial<Record<Lang, Version>>;
 };
 
@@ -110,6 +111,7 @@ export function summarize(post: BlogPost, { full = false } = {}): BlogPostSummar
     topics: data.topics,
     readingMinutes: Math.max(1, Math.round(words / WORDS_PER_MINUTE)),
     event: data.event,
+    location: data.location,
     draft: data.draft,
     links: data.links,
     versions,

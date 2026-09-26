@@ -19,6 +19,8 @@ import { z } from "astro/zod";
 //               allowed) to give it its own page too.
 // - milestone — a career moment (a defence, a first job…); inline.
 // - release   — a project going public (usually with `project:`); inline.
+// - event     — an event attended (meetup, fair…), with `location` and
+//               links to the event page / a recap; inline.
 // - til       — "today I learned": a 2–3 sentence note; inline.
 const blog = defineCollection({
   loader: glob({ pattern: "[^_]*/{en,es}.md", base: "./src/content/blog" }),
@@ -28,7 +30,7 @@ const blog = defineCollection({
       description: z.string(),
       date: z.coerce.date(),
       type: z
-        .enum(["article", "talk", "linkedin", "milestone", "release", "til"])
+        .enum(["article", "talk", "linkedin", "milestone", "release", "event", "til"])
         .default("article"),
       // The original LinkedIn post (type: linkedin).
       linkedin: z.url().optional(),
@@ -47,11 +49,16 @@ const blog = defineCollection({
       // Files live next to the Markdown; `alt` in this file's language.
       images: z.array(z.object({ src: image(), alt: z.string() })).default([]),
       event: z.string().optional(),
+      // Where it happened (events): shown next to the date.
+      location: z.string().optional(),
       links: z
         .object({
           slides: z.url().optional(),
           video: z.url().optional(),
           repo: z.url().optional(),
+          // The event's own page, and a recap/photos post (events).
+          event: z.url().optional(),
+          recap: z.url().optional(),
         })
         .optional(),
       // Drafts show up in `astro dev` only, never in the production build.

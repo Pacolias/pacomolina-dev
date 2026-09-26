@@ -3,6 +3,8 @@ import {
   ArrowLeft,
   ArrowRight,
   ArrowUpRight,
+  CalendarDays,
+  Camera,
   FileText,
   Flag,
   Lightbulb,
@@ -44,9 +46,18 @@ const TYPE_ICONS: Record<BlogType, typeof FileText> = {
   linkedin: LinkedInIcon as unknown as typeof FileText,
   milestone: Flag,
   release: Rocket,
+  event: CalendarDays,
   til: Lightbulb,
 };
-const TYPE_ORDER: BlogType[] = ["linkedin", "article", "talk", "milestone", "release", "til"];
+const TYPE_ORDER: BlogType[] = [
+  "linkedin",
+  "article",
+  "talk",
+  "event",
+  "milestone",
+  "release",
+  "til",
+];
 
 function TypeBadge({ type }: { type: BlogType }) {
   const Icon = TYPE_ICONS[type];
@@ -65,9 +76,11 @@ function PostMeta({ post }: { post: BlogPostSummary }) {
   const extra =
     post.type === "talk" && post.event
       ? post.event
-      : post.type === "article"
-        ? `${post.readingMinutes} ${copy.minRead}`
-        : null;
+      : post.type === "event" && post.location
+        ? post.location
+        : post.type === "article"
+          ? `${post.readingMinutes} ${copy.minRead}`
+          : null;
   return (
     <span className="text-xs text-stone-500 dark:text-stone-400">
       <span className="sr-only">{copy.types[post.type]}, </span>
@@ -121,12 +134,29 @@ function SeriesNav({ post, all }: { post: BlogPostSummary; all: BlogPostSummary[
   );
 }
 
-function EntryLinks({ post }: { post: BlogPostSummary }) {
+// `external: false` on article/talk pages, whose header already shows the
+// slides/video/code links.
+function EntryLinks({ post, external: withExternal = true }: { post: BlogPostSummary; external?: boolean }) {
   const { t } = useLanguage();
   const copy = t.pages.blog;
-  if (!post.linkedin && !post.project) return null;
+  // External links, in order: event page, recap, slides, video, code.
+  const external = !withExternal ? [] : [
+    { href: post.links?.event, label: copy.eventPage, Icon: CalendarDays },
+    { href: post.links?.recap, label: copy.recap, Icon: Camera },
+    { href: post.links?.slides, label: copy.slides, Icon: Presentation },
+    { href: post.links?.video, label: copy.video, Icon: Video },
+    { href: post.links?.repo, label: copy.repo, Icon: SiGithub as unknown as typeof Video },
+  ].filter((l): l is typeof l & { href: string } => Boolean(l.href));
+  if (!post.linkedin && !post.project && external.length === 0) return null;
   return (
     <div className="flex flex-wrap items-center gap-x-4 gap-y-3">
+      {external.map(({ href, label, Icon }) => (
+        <a key={href} href={href} target="_blank" rel="noreferrer noopener" className={buttonSm.accent}>
+          <Icon className="h-3.5 w-3.5" />
+          {label}
+          <ArrowUpRight className="h-3 w-3" />
+        </a>
+      ))}
       {post.linkedin && (
         <a href={post.linkedin} target="_blank" rel="noreferrer noopener" className={buttonSm.accent}>
           <LinkedInIcon className="h-3.5 w-3.5" />
@@ -383,7 +413,7 @@ function PostExtras({ post }: { post: BlogPostSummary }) {
     <div className="mt-8 space-y-4 border-t border-stone-100 pt-6 dark:border-stone-800">
       {all.length > 0 && <SeriesNav post={post} all={all} />}
       <TopicChips post={post} />
-      <EntryLinks post={post} />
+      <EntryLinks post={post} external={false} />
     </div>
   );
 }
