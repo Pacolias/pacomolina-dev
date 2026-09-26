@@ -3,6 +3,7 @@ title: "RedCheck, en producción"
 description: "Desplegar RedCheck en su propio dominio — Docker, un servidor desde cero, llamadas asíncronas al LLM y un pequeño detalle de UX."
 date: 2026-06-02
 type: linkedin
+linkedin: https://www.linkedin.com/feed/update/urn:li:activity:7467504912843702272/
 project: redcheck
 topics: [backend, devops, ai]
 images:

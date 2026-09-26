@@ -3,6 +3,7 @@ title: "RedCheck goes live"
 description: "Deploying RedCheck on its own domain — Docker, a server from scratch, async LLM calls, and one small UX detail."
 date: 2026-06-02
 type: linkedin
+linkedin: https://www.linkedin.com/feed/update/urn:li:activity:7467504912843702272/
 project: redcheck
 topics: [backend, devops, ai]
 images:
