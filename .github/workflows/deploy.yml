@@ -15,6 +15,38 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # Quality gate: nothing is deployed unless this passes. Runs on its own
+  # build of the site (the deploy job keeps using withastro/action).
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Type-check (strict TypeScript)
+        run: npx astro sync && npx -y -p typescript@5 tsc --noEmit -p .
+      - name: Build
+        run: npx astro build
+      - name: Broken internal links
+        run: node scripts/ci/check-links.mjs dist
+      - name: Weight budget
+        run: node scripts/ci/check-budget.mjs dist
+      - name: Install browser checks (not project dependencies)
+        run: |
+          npm install --no-save playwright @axe-core/playwright
+          npx playwright install --with-deps chromium
+      - name: Accessibility, console errors and overflow on every page
+        run: |
+          npx astro preview --port 4321 &
+          npx -y wait-on http://localhost:4321/ --timeout 60000
+          node scripts/ci/check-pages.mjs http://localhost:4321
+
   build:
     runs-on: ubuntu-latest
     steps:
@@ -26,7 +58,7 @@ jobs:
           node-version: 22
 
   deploy:
-    needs: build
+    needs: [check, build]
     runs-on: ubuntu-latest
     environment:
       name: github-pages

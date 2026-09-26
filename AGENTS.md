@@ -520,6 +520,30 @@ Internal asset paths (`site.ts`, `Layout.astro`) read
 files in `public/` (`manifest.webmanifest`, `robots.txt`) can't, so they
 use root paths / the absolute domain directly.
 
+## Quality gate (CI)
+
+`.github/workflows/deploy.yml` has a `check` job, and `deploy` needs it:
+nothing reaches production unless it passes. It runs, on its own build:
+
+- strict type-check (`astro sync` + `tsc --noEmit`);
+- `scripts/ci/check-links.mjs` — every internal href/src (markup and
+  island props) resolves to a file in `dist/`, and `#fragments` to an
+  element id (rows are prerendered with their anchor ids). External links
+  are listed, never fetched (LinkedIn & co. block bots);
+- `scripts/ci/check-budget.mjs` — gzip weight budgets: all JS ≤140KB, all
+  CSS ≤25KB, each HTML page ≤70KB, any image ≤450KB. Raise one
+  deliberately, not to silence a failure;
+- `scripts/ci/check-pages.mjs` — every page (plus expanded rows and the
+  404) at 360px ES light, 390px EN dark, 1440px EN light and ES dark:
+  fails on axe violations (WCAG 2.1 A/AA + best practices), JS/console
+  errors, or horizontal overflow. GoatCounter requests are blocked so CI
+  never counts as a visit. `playwright` and `@axe-core/playwright` are
+  installed in the job with `--no-save`, not project dependencies.
+
+To run the browser check locally: `npm install --no-save playwright
+@axe-core/playwright`, `npx astro build && npx astro preview`, then
+`node scripts/ci/check-pages.mjs http://localhost:4321`.
+
 ## Development
 
 When starting the dev server, use background mode:
