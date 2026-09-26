@@ -8,6 +8,6 @@ const copy = dictionary.en.pages.blog;
 const posts = (await getBlogPosts()).map(summarize);
 ---
 
-<Layout title={`Blog — Paco Molina`} description={copy.subtitle}>
+<Layout title={`Blog — Paco Molina`} description={copy.subtitle} ogImage="/og/blog.jpg">
 	<BlogIndexApp client:load posts={posts} />
 </Layout>

@@ -314,15 +314,22 @@ All real content is in as of the second pass:
   one-tap way for someone to save Paco's contact, more reliable than
   `mailto:` on a device with no mail client configured. Contains name,
   title, email, LinkedIn and GitHub URLs. No phone number (never provided).
-- **OG image** (`public/og-image.jpg`, 1200×630): a generated brand card
-  (warm gradient, "P" monogram, name, role, location/availability) wired via
-  `og:image`/`twitter:image` in `Layout.astro` as an **absolute** URL
-  (`new URL(..., Astro.site)`) — OG tags require absolute URLs, relative
-  ones are silently ignored by most crawlers. If the SVG source is ever
-  needed again to regenerate it, it was rendered locally via
-  `magick <svg> -resize 1200x630 -background "#fafaf9" -flatten -strip
-  -quality 87 public/og-image.jpg`; the source SVG itself wasn't kept in the
-  repo (only the rendered JPG).
+- **Social preview (OG) images**, 1200×630, one per section:
+  `public/og-image.jpg` (home, also the JSON-LD Person image) and
+  `public/og/{projects,work,about,blog}.jpg` (blog posts use the blog
+  card). Pages pass `ogImage` to `Layout.astro`, which emits it as an
+  **absolute** URL (`new URL(..., Astro.site)`) for `og:image` /
+  `twitter:image` — relative ones are silently ignored by most crawlers.
+  Rendered by `scripts/og/render.mjs` (Playwright + the site's own
+  Fraunces/Inter, inlined as data: URLs — loaded from file:// they
+  silently fell back to Times/Arial; the script now throws if the fonts
+  didn't load). English text, since crawlers see the English prerender.
+  Re-run it if a card's text changes (job title, project names…).
+- **Blog feed + structured data**: `src/pages/rss.xml.ts` (hand-written,
+  published posts only, English version or Spanish fallback), advertised
+  via `<link rel="alternate">` in every page's `<head>`; each post also
+  gets a `BlogPosting` JSON-LD block (`Event` for talks) through
+  `Layout`'s `jsonLd` prop.
 - **Analytics: wired, switched off until Paco creates the account.** He
   picked GoatCounter (free, cookie-less, no consent banner). Set
   `site.goatcounter` in `site.ts` to the account's code (the `xxx` of
