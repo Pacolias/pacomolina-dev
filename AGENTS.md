@@ -40,9 +40,13 @@ second-guess them without checking in again:
 - **Typography**: warm serif + clean sans. `Fraunces` (via `@fontsource`) for
   the name and headings — `font-display` token — and `Inter` for everything
   else — `font-sans`, the default. Only weights 400/500 are imported (nothing
-  is set bold anywhere in the design) and only the `latin`/`latin-ext`
-  subsets (covers English + Spanish incl. ñ/accents) to keep the font payload
-  small on mobile. See `src/styles/global.css`.
+  is set bold anywhere in the design), via the per-weight fontsource files
+  (`inter/400.css`…), which declare each subset with its `unicode-range`
+  so a page only downloads what its text needs — just `latin`, which
+  already covers Spanish (ñ, á…): ~65KB of fonts per page. The per-subset
+  files (`latin-400.css`, `latin-ext-400.css`) that were used before have
+  **no** unicode-range, so every page downloaded latin-ext too (~170KB in
+  all) — don't go back to them. See `src/styles/global.css`.
 - **Palette**: warm/organic, not the typical dark "hacker portfolio". Tailwind
   `stone` for backgrounds/text, `amber` for borders/accents/tags, soft
   `rounded-3xl` cards, very diffused shadows (`shadow-sm shadow-stone-200/50`).
