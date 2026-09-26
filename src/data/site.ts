@@ -19,6 +19,11 @@ export const site = {
   github: "https://github.com/Pacolias",
   cvHref: withBase("/cv/CV-Paco.pdf"),
   vcardHref: withBase("/paco-molina.vcf"),
+  // GoatCounter site code (the "xxx" in xxx.goatcounter.com) — free,
+  // cookie-less, no consent banner. null = analytics off. Once set, point
+  // the NFC sticker at https://pacomolina.dev/?ref=nfc and printed QRs at
+  // ?ref=qr: GoatCounter records `ref` as the visit's source.
+  goatcounter: null as string | null,
 } as const;
 
 export const redCheck = {
