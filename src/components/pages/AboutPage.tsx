@@ -79,7 +79,7 @@ export function AboutPage() {
   return (
     <>
       <PageHeader title={copy.title} subtitle={copy.subtitle} />
-      <main className="flex flex-col gap-4 px-6 pb-4">
+      <div className="flex flex-col gap-4 px-6 pb-4">
         <section className={`${card} fade-up-3 p-6 sm:p-8`}>
           <img
             src={site.photo}
@@ -147,7 +147,7 @@ export function AboutPage() {
           {t.pages.now.link}
           <ArrowRight className="h-3.5 w-3.5" />
         </a>
-      </main>
+      </div>
     </>
   );
 }

@@ -15,7 +15,7 @@ export function NowPage() {
   return (
     <>
       <PageHeader title={copy.title} subtitle={copy.subtitle} />
-      <main className="flex flex-col gap-4 px-6 pb-4">
+      <div className="flex flex-col gap-4 px-6 pb-4">
         {now.map((section, i) => (
           <section
             key={section.heading.en}
@@ -45,7 +45,7 @@ export function NowPage() {
         <p className="fade-up-6 px-1 text-xs text-stone-500 dark:text-stone-400">
           {copy.updated} <time dateTime={nowUpdated}>{formatDate(nowUpdated, lang)}</time>
         </p>
-      </main>
+      </div>
     </>
   );
 }

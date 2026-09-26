@@ -15,7 +15,7 @@ export function NotFoundPage() {
   return (
     <>
       <PageHeader title={copy.title} subtitle={copy.subtitle} />
-      <main className="fade-up-3 px-6 pb-10">
+      <div className="fade-up-3 px-6 pb-10">
         <a href={withBase("/")} className={button.primary}>
           <ArrowLeft className="h-4 w-4" />
           {copy.home}
@@ -30,7 +30,7 @@ export function NotFoundPage() {
               </a>
             ))}
         </p>
-      </main>
+      </div>
     </>
   );
 }

@@ -145,7 +145,7 @@ export function ProjectsPage() {
   return (
     <>
       <PageHeader title={copy.title} subtitle={copy.subtitle} />
-      <main className="px-6 pb-4">
+      <div className="px-6 pb-4">
         <section className={`${card} fade-up-3 px-6 py-2 sm:px-8`}>
           <ul>
             {featured.map((project) => (
@@ -179,7 +179,7 @@ export function ProjectsPage() {
             </>
           )}
         </section>
-      </main>
+      </div>
     </>
   );
 }

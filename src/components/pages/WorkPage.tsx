@@ -82,7 +82,7 @@ export function WorkPage() {
   return (
     <>
       <PageHeader title={copy.title} subtitle={copy.subtitle} />
-      <main className="flex flex-col gap-4 px-6 pb-4">
+      <div className="flex flex-col gap-4 px-6 pb-4">
         <section className={`${card} fade-up-3 px-6 py-2 sm:px-8`}>
           <ul>
             {jobs.map((job) => (
@@ -101,7 +101,7 @@ export function WorkPage() {
             <ArrowRight className="h-3.5 w-3.5" />
           </a>
         </section>
-      </main>
+      </div>
     </>
   );
 }

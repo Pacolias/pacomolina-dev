@@ -446,6 +446,12 @@ All real content is in as of the second pass:
   "Tech stack", "Let's talk") — it used to skip straight to `h3` everywhere,
   fixed across `RedCheckCard.tsx`, `StackGrid.tsx` (both since replaced by
   the new Home), `ContactCard.tsx`.
+- Landmarks (axe clean, WCAG 2.1 AA + best practices, both themes, phone +
+  desktop, every page): one `banner` (the site nav), one `<main>` —
+  rendered by `SiteShell` around each page's title and content, so pages
+  use plain `<div>`s, not `<main>`/`<header>` — and the contact card as the
+  `<footer>`. A page-level `<header>` or a title outside `<main>` both got
+  flagged; keep it this way.
 - Every interactive `<a>`/`<button>` has an explicit
   `focus-visible:ring-2 focus-visible:ring-amber-500` state now — there was
   no visible keyboard focus indicator anywhere before this pass.
