@@ -148,6 +148,27 @@ export const dictionary = {
       toDark: "Switch to dark mode",
       toLight: "Switch to light mode",
     },
+    search: {
+      open: "Search",
+      label: "Search the site",
+      placeholder: "Search projects, work, posts…",
+      empty: "Nothing matches that.",
+      hint: "↑↓ to move · Enter to open · Esc to close",
+      groups: {
+        page: "Pages",
+        project: "Projects",
+        job: "Work",
+        post: "Blog",
+        action: "Actions",
+      },
+      actions: {
+        theme: "Toggle dark mode",
+        lang: "Switch to Spanish",
+        cv: "Download CV",
+        email: "Copy email address",
+        emailCopied: "Email copied",
+      },
+    },
     lightbox: {
       open: "Open image",
       close: "Close",
@@ -302,6 +323,27 @@ export const dictionary = {
     themeToggle: {
       toDark: "Cambiar a modo oscuro",
       toLight: "Cambiar a modo claro",
+    },
+    search: {
+      open: "Buscar",
+      label: "Buscar en la web",
+      placeholder: "Busca proyectos, trabajo, entradas…",
+      empty: "No hay nada que coincida.",
+      hint: "↑↓ para moverte · Enter para abrir · Esc para cerrar",
+      groups: {
+        page: "Páginas",
+        project: "Proyectos",
+        job: "Trabajo",
+        post: "Blog",
+        action: "Acciones",
+      },
+      actions: {
+        theme: "Cambiar modo claro/oscuro",
+        lang: "Cambiar a inglés",
+        cv: "Descargar CV",
+        email: "Copiar dirección de email",
+        emailCopied: "Email copiado",
+      },
     },
     lightbox: {
       open: "Abrir imagen",
