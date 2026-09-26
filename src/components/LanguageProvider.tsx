@@ -27,19 +27,25 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   // script in Layout.astro sets window.__INITIAL_LANG__ before this runs,
   // so client visitors get their detected/stored language on first paint.
   const [lang, setLang] = useState<Lang>("en");
+  // Same as ThemeProvider: don't write the "en" placeholder to <html lang>
+  // before the detected language is in state (it would briefly switch the
+  // CSS-driven bilingual blocks back to English).
+  const [detected, setDetected] = useState(false);
 
   useEffect(() => {
     setLang(detectInitialLang());
+    setDetected(true);
   }, []);
 
   useEffect(() => {
+    if (!detected) return;
     document.documentElement.lang = lang;
     // The detected language has now rendered — reveal the page (the inline
     // script in Layout.astro hid it to avoid an EN→ES flash).
     if (lang === detectInitialLang()) {
       document.documentElement.removeAttribute("data-lang-pending");
     }
-  }, [lang]);
+  }, [lang, detected]);
 
   const value = useMemo<LanguageContextValue>(
     () => ({
