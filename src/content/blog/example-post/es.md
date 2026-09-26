@@ -2,7 +2,7 @@
 title: "Entrada de ejemplo — cómo escribir una"
 description: "Una plantilla en borrador: solo visible en modo desarrollo, nunca se publica. Copia esta carpeta para empezar una entrada nueva."
 date: 2026-09-25
-type: post
+type: article
 draft: true
 ---
 

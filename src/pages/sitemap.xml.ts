@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro";
-import { getBlogPosts } from "../data/blog";
+import { getBlogPosts, hasOwnPage } from "../data/blog";
 import { sections } from "../data/site";
 
 // A plain sitemap for the section pages and published blog posts (drafts
@@ -8,7 +8,8 @@ import { sections } from "../data/site";
 export const GET: APIRoute = async ({ site }) => {
   const base = import.meta.env.BASE_URL.replace(/\/$/, "");
   const url = (path: string) => new URL(`${base}${path}`, site).toString();
-  const posts = await getBlogPosts();
+  // Only entries with their own page (inline ones live at /blog/#slug).
+  const posts = (await getBlogPosts()).filter((post) => hasOwnPage(post.primary));
 
   const entries = [
     ...sections.map((s) => `  <url><loc>${url(s.path)}</loc></url>`),

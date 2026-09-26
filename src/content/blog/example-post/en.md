@@ -2,7 +2,7 @@
 title: "Example post — how to write one"
 description: "A draft template: only visible in dev mode, never published. Copy this folder to start a new post."
 date: 2026-09-25
-type: post
+type: article
 draft: true
 ---
 

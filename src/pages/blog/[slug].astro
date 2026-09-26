@@ -2,11 +2,12 @@
 import { render } from "astro:content";
 import Layout from "../../layouts/Layout.astro";
 import { BlogPostApp } from "../../components/pages/BlogPages";
-import { getBlogPosts, summarize, type BlogPost } from "../../data/blog";
+import { getBlogPosts, hasOwnPage, summarize, type BlogPost } from "../../data/blog";
 import { dictionary } from "../../data/i18n";
 
 export async function getStaticPaths() {
-	const posts = await getBlogPosts();
+	// Only entries with their own page; the rest live inline in the list.
+	const posts = (await getBlogPosts()).filter((post) => hasOwnPage(post.primary));
 	return posts.map((post) => ({ params: { slug: post.slug }, props: { post } }));
 }
 

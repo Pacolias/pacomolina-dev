@@ -5,7 +5,7 @@ import { getBlogPosts, summarize } from "../../data/blog";
 import { dictionary } from "../../data/i18n";
 
 const copy = dictionary.en.pages.blog;
-const posts = (await getBlogPosts()).map(summarize);
+const posts = (await getBlogPosts()).map((post) => summarize(post, { full: true }));
 ---
 
 <Layout title={`Blog — Paco Molina`} description={copy.subtitle} ogImage="/og/blog.jpg">
