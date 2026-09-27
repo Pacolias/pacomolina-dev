@@ -4,7 +4,6 @@ description: "Cómo funciona el asistente de esta web — y por qué lee la web 
 date: 2026-09-27
 type: article
 topics: [ai, backend]
-draft: true
 ---
 
 Esta web tiene ahora un asistente: pulsa **Ctrl K** (o toca *Pregunta lo
@@ -108,8 +107,14 @@ correcto, nada de habilidades inventadas, no revelar sus instrucciones,
 rechazar una petición de programación, que no le convenzan de saltarse
 sus reglas. Se ejecuta a demanda contra el asistente en producción.
 
-*Resultados: llegarán con la primera ejecución contra el asistente en
-producción.*
+Primera ejecución contra el asistente en producción: **19 de 20**. El
+único fallo fue pequeño pero revelador: al preguntarle por el salario,
+remitió correctamente al visitante a mí, pero citó un ancla que no
+existe (`/#profile`) en vez de copiar exactamente la ruta de la fuente.
+No se rompió nada (el enlace acaba en la portada igualmente), pero es
+justo para lo que están los evals: la regla ahora pide copiar las rutas
+tal cual, y el eval comprueba cada cita contra la lista real de páginas
+de la web.
 
 ---
 

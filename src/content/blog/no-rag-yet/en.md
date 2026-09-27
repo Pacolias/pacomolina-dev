@@ -4,7 +4,6 @@ description: "How the assistant on this site works — and why it reads the whol
 date: 2026-09-27
 type: article
 topics: [ai, backend]
-draft: true
 ---
 
 This site now has an assistant: press **Ctrl K** (or tap *Ask anything
@@ -106,7 +105,13 @@ invented skills, no revealing its instructions, declining a coding
 request, not getting talked out of its rules. It runs on demand against
 the live assistant.
 
-*Results: coming with the first run against the live assistant.*
+First run against the live assistant: **19 of 20**. The one miss was
+small but telling — asked about salary, it correctly sent the visitor to
+me, but cited a page anchor that doesn't exist (`/#profile`) instead of
+copying the source path exactly. Nothing broke (the link still lands on
+the home page), but it's exactly what evals are for: the rule now says
+to copy paths verbatim, and the eval checks every citation against the
+site's real list of pages.
 
 ---
 
