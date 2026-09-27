@@ -3,6 +3,9 @@
 // device — phone browsers can't display an embedded PDF. Writes:
 //   public/docs/<id>/page-<n>.webp          (1400px wide)
 //   src/data/documents.json                 (pages + the PDF's sha256)
+//   src/data/documents-text.json            (the text of `text: true` docs,
+//                                           for the site assistant; phone
+//                                           numbers stripped)
 // CI (scripts/ci/check-documents.mjs) fails if a PDF changed without
 // re-running this.
 //
@@ -21,7 +24,7 @@ const root = resolve(import.meta.dirname, "../..");
 const DPI = 170; // A4 at 170dpi ≈ 1400px wide
 
 const docs = [
-  { id: "cv", pdf: "public/cv/CV-Paco.pdf" },
+  { id: "cv", pdf: "public/cv/CV-Paco.pdf", text: true },
   {
     id: "english-c1",
     pdf: "public/docs/english-c1-british-council.pdf",
@@ -40,6 +43,7 @@ const sources = Object.fromEntries(
 const run = (cmd, args) => execFileSync(cmd, args, { stdio: ["ignore", "pipe", "inherit"] });
 const sha = (file) => createHash("sha256").update(readFileSync(file)).digest("hex");
 const manifest = {};
+const texts = {};
 
 for (const doc of docs) {
   const tmp = mkdtempSync(join(tmpdir(), `doc-${doc.id}-`));
@@ -87,9 +91,21 @@ for (const doc of docs) {
     return { src: `/docs/${doc.id}/page-${i + 1}.webp`, width, height };
   });
   rmSync(tmp, { recursive: true, force: true });
+  if (doc.text) {
+    texts[doc.id] = run("pdftotext", ["-layout", out, "-"])
+      .toString()
+      // The assistant points people to email/LinkedIn, never a phone.
+      .replace(/\+?\d[\d ]{7,}\d\s*\|?\s*/g, "")
+      .replace(/[ \t]+\n/g, "\n")
+      .replace(/^[ \t]+/gm, "")
+      .replace(/ {3,}/g, " · ")
+      .replace(/\n{3,}/g, "\n\n")
+      .trim();
+  }
   manifest[doc.id] = { pdf: `/${doc.pdf.replace(/^public\//, "")}`, sha256: sha(out), pages };
   console.log(`${doc.id}: ${pages.length} page(s)`);
 }
 
 writeFileSync(join(root, "src/data/documents.json"), JSON.stringify(manifest, null, 2) + "\n");
+writeFileSync(join(root, "src/data/documents-text.json"), JSON.stringify(texts, null, 2) + "\n");
 console.log("wrote src/data/documents.json");
