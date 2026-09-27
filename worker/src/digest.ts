@@ -95,7 +95,7 @@ export async function sendWeeklyDigest(env: {
       "User-Agent": "pacomolina-assistant",
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ title, body: body.slice(0, 60000), labels: ["digest"] }),
+    body: JSON.stringify({ title, body: body.slice(0, 60000) }),
   });
   if (!res.ok) console.log(`digest failed: ${res.status} ${(await res.text()).slice(0, 300)}`);
 }
