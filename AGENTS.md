@@ -55,7 +55,9 @@ second-guess them without checking in again:
   URL (important for a single QR/NFC target). Default is English if a
   language must be picked, but on first client load it auto-detects from
   `navigator.language` (Spanish → Spanish), remembers the visitor's explicit
-  toggle choice in `localStorage`, and there's a manual toggle pill in the
+  toggle choice in `localStorage`, honours a `?lang=es` / `?lang=en` URL
+  parameter (it wins and is stored like a toggle click — for links sent to
+  a recruiter; combines with `?ref=`), and there's a manual toggle pill in the
   nav (`LanguageToggle.tsx`). Translated copy lives in
   `src/data/i18n.ts`; non-translated facts (links, email, project URLs) live
   in `src/data/site.ts`. Known trade-off: the statically prerendered HTML is

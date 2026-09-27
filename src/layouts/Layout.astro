@@ -117,6 +117,11 @@ const personLd = {
 		<script is:inline>
 			(function () {
 				try {
+					// ?lang=es / ?lang=en (e.g. a link sent to a recruiter) wins
+					// and is remembered like a toggle click; then a stored choice;
+					// then the browser's language.
+					var param = new URLSearchParams(location.search).get("lang");
+					if (param === "en" || param === "es") localStorage.setItem("lang", param);
 					var stored = localStorage.getItem("lang");
 					var lang =
 						stored === "en" || stored === "es"
