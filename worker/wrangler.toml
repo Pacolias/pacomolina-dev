@@ -21,7 +21,7 @@ ALLOWED_ORIGINS = "https://pacomolina.dev"
 [[d1_databases]]
 binding = "LOG"
 database_name = "pacomolina-assistant-log"
-database_id = "REPLACE_WITH_ID_FROM_d1_create"
+database_id = "02e425b0-824b-4433-9b87-3a9375c96171"
 migrations_dir = "migrations"
 
 # Nightly purge of questions older than 90 days.
