@@ -34,6 +34,12 @@ async function ask(q) {
   return { text };
 }
 
+// Every citation must be one of the site's real "Source:" paths.
+const knowledgeUrl = process.env.KNOWLEDGE_URL ?? "https://pacomolina.dev/assistant/knowledge.txt";
+const sources = new Set(
+  [...(await (await fetch(knowledgeUrl)).text()).matchAll(/^Source: (\S+)$/gm)].map((m) => m[1])
+);
+
 const SPANISH = /\b(el|la|los|las|que|de|en|y|con|para|está|es)\b/gi;
 const rows = [];
 let failed = 0;
@@ -47,8 +53,8 @@ for (const [i, c] of cases.entries()) {
     for (const re of c.mustNot ?? []) if (new RegExp(re, "im").test(text)) problems.push(`says /${re}/`);
     const links = [...text.matchAll(/\[\[([^|\]]+)\|/g)].map((m) => m[1]);
     if (c.cite && !links.length) problems.push("no citation");
-    const bad = links.filter((l) => !/^\/(?!\/)/.test(l));
-    if (bad.length) problems.push(`external link ${bad.join(", ")}`);
+    const bad = links.filter((l) => !sources.has(l));
+    if (bad.length) problems.push(`cites a path that isn't a source: ${bad.map((l) => JSON.stringify(l)).join(", ")}`);
     if (/(^|[.!?]\s)I('m| am| built| worked| studied)\b/.test(text)) problems.push("speaks as Paco");
     if (c.lang === "es" && (text.match(SPANISH) ?? []).length < 3) problems.push("not in Spanish");
   }
