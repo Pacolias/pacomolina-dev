@@ -634,6 +634,13 @@ astro dev --background
 Manage the background server with `astro dev stop`, `astro dev status`, and
 `astro dev logs`.
 
+**After installing or removing packages, restart it** (`astro dev stop`,
+`rm -rf node_modules/.vite`, `astro dev --background --force`): changing
+`node_modules` under a running dev server leaves Vite's pre-bundled deps
+stale, every island fails with "error loading dynamically imported module
+…/.vite/deps/react.js" and nothing hydrates (images without `src`, rows
+that don't open, dead filters) — while the production build is fine.
+
 ## Documentation
 
 Full documentation: https://docs.astro.build
