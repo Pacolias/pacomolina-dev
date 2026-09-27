@@ -557,7 +557,7 @@ nothing reaches production unless it passes. It runs, on its own build:
   island props) resolves to a file in `dist/`, and `#fragments` to an
   element id (rows are prerendered with their anchor ids). External links
   are listed, never fetched (LinkedIn & co. block bots);
-- `scripts/ci/check-budget.mjs` — gzip weight budgets: all JS ≤140KB, all
+- `scripts/ci/check-budget.mjs` — gzip weight budgets: all JS ≤80KB, all
   CSS ≤25KB, each HTML page ≤70KB, any image ≤450KB. Raise one
   deliberately, not to silence a failure;
 - `scripts/ci/check-pages.mjs` — every page (plus expanded rows and the

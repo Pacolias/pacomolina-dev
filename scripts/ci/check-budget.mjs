@@ -10,7 +10,7 @@ import { join, relative, sep } from "node:path";
 const dist = process.argv[2] ?? "dist";
 const KB = 1024;
 const BUDGETS = {
-  jsTotal: 140 * KB, // all JS, gzipped (React + every page's island)
+  jsTotal: 80 * KB, // all JS, gzipped (Preact + every page's island; ~57KB in Sep 2026)
   cssTotal: 25 * KB, // all CSS, gzipped
   page: 70 * KB, // each HTML page, gzipped (the blog embeds its entries)
   image: 450 * KB, // any single image file
