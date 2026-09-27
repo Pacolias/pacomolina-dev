@@ -52,6 +52,7 @@ export const dictionary = {
         showFewer: "Show fewer",
         links: { live: "Live demo", website: "Website", repo: "Source code" },
         writtenAbout: "Written about this",
+        updated: "Last push",
         status: { live: "Live", active: "Active", complete: "Complete" },
       },
       work: {
@@ -234,6 +235,7 @@ export const dictionary = {
         showFewer: "Mostrar menos",
         links: { live: "Demo en vivo", website: "Sitio web", repo: "Código fuente" },
         writtenAbout: "Escrito sobre esto",
+        updated: "Último push",
         status: { live: "En vivo", active: "Activo", complete: "Completado" },
       },
       work: {

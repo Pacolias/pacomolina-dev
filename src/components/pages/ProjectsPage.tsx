@@ -5,7 +5,8 @@ import { SiGithub } from "@icons-pack/react-simple-icons";
 import { projects, type Project, type ProjectLink } from "../../data/projects";
 import type { BlogPostSummary } from "../../data/blog";
 import { readBlogIndex } from "../../data/blogIndex";
-import { formatDate } from "../../data/format";
+import { formatDate, formatRelative } from "../../data/format";
+import type { Activity } from "../../data/github";
 import { withBase } from "../../data/site";
 import { useLanguage } from "../LanguageProvider";
 import { SiteShell } from "../SiteShell";
@@ -102,7 +103,25 @@ function RelatedEntries({ project }: { project: Project }) {
   );
 }
 
-function ProjectRow({ project }: { project: Project }) {
+// "Last push: 3 days ago", from the repo's pushed_at fetched at build time.
+// The prerender shows the absolute date; after hydration it becomes
+// relative to the visitor's "now" (computing that on the server would bake
+// in the build time and mismatch on hydration).
+function LastPush({ date }: { date: string }) {
+  const { t, lang } = useLanguage();
+  const [relative, setRelative] = useState<string | null>(null);
+  useEffect(() => setRelative(formatRelative(date, lang)), [date, lang]);
+  return (
+    <p className="mt-1 text-xs text-stone-500 dark:text-stone-400">
+      {t.pages.projects.updated}:{" "}
+      <time dateTime={date} title={formatDate(date, lang)}>
+        {relative ?? formatDate(date, lang)}
+      </time>
+    </p>
+  );
+}
+
+function ProjectRow({ project, lastPush }: { project: Project; lastPush?: string }) {
   const { lang } = useLanguage();
   return (
     <ExpandableRow
@@ -118,6 +137,7 @@ function ProjectRow({ project }: { project: Project }) {
       <Gallery images={project.images} />
       <div>
         <p className="text-xs text-stone-500 dark:text-stone-400">{project.year}</p>
+        {lastPush && <LastPush date={lastPush} />}
         <p className="mt-1 text-sm font-medium leading-snug text-amber-700 dark:text-amber-400">
           {project.tagline[lang]}
         </p>
@@ -135,7 +155,8 @@ function ProjectRow({ project }: { project: Project }) {
 
 // One compact list, one glance: featured projects are visible rows, the rest
 // wait behind "Show all projects (n)". Each row opens to the full story.
-export function ProjectsPage() {
+// `activity` is optional: the swipe preview renders this page without it.
+export function ProjectsPage({ activity = {} }: { activity?: Activity }) {
   const { t } = useLanguage();
   const copy = t.pages.projects;
   const featured = projects.filter((p) => p.featured);
@@ -150,7 +171,7 @@ export function ProjectsPage() {
         <section className={`${card} fade-up-3 px-6 py-2 sm:px-8`}>
           <ul>
             {featured.map((project) => (
-              <ProjectRow key={project.slug} project={project} />
+              <ProjectRow key={project.slug} project={project} lastPush={activity[project.slug]} />
             ))}
           </ul>
           {more.length > 0 && (
@@ -158,7 +179,7 @@ export function ProjectsPage() {
               <Collapsible id={moreId} open={showAll} bleed>
                 <ul className="border-t border-stone-100 dark:border-stone-800">
                   {more.map((project) => (
-                    <ProjectRow key={project.slug} project={project} />
+                    <ProjectRow key={project.slug} project={project} lastPush={activity[project.slug]} />
                   ))}
                 </ul>
               </Collapsible>
@@ -185,10 +206,10 @@ export function ProjectsPage() {
   );
 }
 
-export function ProjectsApp({ pageLang }: { pageLang?: Lang }) {
+export function ProjectsApp({ pageLang, activity }: { pageLang?: Lang; activity?: Activity }) {
   return (
     <SiteShell current="projects" pageLang={pageLang}>
-      <ProjectsPage />
+      <ProjectsPage activity={activity} />
     </SiteShell>
   );
 }
