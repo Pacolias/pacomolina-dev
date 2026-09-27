@@ -1,5 +1,6 @@
 import { SYSTEM_PROMPT } from "./prompt";
 import { logQuestion, purgeOld, type LogEntry } from "./log";
+import { sendWeeklyDigest } from "./digest";
 
 // POST /chat  { messages: [{ role: "user" | "assistant", text }], lang? }
 //   → text/event-stream: `data: {"t": "..."}` chunks, then `data: {"done": true}`
@@ -26,7 +27,13 @@ export interface Env {
   LIMITER?: RateLimiter;
   // The anonymous question log (D1). Optional: without it nothing is kept.
   LOG?: D1Database;
+  // Weekly digest (src/digest.ts): a private repo and a token for it.
+  DIGEST_REPO?: string;
+  GITHUB_TOKEN?: string;
+  GITHUB_API?: string; // tests only
 }
+
+const WEEKLY_CRON = "0 7 * * 1";
 
 type Message = { role: "user" | "assistant"; text: string };
 
@@ -82,9 +89,10 @@ function parseMessages(body: unknown): Message[] | null {
 }
 
 export default {
-  // Nightly: drop logged questions past the retention period.
-  async scheduled(_event: ScheduledController, env: Env, ctx: ExecutionContext) {
-    ctx.waitUntil(purgeOld(env.LOG));
+  // Nightly: drop logged questions past the retention period. Mondays:
+  // the weekly digest of the past week's questions.
+  async scheduled(event: ScheduledController, env: Env, ctx: ExecutionContext) {
+    ctx.waitUntil(event.cron === WEEKLY_CRON ? sendWeeklyDigest(env) : purgeOld(env.LOG));
   },
 
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {

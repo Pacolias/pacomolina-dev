@@ -271,6 +271,14 @@ The site grew from one page into five, keeping the same look everywhere:
     identifying.** A nightly cron deletes rows older than 90 days; the
     chat's notice says so. Read them with `npm run questions` in
     `worker/`. Good source of new eval cases and of gaps in the site.
+  - **Weekly digest** (`worker/src/digest.ts`, cron `0 7 * * 1`): the
+    Worker opens an issue with the past week's questions (summary,
+    uncited ones = possible gaps, errors, table, answers folded) in the
+    **private** repo `DIGEST_REPO` (`Pacolias/pacomolina-assistant-log`)
+    — never in this repo, which is public. Secret `GITHUB_TOKEN`: a
+    fine-grained token with Issues read/write on that repo only.
+    Visitor text is made inert (no @mentions/#refs, `|` escaped in the
+    table). Skipped silently if the secret or repo is missing.
   - Local dev: `worker/.dev.vars` with `GEMINI_API_KEY=…` (git-ignored),
     `npm run dev` in `worker/` (port 8787, reads the knowledge from the
     astro dev server). Deploy: `npx wrangler login`, `npx wrangler secret

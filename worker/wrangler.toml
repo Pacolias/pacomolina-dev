@@ -14,6 +14,7 @@ compatibility_date = "2026-09-01"
 GEMINI_MODEL = "gemini-flash-lite-latest"
 KNOWLEDGE_URL = "https://pacomolina.dev/assistant/knowledge.txt"
 ALLOWED_ORIGINS = "https://pacomolina.dev"
+DIGEST_REPO = "Pacolias/pacomolina-assistant-log"
 
 # The anonymous question log (src/log.ts). Created once with
 #   npx wrangler d1 create pacomolina-assistant-log
@@ -24,9 +25,11 @@ database_name = "pacomolina-assistant-log"
 database_id = "02e425b0-824b-4433-9b87-3a9375c96171"
 migrations_dir = "migrations"
 
-# Nightly purge of questions older than 90 days.
+# Nightly purge of questions older than 90 days; Mondays 07:00 UTC, the
+# weekly digest (an issue in DIGEST_REPO — private; needs the secret
+# GITHUB_TOKEN: a fine-grained token with Issues read/write on that repo).
 [triggers]
-crons = ["0 4 * * *"]
+crons = ["0 4 * * *", "0 7 * * 1"]
 
 # Per-IP limit: 8 questions a minute (Workers rate limiting, free).
 [[ratelimits]]
