@@ -16,6 +16,7 @@ import { projects } from "../data/projects";
 import { jobs } from "../data/work";
 import { readBlogIndex } from "../data/blogIndex";
 import { sections, site, withBase } from "../data/site";
+import { useDocumentViewer } from "./DocumentViewer";
 import { useLanguage } from "./LanguageProvider";
 import { useTheme } from "./ThemeProvider";
 import { focusRing } from "./ui";
@@ -53,6 +54,7 @@ const go = (path: string) => {
 export function CommandPalette() {
   const { t, lang, toggle: toggleLang } = useLanguage();
   const { toggle: toggleTheme } = useTheme();
+  const viewDocument = useDocumentViewer();
   const copy = t.search;
   const dialogRef = useRef<HTMLDialogElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -155,6 +157,17 @@ export function CommandPalette() {
     const actions: Item[] = [
       { id: "action-theme", group: "action", title: copy.actions.theme, keywords: "theme tema dark light oscuro claro", Icon: SunMoon, run: () => { toggleTheme(); setOpen(false); } },
       { id: "action-lang", group: "action", title: copy.actions.lang, keywords: "language idioma english español", Icon: Languages, run: () => { toggleLang(); setOpen(false); } },
+      {
+        id: "action-view-cv",
+        group: "action",
+        title: copy.actions.viewCv,
+        keywords: "cv resume curriculum ver view",
+        Icon: FileText,
+        run: () => {
+          setOpen(false);
+          viewDocument("cv");
+        },
+      },
       {
         id: "action-cv",
         group: "action",

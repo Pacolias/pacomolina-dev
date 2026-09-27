@@ -1,0 +1,29 @@
+{
+  "cv": {
+    "pdf": "/cv/CV-Paco.pdf",
+    "sha256": "1f561ac52cd55d69134422a40cdcb0e2bb691acf2e0f1d931854215d9cd9732d",
+    "pages": [
+      {
+        "src": "/docs/cv/page-1.webp",
+        "width": 1445,
+        "height": 1870
+      }
+    ]
+  },
+  "english-c1": {
+    "pdf": "/docs/english-c1-british-council.pdf",
+    "sha256": "3848fc980f4cab5fd6231b4348461aab480d5bc412097adf62f0a2f3497ced34",
+    "pages": [
+      {
+        "src": "/docs/english-c1/page-1.webp",
+        "width": 1406,
+        "height": 1989
+      },
+      {
+        "src": "/docs/english-c1/page-2.webp",
+        "width": 1406,
+        "height": 1989
+      }
+    ]
+  }
+}

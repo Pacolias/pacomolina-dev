@@ -44,6 +44,8 @@ jobs:
         run: node scripts/ci/check-links.mjs dist
       - name: Weight budget
         run: node scripts/ci/check-budget.mjs dist
+      - name: Document viewer pages match their PDFs
+        run: node scripts/ci/check-documents.mjs
       - name: Install browser checks (not project dependencies)
         run: |
           npm install --no-save playwright @axe-core/playwright

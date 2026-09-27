@@ -1,4 +1,4 @@
-import { useEffect, useRef, type TouchEvent } from "react";
+import { useEffect, useRef, type ReactNode, type TouchEvent } from "react";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { useLanguage } from "./LanguageProvider";
 import type { LightboxImage } from "./Gallery";
@@ -7,8 +7,10 @@ import { useImageZoom } from "./useImageZoom";
 // Full-screen image viewer. A native <dialog> opened with showModal() gives
 // the top layer (escapes any card's overflow/stacking), a focus trap, Esc to
 // close and inert page content for free; the page behind is blurred via
-// ::backdrop. Arrow keys, the side buttons or a horizontal swipe move
-// between images (wrapping around). The image zooms: pinch or double-tap
+// ::backdrop, and darkened by the dialog's own background (not the
+// backdrop's: that one is invisible to contrast checkers, and the caption
+// needs ≥4.5:1 over a light page). Arrow keys, the side buttons or a
+// horizontal swipe move between images (wrapping around). The image zooms: pinch or double-tap
 // on phones, wheel or double-click on desktop, + / - / 0 on the keyboard
 // (see useImageZoom); while zoomed, swipes pan instead of changing image.
 export function Lightbox({
@@ -16,11 +18,15 @@ export function Lightbox({
   index,
   onIndexChange,
   onClose,
+  actions,
 }: {
   images: LightboxImage[];
   index: number | null;
   onIndexChange: (index: number) => void;
   onClose: () => void;
+  // Extra buttons/links for the top bar, next to Close (e.g. the document
+  // viewer's "Download PDF").
+  actions?: ReactNode;
 }) {
   const { t, lang } = useLanguage();
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -96,13 +102,13 @@ export function Lightbox({
         // What's under the pointer, not e.target: the zoom's pointer
         // capture retargets clicks to the image area.
         const hit = document.elementFromPoint(e.clientX, e.clientY) ?? (e.target as Element);
-        if (hit.closest("img, button")) return;
+        if (hit.closest("img, button, a")) return;
         if (zoom.isZoomed()) zoom.reset();
         else onClose();
       }}
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
-      className="m-0 h-dvh max-h-none w-screen max-w-none overflow-hidden bg-transparent p-0 text-stone-100 backdrop:animate-backdrop-in backdrop:bg-stone-950/60 backdrop:backdrop-blur-md"
+      className="m-0 h-dvh max-h-none w-screen max-w-none animate-backdrop-in overflow-hidden bg-stone-950/70 p-0 text-stone-100 backdrop:animate-backdrop-in backdrop:bg-transparent backdrop:backdrop-blur-md"
     >
       {image && index !== null && (
         <div className="flex h-full flex-col">
@@ -110,15 +116,18 @@ export function Lightbox({
             <span className="text-sm font-medium tabular-nums text-stone-200">
               {many && `${index + 1} ${t.lightbox.of} ${images.length}`}
             </span>
-            <button
-              type="button"
-              onClick={onClose}
-              aria-label={t.lightbox.close}
-              title={t.lightbox.close}
-              className={`${controlClass} inline-flex`}
-            >
-              <X className="h-4 w-4" />
-            </button>
+            <div className="flex items-center gap-2">
+              {actions}
+              <button
+                type="button"
+                onClick={onClose}
+                aria-label={t.lightbox.close}
+                title={t.lightbox.close}
+                className={`${controlClass} inline-flex`}
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
           </div>
 
           {/* touch-none: the browser leaves pinches here to useImageZoom

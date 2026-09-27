@@ -1,8 +1,9 @@
 import type { Lang } from "../../data/i18n";
-import { AppWindow, ArrowRight, Download, Globe } from "lucide-react";
+import { AppWindow, ArrowRight, FileText, Globe } from "lucide-react";
 import { SiGithub } from "@icons-pack/react-simple-icons";
 import { projects, type ProjectLink } from "../../data/projects";
 import { site, withBase } from "../../data/site";
+import { DocumentLink } from "../DocumentViewer";
 import { useLanguage } from "../LanguageProvider";
 import { SiteShell } from "../SiteShell";
 import { Gallery } from "../Gallery";
@@ -72,14 +73,11 @@ function Intro() {
           <LinkedInIcon className="h-4 w-4" />
           {t.cta.linkedin}
         </a>
-        <a
-          href={site.cvHref}
-          download
-          className={`${button.outline} flex-1 whitespace-nowrap sm:flex-none`}
-        >
-          <Download className="h-4 w-4" />
+        {/* Opens the CV in the in-page viewer (download from there). */}
+        <DocumentLink id="cv" className={`${button.outline} flex-1 whitespace-nowrap sm:flex-none`}>
+          <FileText className="h-4 w-4" />
           {t.cta.cv}
-        </a>
+        </DocumentLink>
       </div>
 
       <a href={withBase("/now/")} className={`${textLink} fade-up-3 mt-4`}>

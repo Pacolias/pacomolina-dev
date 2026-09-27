@@ -14,7 +14,7 @@ export const dictionary = {
     },
     cta: {
       linkedin: "Connect on LinkedIn",
-      cv: "Download CV",
+      cv: "View CV",
     },
     home: {
       featured: "Featured project",
@@ -172,6 +172,7 @@ export const dictionary = {
         theme: "Toggle dark mode",
         lang: "Switch to Spanish",
         cv: "Download CV",
+        viewCv: "View CV",
         email: "Copy email address",
         emailCopied: "Email copied",
       },
@@ -182,6 +183,13 @@ export const dictionary = {
       prev: "Previous image",
       next: "Next image",
       of: "of",
+    },
+    docs: {
+      titles: { cv: "CV — Paco Molina", "english-c1": "English C1 certificate — British Council" },
+      page: "page",
+      download: "Download PDF",
+      verify: "Verify",
+      verifyTitle: "Verify on the British Council website",
     },
   },
   es: {
@@ -197,7 +205,7 @@ export const dictionary = {
     },
     cta: {
       linkedin: "Conectar en LinkedIn",
-      cv: "Descargar CV",
+      cv: "Ver CV",
     },
     home: {
       featured: "Proyecto destacado",
@@ -355,6 +363,7 @@ export const dictionary = {
         theme: "Cambiar modo claro/oscuro",
         lang: "Cambiar a inglés",
         cv: "Descargar CV",
+        viewCv: "Ver CV",
         email: "Copiar dirección de email",
         emailCopied: "Email copiado",
       },
@@ -365,6 +374,13 @@ export const dictionary = {
       prev: "Imagen anterior",
       next: "Imagen siguiente",
       of: "de",
+    },
+    docs: {
+      titles: { cv: "CV — Paco Molina", "english-c1": "Certificado de inglés C1 — British Council" },
+      page: "página",
+      download: "Descargar PDF",
+      verify: "Verificar",
+      verifyTitle: "Verificar en la web del British Council",
     },
   },
 } as const;

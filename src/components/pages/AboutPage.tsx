@@ -1,14 +1,15 @@
 import type { Lang } from "../../data/i18n";
 import {
   ArrowRight,
-  ArrowUpRight,
   Briefcase,
+  FileText,
   GraduationCap,
   Rocket,
   Sparkles,
 } from "lucide-react";
 import { intro, languages, timeline, type TimelineItem } from "../../data/about";
 import { site, withBase } from "../../data/site";
+import { DocumentLink } from "../DocumentViewer";
 import { useLanguage } from "../LanguageProvider";
 import { SiteShell } from "../SiteShell";
 import { PageHeader } from "../PageHeader";
@@ -118,21 +119,19 @@ export function AboutPage() {
               const box = "block h-full rounded-2xl border px-4 py-3";
               return (
                 <li key={l.name.en}>
-                  {l.href ? (
-                    <a
-                      href={l.href}
-                      target="_blank"
-                      rel="noreferrer noopener"
+                  {l.doc ? (
+                    <DocumentLink
+                      id={l.doc}
                       title={copy.viewCertificate}
                       className={`${box} group relative pr-8 border-amber-100 bg-amber-50/40 transition-colors duration-200 hover:border-amber-300 hover:bg-amber-50 dark:border-stone-700 dark:bg-stone-800/40 dark:hover:border-amber-700 dark:hover:bg-stone-800 ${focusRing}`}
                     >
                       {body}
-                      <ArrowUpRight
+                      <FileText
                         aria-hidden="true"
-                        className="absolute top-3 right-3 h-3.5 w-3.5 text-amber-600 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 dark:text-amber-400"
+                        className="absolute top-3 right-3 h-3.5 w-3.5 text-amber-600 transition-transform duration-200 group-hover:-translate-y-0.5 dark:text-amber-400"
                       />
                       <span className="sr-only">({copy.viewCertificate})</span>
-                    </a>
+                    </DocumentLink>
                   ) : (
                     <div className={`${box} border-stone-100 bg-stone-50/60 dark:border-stone-800 dark:bg-stone-800/40`}>
                       {body}

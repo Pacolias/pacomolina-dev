@@ -1,4 +1,5 @@
 import type { Localized } from "./i18n";
+import type { DocumentId } from "./documents";
 import { withBase } from "./site";
 
 // About page: a short first-person intro, then a chronological timeline
@@ -15,13 +16,14 @@ export const intro: Localized[] = [
   },
 ];
 
-// Spoken languages. `href` makes the card a link to proof of the level.
-export const languages: { name: Localized; level: Localized; href?: string }[] = [
+// Spoken languages. `doc` makes the card open the certificate proving the
+// level in the document viewer (which also links to verify it).
+export const languages: { name: Localized; level: Localized; doc?: DocumentId }[] = [
   { name: { en: "Spanish", es: "Español" }, level: { en: "Native", es: "Nativo" } },
   {
     name: { en: "English", es: "Inglés" },
     level: { en: "C1 — British Council", es: "C1 — British Council" },
-    href: "https://credentials.britishcouncil.org/bec46bcd-cf45-4690-a914-46b4ec75225a?key=21c5bfc21b09d829082936195efa1540dadb7b2e55ae1ac8fa01b975df2e7544",
+    doc: "english-c1",
   },
 ];
 

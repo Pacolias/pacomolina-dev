@@ -368,6 +368,32 @@ The site grew from one page into five, keeping the same look everywhere:
   `usePostImageViewer` in `BlogPages.tsx` wires click/Enter on the static
   Astro-rendered `<img>`s via event delegation. It steps through the images of
   the active language block only.
+- **Document viewer** (`DocumentViewer.tsx`, Sep 27 2026, Paco's
+  request): the CV and the English C1 certificate open in-page, in the same
+  `Lightbox` as photos (so they zoom), with "Download PDF" and — for the
+  certificate — "Verify" (the British Council credential page) in the top
+  bar (icon + "PDF" on phones so it fits at 360px). Pages are
+  **pre-rendered images**, not an embedded PDF: phone browsers (Android
+  above all) can't show a PDF inside a page. `node scripts/docs/render.mjs`
+  writes `public/docs/<id>/page-N.webp` + `src/data/documents.json` (pages,
+  sizes, the PDF's sha256); `scripts/ci/check-documents.mjs` (deploy gate)
+  fails if a PDF changed without re-rendering — **after replacing
+  `public/cv/CV-Paco.pdf`, re-run the script**. `DocumentViewerProvider`
+  sits in `SiteShell`; open one with `useDocumentViewer()(id)` or
+  `<DocumentLink id>` (a real link to the PDF: no-JS and Ctrl/⌘-click open
+  the file). Used by Home's "View CV" (was "Download CV" — the download is
+  inside), About's C1 card (`about.ts` `doc`), and the palette ("View CV"
+  next to "Download CV").
+  **The certificate shows Paco's DNI**: the published copy
+  (`public/docs/english-c1-british-council.pdf`) is rasterised with that
+  box painted over (a `redact` entry in `render.mjs`; rasterised so no
+  text layer keeps the number). The original lives outside the repo —
+  re-render it with `node scripts/docs/render.mjs
+  "english-c1=<path to the original>"`. Never publish the original.
+  The CV includes his phone number (it did before too — his choice).
+  The lightbox's dark scrim is the dialog's own background
+  (`bg-stone-950/70`), not `::backdrop` (which only blurs): axe can't see
+  `::backdrop`, and the caption needed the extra contrast over light pages.
 - **Post image captions**: `![alt](./x.webp "Caption")` on its own line
   becomes `<figure><img><figcaption>Caption</figcaption></figure>` (shown
   under the image and in the lightbox). Astro 7's default Markdown

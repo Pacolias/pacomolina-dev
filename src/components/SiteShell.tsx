@@ -7,6 +7,7 @@ import { SiteNav } from "./SiteNav";
 import { ContactCard } from "./ContactCard";
 import { useSwipeNavigation } from "./useSwipeNavigation";
 import { CommandPalette } from "./CommandPalette";
+import { DocumentViewerProvider } from "./DocumentViewer";
 
 // Shared chrome for every page: providers, the sticky top nav, and the
 // "Let's talk" card as a closing footer. Each page is a single React island
@@ -29,42 +30,44 @@ export function SiteShell({
   return (
     <ThemeProvider>
       <LanguageProvider initialLang={pageLang}>
-        <div className="flex min-h-screen flex-col overflow-x-clip">
-          <SiteNav current={current} />
-          <CommandPalette />
-          <div ref={contentRef} className="mx-auto flex w-full max-w-2xl flex-1 flex-col will-change-transform">
-            {/* The one <main> per page: the page's title and content (pages
-                render plain blocks); the contact footer stays outside. */}
-            <main className="flex flex-col">{children}</main>
-            {footer && (
-              <footer className="px-6 pb-16">
-                <ContactCard />
-              </footer>
-            )}
-          </div>
-          {preview && (
-            // The neighbour page while swiping (see useSwipeNavigation):
-            // decorative only, so hidden from assistive tech and inert. It
-            // starts off-screen on its side; the gesture positions it.
-            <div
-              ref={previewRef}
-              aria-hidden="true"
-              inert
-              className="swipe-preview pointer-events-none fixed inset-x-0 bottom-0 z-10 overflow-hidden bg-stone-50 will-change-transform dark:bg-stone-950"
-              style={{
-                top: document.getElementById("site-nav")?.getBoundingClientRect().bottom ?? 0,
-                transform: `translate3d(${preview.direction === "next" ? "100vw" : "-100vw"}, 0, 0)`,
-              }}
-            >
-              <div className="mx-auto w-full max-w-2xl">
-                <preview.Page />
+        <DocumentViewerProvider>
+          <div className="flex min-h-screen flex-col overflow-x-clip">
+            <SiteNav current={current} />
+            <CommandPalette />
+            <div ref={contentRef} className="mx-auto flex w-full max-w-2xl flex-1 flex-col will-change-transform">
+              {/* The one <main> per page: the page's title and content (pages
+                  render plain blocks); the contact footer stays outside. */}
+              <main className="flex flex-col">{children}</main>
+              {footer && (
                 <footer className="px-6 pb-16">
                   <ContactCard />
                 </footer>
-              </div>
+              )}
             </div>
-          )}
-        </div>
+            {preview && (
+              // The neighbour page while swiping (see useSwipeNavigation):
+              // decorative only, so hidden from assistive tech and inert. It
+              // starts off-screen on its side; the gesture positions it.
+              <div
+                ref={previewRef}
+                aria-hidden="true"
+                inert
+                className="swipe-preview pointer-events-none fixed inset-x-0 bottom-0 z-10 overflow-hidden bg-stone-50 will-change-transform dark:bg-stone-950"
+                style={{
+                  top: document.getElementById("site-nav")?.getBoundingClientRect().bottom ?? 0,
+                  transform: `translate3d(${preview.direction === "next" ? "100vw" : "-100vw"}, 0, 0)`,
+                }}
+              >
+                <div className="mx-auto w-full max-w-2xl">
+                  <preview.Page />
+                  <footer className="px-6 pb-16">
+                    <ContactCard />
+                  </footer>
+                </div>
+              </div>
+            )}
+          </div>
+        </DocumentViewerProvider>
       </LanguageProvider>
     </ThemeProvider>
   );
