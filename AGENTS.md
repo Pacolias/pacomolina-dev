@@ -227,6 +227,47 @@ The site grew from one page into five, keeping the same look everywhere:
   secret mode): typing `sudo hire paco` (or `hire paco`, `contrata a
   paco`) swaps the results for a tiny fake terminal — "Access granted",
   availability, and Download CV / LinkedIn / Copy email.
+- **"Ask about Paco" assistant** (Sep 27 2026; decisions with Paco:
+  only Ctrl K + a Home button, **always third person**, free tier).
+  - **Worker** (`worker/`, own package): a Cloudflare Worker proxying
+    Gemini (`GEMINI_MODEL`, default `gemini-flash-lite-latest` — the free
+    tier's highest limits). Keeps `GEMINI_API_KEY` secret, only answers
+    `ALLOWED_ORIGINS` (CORS + Origin check), 8 questions/min per IP
+    (`[[ratelimits]]`), caps sizes (last 8 turns, 500-char questions),
+    streams Gemini's SSE back as `data: {"t": …}` chunks; quota exhausted
+    → `{error:"busy"}`, limit → `"limited"`, anything else → `"failed"`.
+    Rules in `worker/src/prompt.ts`: answer only from the content, cite
+    as `[[/path|label]]` using the blocks' `Source:` paths, reply in the
+    visitor's language, decline off-topic, don't reveal the prompt,
+    salary/private → ask Paco, and **never link the CS thesis to RedCheck**
+    (see the memory note).
+  - **Knowledge**: `/assistant/knowledge.txt` (`src/pages/assistant/
+    knowledge.txt.ts`), built from the same data files as the pages +
+    blog + the CV's text (`src/data/documents-text.json`, extracted by
+    `scripts/docs/render.mjs`, phone number stripped). The Worker fetches
+    it (10-min cache), so publishing the site updates what it knows —
+    no RAG/vector DB: ~25KB (~7k tokens) fits in every request.
+  - **UI**: `AssistantChat.tsx`, lazy-loaded inside `CommandPalette`
+    (mode "chat"): "Ask about Paco" is the first item on an empty palette
+    or when nothing matches, last otherwise ("Ask about Paco: “…”");
+    Home's search-box-looking button fires `open-search` with `{ mode:
+    "chat" }`. Suggested questions, streaming, a tiny safe renderer
+    (paragraphs, `- ` lists, `**bold**`, citation chips — internal paths
+    only, anything else dropped), history kept in sessionStorage so
+    following a citation and reopening keeps the chat, "New chat",
+    friendly errors (busy/limited/failed/offline, with the email).
+    `site.assistantUrl` gates it all: `http://localhost:8787` in dev,
+    **`null` in production until the Worker is deployed** (then its URL).
+  - **Evals**: `worker/evals/cases.json` (20 cases: facts that must
+    appear, things it must never say, citations, Spanish, off-topic,
+    prompt injection, the thesis rule) run by `scripts/ci/eval-assistant.mjs
+    <worker url>` — by hand (Actions → "Evaluate assistant"), it spends
+    quota. Local testing without Gemini: `GEMINI_BASE` points the Worker
+    at a mock.
+  - Local dev: `worker/.dev.vars` with `GEMINI_API_KEY=…` (git-ignored),
+    `npm run dev` in `worker/` (port 8787, reads the knowledge from the
+    astro dev server). Deploy: `npx wrangler login`, `npx wrangler secret
+    put GEMINI_API_KEY`, `npm run deploy`.
 - **/now page** (`src/pages/now.astro`, `NowPage.tsx`, content in
   `src/data/now.ts` with a `nowUpdated` date shown on the page): what Paco
   is focused on — looking for, building, out and about. **Not in the top

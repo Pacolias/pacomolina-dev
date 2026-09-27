@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState, type ComponentType } from "react";
 import {
+  ArrowLeft,
   Briefcase,
   CalendarDays,
   Copy,
@@ -9,6 +10,7 @@ import {
   Home,
   Languages,
   Search,
+  Sparkles,
   SunMoon,
   User,
 } from "lucide-react";
@@ -24,8 +26,13 @@ import { focusRing } from "./ui";
 // Ctrl/⌘+K: jump to any page, project, job or blog entry, or run a small
 // action (theme, language, CV, copy email). Desktop-first: the nav only
 // shows its trigger button from `sm` up, but the shortcut works anywhere.
+// It's also the home of the "Ask about Paco" assistant (AssistantChat,
+// lazy-loaded): "Ask about Paco: …" with whatever was typed, or the Home
+// page's ask button (an "open-search" event with { mode: "chat" }).
 
-type Group = "page" | "project" | "job" | "post" | "action";
+type Group = "page" | "project" | "job" | "post" | "action" | "ask";
+type Mode = "search" | "chat";
+type ChatComponent = typeof import("./AssistantChat").default;
 type Item = {
   id: string;
   group: Group;
@@ -62,6 +69,16 @@ export function CommandPalette() {
   const [query, setQuery] = useState("");
   const [active, setActive] = useState(0);
   const [notice, setNotice] = useState("");
+  const [mode, setMode] = useState<Mode>("search");
+  const [chatQuestion, setChatQuestion] = useState<string | undefined>();
+  const [Chat, setChat] = useState<ChatComponent | null>(null);
+  const chatInputRef = useRef<HTMLInputElement>(null);
+
+  const openChat = (question?: string) => {
+    setChatQuestion(question);
+    setMode("chat");
+    if (!Chat) import("./AssistantChat").then((m) => setChat(() => m.default));
+  };
 
   // Global shortcut, plus the nav button (which dispatches "open-search").
   useEffect(() => {
@@ -71,7 +88,10 @@ export function CommandPalette() {
         setOpen((o) => !o);
       }
     };
-    const onOpen = () => setOpen(true);
+    const onOpen = (e: Event) => {
+      setOpen(true);
+      if ((e as CustomEvent<{ mode?: Mode }>).detail?.mode === "chat") openChat();
+    };
     window.addEventListener("keydown", onKey);
     window.addEventListener("open-search", onOpen);
     return () => {
@@ -90,7 +110,10 @@ export function CommandPalette() {
       dialog.showModal();
       inputRef.current?.focus();
     }
-    if (!open && dialog.open) dialog.close();
+    if (!open) {
+      if (dialog.open) dialog.close();
+      setMode("search");
+    }
   }, [open]);
 
   const items = useMemo<Item[]>(() => {
@@ -210,8 +233,20 @@ export function CommandPalette() {
         })
       : items;
     // Grouped in a fixed order, so arrow keys follow what's on screen.
-    return GROUP_ORDER.flatMap((g) => matched.filter((i) => i.group === g));
-  }, [items, query]);
+    const grouped = GROUP_ORDER.flatMap((g) => matched.filter((i) => i.group === g));
+    if (!open || !site.assistantUrl) return grouped;
+    // The assistant: first while nothing's typed (discoverable) or nothing
+    // matches; otherwise after the matches, asking what was typed.
+    const q = query.trim();
+    const ask: Item = {
+      id: "ask",
+      group: "ask",
+      title: q ? `${t.assistant.askQuery}: “${q}”` : t.assistant.ask,
+      Icon: Sparkles,
+      run: () => openChat(q || undefined),
+    };
+    return !q || grouped.length === 0 ? [ask, ...grouped] : [...grouped, ask];
+  }, [items, query, open, t]);
 
   useEffect(() => {
     setActive(0);
@@ -226,6 +261,7 @@ export function CommandPalette() {
   }, [active]);
 
   const egg = EGG.includes(normalize(query).trim().replace(/\s+/g, " "));
+  const chatting = mode === "chat";
 
   const onInputKey = (e: React.KeyboardEvent) => {
     if (e.key === "ArrowDown") {
@@ -252,83 +288,120 @@ export function CommandPalette() {
       }}
       className="m-0 h-dvh max-h-none w-screen max-w-none bg-transparent p-4 backdrop:bg-stone-950/40 backdrop:backdrop-blur-sm sm:pt-[12vh]"
     >
-      <div className="mx-auto flex max-h-[70vh] w-full max-w-lg flex-col overflow-hidden rounded-3xl border border-amber-100 bg-white shadow-xl shadow-stone-900/10 dark:border-stone-800 dark:bg-stone-900">
-        <div className="flex items-center gap-3 border-b border-stone-100 px-4 dark:border-stone-800">
-          <Search className="h-4 w-4 shrink-0 text-stone-400" aria-hidden="true" />
-          <input
-            ref={inputRef}
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            onKeyDown={onInputKey}
-            placeholder={copy.placeholder}
-            aria-label={copy.label}
-            role="combobox"
-            aria-expanded="true"
-            aria-controls="search-results"
-            aria-activedescendant={results[active] ? `search-${results[active].id}` : undefined}
-            className="h-12 w-full bg-transparent text-sm text-stone-900 outline-none placeholder:text-stone-400 dark:text-stone-100"
-          />
-          <kbd className="hidden shrink-0 rounded border border-stone-200 px-1.5 py-0.5 text-[10px] text-stone-400 sm:inline dark:border-stone-700">
-            Esc
-          </kbd>
-        </div>
-        {egg ? (
-          <EasterEgg onNotice={setNotice} />
-        ) : (
-          <ul id="search-results" role="listbox" className="flex-1 overflow-y-auto p-2">
-            {open && results.length === 0 && (
-              <li className="px-3 py-6 text-center text-sm text-stone-500 dark:text-stone-400">
-                {copy.empty}
-              </li>
+      <div
+        className={`mx-auto flex w-full max-w-lg flex-col overflow-hidden rounded-3xl border border-amber-100 bg-white shadow-xl shadow-stone-900/10 dark:border-stone-800 dark:bg-stone-900 ${
+          chatting ? "h-[min(75dvh,600px)]" : "max-h-[70vh]"
+        }`}
+      >
+        {chatting ? (
+          <>
+            <div className="flex h-12 shrink-0 items-center gap-2 border-b border-stone-100 px-2 dark:border-stone-800">
+              <button
+                type="button"
+                onClick={() => {
+                  // The typed text already went to the chat as a question.
+                  setQuery("");
+                  setMode("search");
+                  setTimeout(() => inputRef.current?.focus());
+                }}
+                aria-label={t.assistant.back}
+                title={t.assistant.back}
+                className={`inline-flex h-8 w-8 items-center justify-center rounded-full text-stone-500 transition-colors hover:bg-stone-100 dark:text-stone-400 dark:hover:bg-stone-800 ${focusRing}`}
+              >
+                <ArrowLeft className="h-4 w-4" />
+              </button>
+              <Sparkles className="h-4 w-4 text-amber-600 dark:text-amber-400" aria-hidden="true" />
+              <h2 className="flex-1 text-sm font-medium text-stone-900 dark:text-stone-100">{t.assistant.label}</h2>
+              <kbd className="mr-2 hidden shrink-0 rounded border border-stone-200 px-1.5 py-0.5 text-[10px] text-stone-400 sm:inline dark:border-stone-700">
+                Esc
+              </kbd>
+            </div>
+            {Chat ? (
+              <Chat initialQuestion={chatQuestion} onNavigate={() => setOpen(false)} inputRef={chatInputRef} />
+            ) : (
+              <p className="p-4 text-sm text-stone-400">{t.assistant.thinking}</p>
             )}
-            {results.map((item, i) => {
-              const header = item.group !== lastGroup ? copy.groups[item.group] : null;
-              lastGroup = item.group;
-              const selected = i === active;
-              return (
-                <li key={item.id} role="presentation">
-                  {header && (
-                    <p className="px-3 pt-3 pb-1 text-[11px] font-medium uppercase tracking-wider text-stone-400 dark:text-stone-500">
-                      {header}
-                    </p>
-                  )}
-                  <button
-                    type="button"
-                    id={`search-${item.id}`}
-                    role="option"
-                    aria-selected={selected}
-                    data-index={i}
-                    tabIndex={-1}
-                    onMouseMove={() => setActive(i)}
-                    onClick={() => item.run()}
-                    className={`flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left ${focusRing} ${
-                      selected ? "bg-amber-50 dark:bg-stone-800" : ""
-                    }`}
-                  >
-                    <item.Icon className="h-4 w-4 shrink-0 text-amber-700 dark:text-amber-400" />
-                    <span className="min-w-0 flex-1">
-                      <span className="block truncate text-sm text-stone-900 dark:text-stone-100">
-                        {item.title}
-                      </span>
-                      {item.subtitle && (
-                        <span className="block truncate text-xs text-stone-500 dark:text-stone-400">
-                          {item.subtitle}
-                        </span>
+          </>
+        ) : (
+          <>
+            <div className="flex items-center gap-3 border-b border-stone-100 px-4 dark:border-stone-800">
+              <Search className="h-4 w-4 shrink-0 text-stone-400" aria-hidden="true" />
+              <input
+                ref={inputRef}
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                onKeyDown={onInputKey}
+                placeholder={copy.placeholder}
+                aria-label={copy.label}
+                role="combobox"
+                aria-expanded="true"
+                aria-controls="search-results"
+                aria-activedescendant={results[active] ? `search-${results[active].id}` : undefined}
+                className="h-12 w-full bg-transparent text-sm text-stone-900 outline-none placeholder:text-stone-400 dark:text-stone-100"
+              />
+              <kbd className="hidden shrink-0 rounded border border-stone-200 px-1.5 py-0.5 text-[10px] text-stone-400 sm:inline dark:border-stone-700">
+                Esc
+              </kbd>
+            </div>
+            {egg ? (
+              <EasterEgg onNotice={setNotice} />
+            ) : (
+              <ul id="search-results" role="listbox" className="flex-1 overflow-y-auto p-2">
+                {open && results.length === 0 && (
+                  <li className="px-3 py-6 text-center text-sm text-stone-500 dark:text-stone-400">
+                    {copy.empty}
+                  </li>
+                )}
+                {results.map((item, i) => {
+                  const header = item.group !== lastGroup ? copy.groups[item.group] : null;
+                  lastGroup = item.group;
+                  const selected = i === active;
+                  return (
+                    <li key={item.id} role="presentation">
+                      {header && (
+                        <p className="px-3 pt-3 pb-1 text-[11px] font-medium uppercase tracking-wider text-stone-400 dark:text-stone-500">
+                          {header}
+                        </p>
                       )}
-                    </span>
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
+                      <button
+                        type="button"
+                        id={`search-${item.id}`}
+                        role="option"
+                        aria-selected={selected}
+                        data-index={i}
+                        tabIndex={-1}
+                        onMouseMove={() => setActive(i)}
+                        onClick={() => item.run()}
+                        className={`flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left ${focusRing} ${
+                          selected ? "bg-amber-50 dark:bg-stone-800" : ""
+                        }`}
+                      >
+                        <item.Icon className="h-4 w-4 shrink-0 text-amber-700 dark:text-amber-400" />
+                        <span className="min-w-0 flex-1">
+                          <span className="block truncate text-sm text-stone-900 dark:text-stone-100">
+                            {item.title}
+                          </span>
+                          {item.subtitle && (
+                            <span className="block truncate text-xs text-stone-500 dark:text-stone-400">
+                              {item.subtitle}
+                            </span>
+                          )}
+                        </span>
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+            <p
+              role="status"
+              aria-live="polite"
+              className="border-t border-stone-100 px-4 py-2 text-[11px] text-stone-400 dark:border-stone-800 dark:text-stone-500"
+            >
+              {notice || copy.hint}
+            </p>
+          </>
         )}
-        <p
-          role="status"
-          aria-live="polite"
-          className="border-t border-stone-100 px-4 py-2 text-[11px] text-stone-400 dark:border-stone-800 dark:text-stone-500"
-        >
-          {notice || copy.hint}
-        </p>
       </div>
     </dialog>
   );

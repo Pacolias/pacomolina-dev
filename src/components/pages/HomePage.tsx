@@ -1,5 +1,6 @@
+import { useEffect, useState } from "react";
 import type { Lang } from "../../data/i18n";
-import { AppWindow, ArrowRight, FileText, Globe } from "lucide-react";
+import { AppWindow, ArrowRight, FileText, Globe, Sparkles } from "lucide-react";
 import { SiGithub } from "@icons-pack/react-simple-icons";
 import { projects, type ProjectLink } from "../../data/projects";
 import { site, withBase } from "../../data/site";
@@ -9,7 +10,7 @@ import { SiteShell } from "../SiteShell";
 import { Gallery } from "../Gallery";
 import { StackRow } from "../StackRow";
 import { LinkedInIcon } from "../icons/LinkedInIcon";
-import { button, buttonSm, card, textLink } from "../ui";
+import { button, buttonSm, card, focusRing, textLink } from "../ui";
 
 const redcheck = projects.find((p) => p.slug === "redcheck")!;
 
@@ -30,6 +31,10 @@ const LINK_STYLES: Record<ProjectLink["kind"], string> = {
 
 function Intro() {
   const { t } = useLanguage();
+  // Same shortcut label as the nav's search button (after mount: the
+  // prerender can't know the platform).
+  const [isMac, setIsMac] = useState(false);
+  useEffect(() => setIsMac(/Mac|iPhone|iPad/.test(navigator.platform)), []);
   return (
     <div className="px-6 pt-10 pb-8 sm:pt-14">
       <div className="fade-up-1 flex items-center gap-4">
@@ -79,6 +84,23 @@ function Intro() {
           {t.cta.cv}
         </DocumentLink>
       </div>
+
+      {site.assistantUrl && (
+        // Looks like a search box, reads as "you can ask here"; opens the
+        // assistant inside the command palette.
+        <button
+          type="button"
+          onClick={() => window.dispatchEvent(new CustomEvent("open-search", { detail: { mode: "chat" } }))}
+          aria-haspopup="dialog"
+          className={`fade-up-3 mt-3 flex w-full items-center gap-2.5 rounded-full border border-amber-100 bg-white px-4 py-2.5 text-left text-sm text-stone-500 shadow-sm shadow-stone-200/50 transition-colors duration-200 hover:border-amber-300 dark:border-stone-800 dark:bg-stone-900 dark:text-stone-400 dark:shadow-none dark:hover:border-amber-800 sm:max-w-md ${focusRing}`}
+        >
+          <Sparkles className="h-4 w-4 shrink-0 text-amber-600 dark:text-amber-400" aria-hidden="true" />
+          <span className="flex-1 truncate">{t.assistant.home}</span>
+          <kbd className="hidden rounded border border-stone-200 px-1.5 py-0.5 font-sans text-[10px] text-stone-400 sm:inline dark:border-stone-700">
+            {isMac ? "⌘K" : "Ctrl K"}
+          </kbd>
+        </button>
+      )}
 
       <a href={withBase("/now/")} className={`${textLink} fade-up-3 mt-4`}>
         {t.pages.now.link}

@@ -24,6 +24,10 @@ export const site = {
   // the NFC sticker at https://pacomolina.dev/?ref=nfc and printed QRs at
   // ?ref=qr: GoatCounter records `ref` as the visit's source.
   goatcounter: "pacomolina" as string | null,
+  // The "Ask about Paco" assistant: the Cloudflare Worker in worker/.
+  // Locally, run it with `npm run dev` in worker/. null hides the
+  // assistant's entry points (Ctrl K item, Home button).
+  assistantUrl: (import.meta.env.DEV ? "http://localhost:8787" : null) as string | null,
 } as const;
 
 export const redCheck = {
