@@ -1,0 +1,31 @@
+# The "Ask about Paco" assistant behind pacomolina.dev: a tiny proxy that
+# keeps the Gemini API key secret, rate-limits, and streams answers.
+# Deploy: `npm run deploy` (in worker/). The key is a secret, never here:
+#   npx wrangler secret put GEMINI_API_KEY
+# For local dev, put it in worker/.dev.vars (git-ignored):
+#   GEMINI_API_KEY=...
+name = "pacomolina-assistant"
+main = "src/index.ts"
+compatibility_date = "2026-09-01"
+
+[vars]
+# Flash-Lite: the free tier's highest limits, plenty for Q&A over a
+# portfolio. Swap for "gemini-flash-latest" if the evals say so.
+GEMINI_MODEL = "gemini-flash-lite-latest"
+KNOWLEDGE_URL = "https://pacomolina.dev/assistant/knowledge.txt"
+ALLOWED_ORIGINS = "https://pacomolina.dev"
+
+# Per-IP limit: 8 questions a minute (Workers rate limiting, free).
+[[ratelimits]]
+name = "LIMITER"
+namespace_id = "1001"
+simple = { limit = 8, period = 60 }
+
+# `npm run dev` (wrangler dev --env dev): against the local site.
+[env.dev]
+vars = { GEMINI_MODEL = "gemini-flash-lite-latest", KNOWLEDGE_URL = "http://localhost:4321/assistant/knowledge.txt", ALLOWED_ORIGINS = "http://localhost:4321,http://localhost:4330" }
+
+[[env.dev.ratelimits]]
+name = "LIMITER"
+namespace_id = "1001"
+simple = { limit = 8, period = 60 }

@@ -1,0 +1,28 @@
+name: Evaluate assistant
+
+# Runs the "Ask about Paco" evals (worker/evals/cases.json) against the
+# deployed Worker. By hand only: each run spends ~20 requests of the free
+# Gemini quota. The report lands in the run's summary.
+on:
+  workflow_dispatch:
+    inputs:
+      endpoint:
+        description: "Worker URL"
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  evals:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Ask every case
+        run: REPORT_FILE=report.md node scripts/ci/eval-assistant.mjs "${{ inputs.endpoint }}"
+      - name: Summary
+        if: always()
+        run: cat report.md >> "$GITHUB_STEP_SUMMARY" || true
