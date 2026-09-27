@@ -4,6 +4,7 @@ import preact from '@astrojs/preact';
 import tailwindcss from '@tailwindcss/vite';
 import { satteri } from '@astrojs/markdown-satteri';
 import { figureCaptions } from './src/plugins/figure-captions.mjs';
+import { mermaidDiagrams } from './src/plugins/mermaid-diagrams.mjs';
 import serviceWorker from './src/integrations/service-worker.mjs';
 
 // https://astro.build/config
@@ -16,8 +17,11 @@ export default defineConfig({
   // is ~40KB lighter gzipped than React + ReactDOM.
   integrations: [preact({ compat: true }), serviceWorker()],
   markdown: {
-    // `![alt](./img.webp "Caption")` → <figure> + <figcaption> in blog posts.
-    processor: satteri({ hastPlugins: [figureCaptions] }),
+    // `![alt](./img.webp "Caption")` → <figure> + <figcaption> in blog posts;
+    // ```mermaid blocks → their pre-rendered SVG (scripts/diagrams/).
+    processor: satteri({ hastPlugins: [figureCaptions, mermaidDiagrams] }),
+    // Mermaid blocks reach mermaidDiagrams as plain text, not highlighted.
+    syntaxHighlight: { type: 'shiki', excludeLangs: ['math', 'mermaid'] },
   },
   vite: {
     plugins: [tailwindcss()],

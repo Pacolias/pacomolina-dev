@@ -18,6 +18,9 @@ import texts from "../../data/documents-text.json";
 
 const strip = (html: string) =>
   html
+    // Diagrams (inline SVG with its own CSS) and code styles aren't prose.
+    .replace(/<figure class="diagram[\s\S]*?<\/figure>/g, " ")
+    .replace(/<style[\s\S]*?<\/style>/g, " ")
     .replace(/<[^>]+>/g, " ")
     .replace(/&nbsp;/g, " ")
     .replace(/&amp;/g, "&")

@@ -17,17 +17,17 @@ RAG?"*. No lo es, y es a propósito. Así funciona, y por qué.
 
 ## Cómo funciona
 
-```
-visitante (chat, Ctrl K)
-  │
-  ▼
-Worker ◄─ knowledge.txt
-  │ reglas + web + pregunta
-  ▼
-Gemini Flash-Lite
-  │ respuesta en streaming
-  ▼
-visitante, con citas
+```mermaid
+flowchart TD
+    V("Visitante<br/>chat · Ctrl K")
+    W("Cloudflare Worker<br/>API key · límites · origen")
+    K("+ knowledge.txt<br/>la web entera")
+    G("Gemini Flash-Lite")
+    A("Respuesta en streaming,<br/>con citas")
+    V -->|pregunta| W
+    W --> K
+    K -->|reglas + web + pregunta| G
+    G --> A
 ```
 
 1. **El conocimiento.** Cada vez que se construye la web, se genera

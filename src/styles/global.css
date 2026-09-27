@@ -169,3 +169,30 @@ html.no-intro [class*="fade-up-"] {
 .swipe-preview [class*="fade-up-"] {
   animation: none;
 }
+
+/* Mermaid diagrams in posts (src/plugins/mermaid-diagrams.mjs): both
+   themes are in the page, the active one shows. The SVG scales down to the
+   column (Mermaid caps it at its natural width). */
+.diagram {
+  margin: 1.75rem 0;
+  padding: 1.25rem 1rem;
+  border: 1px solid var(--color-amber-100);
+  border-radius: 1.5rem;
+  background: #fff;
+}
+.dark .diagram {
+  border-color: var(--color-stone-800);
+  background: var(--color-stone-900);
+}
+.diagram svg {
+  display: block;
+  height: auto;
+  margin: 0 auto;
+}
+.diagram-dark,
+.dark .diagram-light {
+  display: none;
+}
+.dark .diagram-dark {
+  display: block;
+}

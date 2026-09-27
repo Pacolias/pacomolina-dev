@@ -398,6 +398,26 @@ The site grew from one page into five, keeping the same look everywhere:
   type is carried by the icon (plus an sr-only label).
 
   Prose styling via `@tailwindcss/typography`.
+- **Mermaid diagrams in posts** (Sep 27 2026, Paco's request): write a
+  ```` ```mermaid ```` block in the Markdown; it's rendered **ahead of
+  time** — Mermaid is ~5MB and never reaches the browser. Run
+  `npm install --no-save playwright && node scripts/diagrams/render.mjs`
+  (stop `astro dev` first: it changes node_modules): it writes
+  `src/diagrams/<hash>-{light,dark}.svg` (hash of the block's text) in
+  the site's stone/amber palette and Inter, rounds coordinates to one
+  decimal (Mermaid's shapes were ~100KB each), drops the node shadows,
+  gives nodes 12px corners, and deletes SVGs no block uses. The Sätteri
+  plugin `src/plugins/mermaid-diagrams.mjs` swaps each block for both
+  SVGs inline in a `figure.diagram` (global.css shows the one for the
+  active theme), stripping `xmlns` (htmlToHast mangles it into
+  `:xmlns`); Shiki skips `mermaid` (`markdown.syntaxHighlight
+  .excludeLangs`). An edited block without its SVG **fails the build**
+  with the command to run. `satteri` is a direct dependency pinned to
+  Astro's version (for `htmlToHast`); `mermaid` is a devDependency.
+  Keep diagrams one column (`flowchart TD`, no side branches) so they
+  fit a phone at full size — ~200px wide. In dev, after a failed render
+  the content cache keeps the empty post: stop, delete
+  `.astro/data-store.json` and `node_modules/.astro`, restart.
 - **Lightbox** (`Lightbox.tsx`, used by `Gallery.tsx`, so it covers every
   project/work image): tapping a photo opens it in-page over a blurred
   page (native `<dialog>` + `showModal()` → top layer, focus trap, Esc;

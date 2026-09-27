@@ -18,17 +18,17 @@ RAG?"*. It isn't — on purpose. Here's how it works, and why.
 
 ## How it works
 
-```
-visitor (chat, Ctrl K)
-  │
-  ▼
-Worker ◄─ knowledge.txt
-  │ rules + site + question
-  ▼
-Gemini Flash-Lite
-  │ streamed answer
-  ▼
-visitor, with citations
+```mermaid
+flowchart TD
+    V("Visitor<br/>chat · Ctrl K")
+    W("Cloudflare Worker<br/>API key · limits · origin")
+    K("+ knowledge.txt<br/>the whole site")
+    G("Gemini Flash-Lite")
+    A("Answer, streamed,<br/>with citations")
+    V -->|question| W
+    W --> K
+    K -->|rules + site + question| G
+    G --> A
 ```
 
 1. **The knowledge.** Every time the site is built, it also generates
