@@ -574,6 +574,26 @@ To run the browser check locally: `npm install --no-save playwright
 @axe-core/playwright`, `npx astro build && npx astro preview`, then
 `node scripts/ci/check-pages.mjs http://localhost:4321`.
 
+**Weekly jobs** (Mondays):
+
+- `deploy.yml` also runs on a `schedule` (05:00 UTC), so the site is
+  rebuilt even without commits. That keeps build-time data fresh: each
+  project row on /projects/ shows its **last GitHub push**
+  (`src/data/github.ts`, fetched at build time from the project's
+  `repo` link — `/repos/{owner}/{repo}`, or the most recently pushed repo
+  of an org). It's shown as an absolute date in the prerender and as a
+  relative "5 days ago" after mount (no hydration mismatch). The fetch
+  uses `GITHUB_TOKEN` when set (CI) for the rate limit; any failure just
+  hides that project's line — the build never fails over it.
+- `links.yml` (06:00 UTC, or by hand) builds and runs
+  `scripts/ci/check-external.mjs`: fetches every external link in
+  `dist/`. 404/410, 5xx and network errors are **broken**; 401/403/429,
+  LinkedIn's 999 and TLS errors (the UGR certificate) are
+  **unverifiable** — listed, not failed. On a failure it opens (or
+  comments on) an issue labelled `broken-links` with the report, and
+  closes it once everything answers again. Deliberately not part of the
+  deploy gate: someone else's site being down shouldn't block a deploy.
+
 ## Development
 
 When starting the dev server, use background mode:

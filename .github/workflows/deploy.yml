@@ -3,6 +3,10 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
+  # Weekly rebuild (Mondays 05:00 UTC), even with no changes, so build-time
+  # data — each project's last GitHub push — stays fresh.
+  schedule:
+    - cron: "0 5 * * 1"
   workflow_dispatch:
 
 permissions:
@@ -19,6 +23,9 @@ jobs:
   # build of the site (the deploy job keeps using withastro/action).
   check:
     runs-on: ubuntu-latest
+    env:
+      # Raises the GitHub API rate limit for the build-time activity data.
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -49,6 +56,8 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4

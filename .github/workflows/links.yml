@@ -1,0 +1,52 @@
+name: Check external links
+
+# Weekly: are the site's external links (RedCheck demo, repos, event pages,
+# the British Council credential…) still alive? Opens — or updates — an
+# issue labelled "broken-links" when something is down, and closes it once
+# everything answers again. See scripts/ci/check-external.mjs.
+on:
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  external-links:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Build
+        run: npm ci && npx astro build
+      - name: Check external links
+        id: check
+        continue-on-error: true
+        run: REPORT_FILE=report.md node scripts/ci/check-external.mjs dist
+      - name: Open or update the issue
+        if: steps.check.outcome == 'failure'
+        run: |
+          gh label create broken-links --color d93f0b --description "Found by the weekly link check" 2>/dev/null || true
+          existing=$(gh issue list --label broken-links --state open --json number -q '.[0].number')
+          if [ -n "$existing" ]; then
+            gh issue comment "$existing" --body-file report.md
+          else
+            gh issue create --title "Broken external links on pacomolina.dev" --label broken-links --body-file report.md
+          fi
+          exit 1
+      - name: Close the issue once links are fine again
+        if: steps.check.outcome == 'success'
+        run: |
+          for n in $(gh issue list --label broken-links --state open --json number -q '.[].number'); do
+            gh issue close "$n" --comment "All external links answer again (weekly check)."
+          done
