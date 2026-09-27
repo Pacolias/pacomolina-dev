@@ -54,6 +54,35 @@ jobs:
           npx -y wait-on http://localhost:4321/ --timeout 60000
           node scripts/ci/check-pages.mjs http://localhost:4321
 
+  # Visual regression: every page's screenshot vs tests/visual/. Runs in
+  # the official Playwright container so fonts render exactly as when the
+  # baselines were made (scripts/ci/visual.sh, same image, locally).
+  visual:
+    runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.63.0-noble # = PLAYWRIGHT in visual.sh
+      options: --ipc=host
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install dependencies
+        run: npm ci
+      - name: Build (without the drifting GitHub dates)
+        run: GITHUB_ACTIVITY=off npx astro build
+      - name: Install the screenshot tools (not project dependencies)
+        run: npm install --no-save --no-audit --no-fund playwright@1.63.0 pixelmatch@7 pngjs@7
+      - name: Compare every page with its baseline
+        run: |
+          npx astro preview --port 4321 &
+          npx -y wait-on http://localhost:4321/ --timeout 60000
+          node scripts/ci/check-visual.mjs http://localhost:4321
+      - name: Upload the differences
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-report
+          path: visual-report/
+
   build:
     runs-on: ubuntu-latest
     env:
@@ -67,7 +96,7 @@ jobs:
           node-version: 22
 
   deploy:
-    needs: [check, build]
+    needs: [check, visual, build]
     runs-on: ubuntu-latest
     environment:
       name: github-pages

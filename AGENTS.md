@@ -582,6 +582,23 @@ nothing reaches production unless it passes. It runs, on its own build:
   never counts as a visit. `playwright` and `@axe-core/playwright` are
   installed in the job with `--no-save`, not project dependencies.
 
+- `scripts/ci/check-visual.mjs` (its own `visual` job, also gating
+  `deploy`) — **visual regression**: a full-page screenshot of every page
+  (plus the open RedCheck row) at 360px ES light and 1440px EN dark,
+  compared pixel by pixel with the PNGs committed in `tests/visual/`
+  (fails past 0.05% changed pixels). On failure the job uploads
+  `visual-report/` (actual + diff with changes in red). Pixels depend on
+  the OS's font rendering, so it runs in the official Playwright container
+  (`mcr.microsoft.com/playwright:v1.63.0-noble`) both in CI and locally:
+  `scripts/ci/visual.sh` compares, `scripts/ci/visual.sh update` accepts
+  the current look (needs podman/docker). **Any intended visual change —
+  a new blog entry, a copy edit — needs `visual.sh update` and the new
+  PNGs in the same commit**, or the deploy is blocked. The build for it
+  uses `GITHUB_ACTIVITY=off` (no drifting "Last push" dates); lazy images
+  are forced to load and the page is scrolled to the top before each
+  capture. Bump the Playwright version in `visual.sh` and `deploy.yml`
+  together, then regenerate every baseline.
+
 To run the browser check locally: `npm install --no-save playwright
 @axe-core/playwright`, `npx astro build && npx astro preview`, then
 `node scripts/ci/check-pages.mjs http://localhost:4321`.

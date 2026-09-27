@@ -34,6 +34,9 @@ async function lastPush(repoUrl: string): Promise<string | undefined> {
 let cached: Promise<Activity> | null = null;
 
 export function getGithubActivity(): Promise<Activity> {
+  // GITHUB_ACTIVITY=off: a deterministic build for the visual regression
+  // screenshots (scripts/ci/check-visual.mjs), where dates would drift.
+  if (process.env.GITHUB_ACTIVITY === "off") return Promise.resolve({});
   cached ??= (async () => {
     const entries = await Promise.all(
       projects.map(async (project) => {
