@@ -39,7 +39,7 @@ export function SiteShell({
                   render plain blocks); the contact footer stays outside. */}
               <main className="flex flex-col">{children}</main>
               {footer && (
-                <footer className="px-6 pb-16">
+                <footer id="contact" className="scroll-mt-20 px-6 pb-16">
                   <ContactCard />
                 </footer>
               )}

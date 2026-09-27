@@ -247,6 +247,11 @@ The site grew from one page into five, keeping the same look everywhere:
     `scripts/docs/render.mjs`, phone number stripped). The Worker fetches
     it (10-min cache), so publishing the site updates what it knows —
     no RAG/vector DB: ~25KB (~7k tokens) fits in every request.
+    A "Contact" block cites `/#contact` — the "Let's talk" footer has
+    that id on every page: without a real page to point to, the model
+    kept inventing `/#profile` when sending people to Paco (salary
+    questions). The evals check every citation against the knowledge
+    file's `Source:` paths.
   - **UI**: `AssistantChat.tsx`, lazy-loaded inside `CommandPalette`
     (mode "chat"): "Ask about Paco" is the first item on an empty palette
     or when nothing matches, last otherwise ("Ask about Paco: “…”");

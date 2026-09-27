@@ -47,9 +47,17 @@ export const GET: APIRoute = async () => {
     `Role: ${en.hero.role}`,
     `In one line: ${en.hero.tagline} (Spanish: "${dictionary.es.hero.tagline}")`,
     `Availability: ${en.hero.availability}`,
-    `Contact: email ${site.email} · LinkedIn ${site.linkedin} · GitHub ${site.github}`,
     `CV: can be viewed and downloaded on the home page ("View CV").`,
     `Core tech stack: ${stack.map((s) => s.name).join(", ")}`,
+  ]);
+
+  // Its own block (the "Let's talk" card at the bottom of every page), so
+  // answers that point to Paco have a real page to cite.
+  block("Contact", "/#contact", [
+    `Email: ${site.email}`,
+    `LinkedIn: ${site.linkedin}`,
+    `GitHub: ${site.github}`,
+    `Every page ends with a "Let's talk" card: send an email (or copy the address), save his contact card, GitHub, and a QR code of the site.`,
   ]);
 
   block("About", "/about/", [
