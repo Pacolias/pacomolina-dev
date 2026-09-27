@@ -161,6 +161,12 @@ export const dictionary = {
         post: "Blog",
         action: "Actions",
       },
+      egg: {
+        prompt: "[sudo] password for recruiter:",
+        granted: "Access granted.",
+        body: "Paco is available now — Málaga · remote, hybrid or on-site. Next step's yours:",
+        linkedin: "LinkedIn",
+      },
       actions: {
         theme: "Toggle dark mode",
         lang: "Switch to Spanish",
@@ -336,6 +342,12 @@ export const dictionary = {
         job: "Trabajo",
         post: "Blog",
         action: "Acciones",
+      },
+      egg: {
+        prompt: "[sudo] contraseña para recruiter:",
+        granted: "Acceso concedido.",
+        body: "Paco está disponible ya — Málaga · remoto, híbrido o presencial. El siguiente paso es tuyo:",
+        linkedin: "LinkedIn",
       },
       actions: {
         theme: "Cambiar modo claro/oscuro",

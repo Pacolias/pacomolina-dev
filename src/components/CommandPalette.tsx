@@ -42,6 +42,10 @@ const GROUP_ORDER: Group[] = ["page", "project", "job", "post", "action"];
 const normalize = (s: string) =>
   s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
 
+// The easter egg (a nod to gkos.dev's secret mode): typing one of these
+// swaps the results for a tiny fake terminal with the "hire me" actions.
+const EGG = ["sudo hire paco", "hire paco", "contrata a paco", "sudo contrata a paco"];
+
 const go = (path: string) => {
   window.location.href = withBase(path);
 };
@@ -208,6 +212,8 @@ export function CommandPalette() {
       ?.scrollIntoView({ block: "nearest" });
   }, [active]);
 
+  const egg = EGG.includes(normalize(query).trim().replace(/\s+/g, " "));
+
   const onInputKey = (e: React.KeyboardEvent) => {
     if (e.key === "ArrowDown") {
       e.preventDefault();
@@ -253,52 +259,56 @@ export function CommandPalette() {
             Esc
           </kbd>
         </div>
-        <ul id="search-results" role="listbox" className="flex-1 overflow-y-auto p-2">
-          {open && results.length === 0 && (
-            <li className="px-3 py-6 text-center text-sm text-stone-500 dark:text-stone-400">
-              {copy.empty}
-            </li>
-          )}
-          {results.map((item, i) => {
-            const header = item.group !== lastGroup ? copy.groups[item.group] : null;
-            lastGroup = item.group;
-            const selected = i === active;
-            return (
-              <li key={item.id} role="presentation">
-                {header && (
-                  <p className="px-3 pt-3 pb-1 text-[11px] font-medium uppercase tracking-wider text-stone-400 dark:text-stone-500">
-                    {header}
-                  </p>
-                )}
-                <button
-                  type="button"
-                  id={`search-${item.id}`}
-                  role="option"
-                  aria-selected={selected}
-                  data-index={i}
-                  tabIndex={-1}
-                  onMouseMove={() => setActive(i)}
-                  onClick={() => item.run()}
-                  className={`flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left ${focusRing} ${
-                    selected ? "bg-amber-50 dark:bg-stone-800" : ""
-                  }`}
-                >
-                  <item.Icon className="h-4 w-4 shrink-0 text-amber-700 dark:text-amber-400" />
-                  <span className="min-w-0 flex-1">
-                    <span className="block truncate text-sm text-stone-900 dark:text-stone-100">
-                      {item.title}
-                    </span>
-                    {item.subtitle && (
-                      <span className="block truncate text-xs text-stone-500 dark:text-stone-400">
-                        {item.subtitle}
-                      </span>
-                    )}
-                  </span>
-                </button>
+        {egg ? (
+          <EasterEgg onNotice={setNotice} />
+        ) : (
+          <ul id="search-results" role="listbox" className="flex-1 overflow-y-auto p-2">
+            {open && results.length === 0 && (
+              <li className="px-3 py-6 text-center text-sm text-stone-500 dark:text-stone-400">
+                {copy.empty}
               </li>
-            );
-          })}
-        </ul>
+            )}
+            {results.map((item, i) => {
+              const header = item.group !== lastGroup ? copy.groups[item.group] : null;
+              lastGroup = item.group;
+              const selected = i === active;
+              return (
+                <li key={item.id} role="presentation">
+                  {header && (
+                    <p className="px-3 pt-3 pb-1 text-[11px] font-medium uppercase tracking-wider text-stone-400 dark:text-stone-500">
+                      {header}
+                    </p>
+                  )}
+                  <button
+                    type="button"
+                    id={`search-${item.id}`}
+                    role="option"
+                    aria-selected={selected}
+                    data-index={i}
+                    tabIndex={-1}
+                    onMouseMove={() => setActive(i)}
+                    onClick={() => item.run()}
+                    className={`flex w-full items-center gap-3 rounded-xl px-3 py-2 text-left ${focusRing} ${
+                      selected ? "bg-amber-50 dark:bg-stone-800" : ""
+                    }`}
+                  >
+                    <item.Icon className="h-4 w-4 shrink-0 text-amber-700 dark:text-amber-400" />
+                    <span className="min-w-0 flex-1">
+                      <span className="block truncate text-sm text-stone-900 dark:text-stone-100">
+                        {item.title}
+                      </span>
+                      {item.subtitle && (
+                        <span className="block truncate text-xs text-stone-500 dark:text-stone-400">
+                          {item.subtitle}
+                        </span>
+                      )}
+                    </span>
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+        )}
         <p
           role="status"
           aria-live="polite"
@@ -308,5 +318,44 @@ export function CommandPalette() {
         </p>
       </div>
     </dialog>
+  );
+}
+
+function EasterEgg({ onNotice }: { onNotice: (text: string) => void }) {
+  const { t } = useLanguage();
+  const copy = t.search;
+  const link =
+    "inline-flex items-center gap-1.5 rounded-full border border-emerald-700/60 px-3 py-1 text-xs text-emerald-300 transition-colors hover:bg-emerald-900/40";
+  return (
+    <div className="m-2 flex-1 overflow-y-auto rounded-2xl bg-stone-950 p-4 font-mono text-xs leading-relaxed text-stone-300">
+      <p>
+        <span className="text-emerald-400">$</span> sudo hire paco
+      </p>
+      <p className="text-stone-500">{copy.egg.prompt} ********</p>
+      <p className="mt-2 text-emerald-400">✓ {copy.egg.granted}</p>
+      <p className="mt-1">{copy.egg.body}</p>
+      <div className="mt-3 flex flex-wrap gap-2 font-sans">
+        <a href={site.cvHref} download className={link}>
+          <Download className="h-3.5 w-3.5" />
+          {copy.actions.cv}
+        </a>
+        <a href={site.linkedin} target="_blank" rel="noreferrer noopener" className={link}>
+          {copy.egg.linkedin} ↗
+        </a>
+        <button
+          type="button"
+          className={link}
+          onClick={() =>
+            navigator.clipboard?.writeText(site.email).then(
+              () => onNotice(copy.actions.emailCopied),
+              () => {}
+            )
+          }
+        >
+          <Copy className="h-3.5 w-3.5" />
+          {copy.actions.email}
+        </button>
+      </div>
+    </div>
   );
 }

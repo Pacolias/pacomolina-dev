@@ -223,7 +223,10 @@ The site grew from one page into five, keeping the same look everywhere:
   list is only built while open: blog entries come from the client-only
   `#blog-index` JSON, and rendering them in the prerender caused a React
   #418 hydration mismatch. Typing in it doesn't fire the h/p/w/b/a nav
-  shortcuts (they ignore inputs).
+  shortcuts (they ignore inputs). **Easter egg** (a nod to gkos.dev's
+  secret mode): typing `sudo hire paco` (or `hire paco`, `contrata a
+  paco`) swaps the results for a tiny fake terminal — "Access granted",
+  availability, and Download CV / LinkedIn / Copy email.
 - **/now page** (`src/pages/now.astro`, `NowPage.tsx`, content in
   `src/data/now.ts` with a `nowUpdated` date shown on the page): what Paco
   is focused on — looking for, building, out and about. **Not in the top
