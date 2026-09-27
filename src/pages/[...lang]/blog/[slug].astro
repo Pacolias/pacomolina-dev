@@ -55,7 +55,7 @@ const articleLd = {
 	description={entry.data.description}
 	ogType="article"
 	jsonLd={articleLd}
-	ogImage="/og/blog.jpg"
+	ogImage={`/og/blog/${lang}/${post.slug}.jpg`}
 >
 	<BlogPostApp client:load post={summary} pageLang={lang}>
 		<div data-lang="en" lang={enFallback ? "es" : "en"}>

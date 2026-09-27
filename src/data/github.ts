@@ -13,9 +13,7 @@ const API = "https://api.github.com";
 
 async function getJson(path: string) {
   const headers: Record<string, string> = { Accept: "application/vnd.github+json" };
-  // Build-time only (Node): read without pulling in Node's types.
-  const token = (globalThis as { process?: { env: Record<string, string | undefined> } }).process
-    ?.env.GITHUB_TOKEN;
+  const token = process.env.GITHUB_TOKEN;
   if (token) headers.Authorization = `Bearer ${token}`;
   const res = await fetch(`${API}${path}`, { headers, signal: AbortSignal.timeout(8000) });
   if (!res.ok) throw new Error(`${res.status} ${path}`);
