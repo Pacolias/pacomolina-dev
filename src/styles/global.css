@@ -25,7 +25,7 @@
 
   --animate-fade-up: fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
 
-  --animate-lightbox-in: lightbox-in 0.25s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-lightbox-in: lightbox-in 0.25s cubic-bezier(0.16, 1, 0.3, 1) backwards;
   --animate-backdrop-in: backdrop-in 0.25s ease-out both;
 
   @keyframes lightbox-in {

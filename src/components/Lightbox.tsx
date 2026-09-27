@@ -2,12 +2,15 @@ import { useEffect, useRef, type TouchEvent } from "react";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { useLanguage } from "./LanguageProvider";
 import type { LightboxImage } from "./Gallery";
+import { useImageZoom } from "./useImageZoom";
 
 // Full-screen image viewer. A native <dialog> opened with showModal() gives
 // the top layer (escapes any card's overflow/stacking), a focus trap, Esc to
 // close and inert page content for free; the page behind is blurred via
 // ::backdrop. Arrow keys, the side buttons or a horizontal swipe move
-// between images (wrapping around).
+// between images (wrapping around). The image zooms: pinch or double-tap
+// on phones, wheel or double-click on desktop, + / - / 0 on the keyboard
+// (see useImageZoom); while zoomed, swipes pan instead of changing image.
 export function Lightbox({
   images,
   index,
@@ -22,8 +25,12 @@ export function Lightbox({
   const { t, lang } = useLanguage();
   const dialogRef = useRef<HTMLDialogElement>(null);
   const touchStartX = useRef<number | null>(null);
+  const areaRef = useRef<HTMLDivElement>(null);
+  const imgRef = useRef<HTMLImageElement>(null);
   const open = index !== null;
   const many = images.length > 1;
+  const image = index !== null ? images[index] : null;
+  const zoom = useImageZoom(areaRef, imgRef, open, image?.src);
 
   useEffect(() => {
     const dialog = dialogRef.current;
@@ -49,26 +56,29 @@ export function Lightbox({
   };
 
   useEffect(() => {
-    if (!open || !many) return;
+    if (!open) return;
     function onKey(e: KeyboardEvent) {
-      if (e.key === "ArrowRight") go(1);
-      if (e.key === "ArrowLeft") go(-1);
+      if (many && e.key === "ArrowRight") go(1);
+      if (many && e.key === "ArrowLeft") go(-1);
+      if (e.key === "+" || e.key === "=") zoom.zoomIn();
+      if (e.key === "-") zoom.zoomOut();
+      if (e.key === "0") zoom.reset();
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   });
 
+  // Swipe to change image — one finger, not zoomed (then it pans).
   const onTouchStart = (e: TouchEvent) => {
-    touchStartX.current = e.touches[0].clientX;
+    touchStartX.current = e.touches.length === 1 && !zoom.isZoomed() ? e.touches[0].clientX : null;
   };
   const onTouchEnd = (e: TouchEvent) => {
-    if (touchStartX.current === null || !many) return;
+    if (touchStartX.current === null || !many || zoom.isZoomed()) return;
     const dx = e.changedTouches[0].clientX - touchStartX.current;
     touchStartX.current = null;
     if (Math.abs(dx) > 50) go(dx < 0 ? 1 : -1);
   };
 
-  const image = index !== null ? images[index] : null;
   // No `display` utility here — each use adds `inline-flex` or
   // `hidden sm:inline-flex`, since both in one class list is order-dependent.
   const controlClass =
@@ -79,9 +89,16 @@ export function Lightbox({
       ref={dialogRef}
       aria-label={image ? image.alt[lang] : undefined}
       onClose={onClose}
-      // Clicking anywhere that isn't the image or a control closes it.
+      // Clicking anywhere that isn't the image or a control closes it (or,
+      // when zoomed, zooms back out). The click that ends a drag doesn't.
       onClick={(e) => {
-        if (!(e.target as HTMLElement).closest("img, button")) onClose();
+        if (zoom.consumeDrag()) return;
+        // What's under the pointer, not e.target: the zoom's pointer
+        // capture retargets clicks to the image area.
+        const hit = document.elementFromPoint(e.clientX, e.clientY) ?? (e.target as Element);
+        if (hit.closest("img, button")) return;
+        if (zoom.isZoomed()) zoom.reset();
+        else onClose();
       }}
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
@@ -104,14 +121,24 @@ export function Lightbox({
             </button>
           </div>
 
-          <div className="relative flex min-h-0 flex-1 items-center justify-center px-4 py-4 sm:px-20">
+          {/* touch-none: the browser leaves pinches here to useImageZoom
+              instead of zooming the page. overflow-hidden keeps a zoomed
+              image off the counter and caption. */}
+          <div
+            ref={areaRef}
+            className="relative flex min-h-0 flex-1 touch-none select-none items-center justify-center overflow-hidden px-4 py-4 sm:px-20"
+          >
             <img
+              ref={imgRef}
               key={image.src}
+              draggable={false}
               src={image.src}
               alt={image.alt[lang]}
               width={image.width}
               height={image.height}
-              className="max-h-full w-auto max-w-full animate-lightbox-in rounded-2xl object-contain shadow-2xl shadow-black/40"
+              className={`max-h-full w-auto max-w-full animate-lightbox-in rounded-2xl object-contain shadow-2xl shadow-black/40 ${
+                zoom.zoomed ? "cursor-grab active:cursor-grabbing" : "cursor-zoom-in"
+              }`}
             />
             {many && (
               <>

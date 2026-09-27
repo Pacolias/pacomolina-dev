@@ -349,8 +349,21 @@ The site grew from one page into five, keeping the same look everywhere:
   wrap-around navigation via arrow keys, buttons or a horizontal swipe.
   Arrows sit at the image's sides on `sm+`, and next to the dots at the
   bottom on phones so they don't cover the image. Page scroll is locked
-  while open. The `<a href>` to the file is kept as the no-JS / new-tab
-  fallback. Blog post images use it too: they live in the post's own folder
+  while open. **Zoom** (`useImageZoom.ts`, Paco's request): pinch with two
+  fingers or double-tap on phones, mouse wheel / trackpad pinch around the
+  cursor or double-click on desktop, `+`/`-`/`0` on the keyboard; up to
+  4×, drag to pan (clamped to the image's edges). While zoomed, a
+  one-finger swipe pans instead of changing image, and a click outside
+  the image zooms out instead of closing; moving to another image resets
+  it. The image area is `touch-none` (the browser would otherwise
+  pinch-zoom the whole page) and `overflow-hidden` (a zoomed image never
+  covers the counter/caption). The transform is written straight to the
+  `<img>` style for 60fps gestures, so its entry animation fills
+  `backwards`, not `both` (a `both` fill would pin `transform` and block
+  the zoom). Outside clicks are decided with `elementFromPoint`, because
+  the pointer capture retargets `click` to the area. Verified with real
+  CDP touch/mouse input: 24 cases. The `<a href>` to the file is kept as
+  the no-JS / new-tab fallback. Blog post images use it too: they live in the post's own folder
   (`![alt](./x.webp "caption")`, optimized by Astro), and
   `usePostImageViewer` in `BlogPages.tsx` wires click/Enter on the static
   Astro-rendered `<img>`s via event delegation. It steps through the images of
