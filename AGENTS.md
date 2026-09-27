@@ -257,7 +257,7 @@ The site grew from one page into five, keeping the same look everywhere:
     following a citation and reopening keeps the chat, "New chat",
     friendly errors (busy/limited/failed/offline, with the email).
     `site.assistantUrl` gates it all: `http://localhost:8787` in dev,
-    **`null` in production until the Worker is deployed** (then its URL).
+    `https://pacomolina-assistant.pacomolina.workers.dev` in production (Paco's Cloudflare account, subdomain `pacomolina`).
   - **Evals**: `worker/evals/cases.json` (20 cases: facts that must
     appear, things it must never say, citations, Spanish, off-topic,
     prompt injection, the thesis rule) run by `scripts/ci/eval-assistant.mjs

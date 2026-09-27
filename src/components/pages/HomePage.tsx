@@ -96,7 +96,7 @@ function Intro() {
         >
           <Sparkles className="h-4 w-4 shrink-0 text-amber-600 dark:text-amber-400" aria-hidden="true" />
           <span className="flex-1 truncate">{t.assistant.home}</span>
-          <kbd className="hidden rounded border border-stone-200 px-1.5 py-0.5 font-sans text-[10px] text-stone-400 sm:inline dark:border-stone-700">
+          <kbd className="hidden rounded border border-stone-200 px-1.5 py-0.5 font-sans text-[10px] text-stone-500 sm:inline dark:border-stone-700 dark:text-stone-400">
             {isMac ? "⌘K" : "Ctrl K"}
           </kbd>
         </button>

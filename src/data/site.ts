@@ -27,7 +27,9 @@ export const site = {
   // The "Ask about Paco" assistant: the Cloudflare Worker in worker/.
   // Locally, run it with `npm run dev` in worker/. null hides the
   // assistant's entry points (Ctrl K item, Home button).
-  assistantUrl: (import.meta.env.DEV ? "http://localhost:8787" : null) as string | null,
+  assistantUrl: (import.meta.env.DEV
+    ? "http://localhost:8787"
+    : "https://pacomolina-assistant.pacomolina.workers.dev") as string | null,
 } as const;
 
 export const redCheck = {
