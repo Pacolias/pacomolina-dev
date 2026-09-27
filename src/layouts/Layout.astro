@@ -1,12 +1,16 @@
 ---
 import "../styles/global.css";
-import { dictionary } from "../data/i18n";
+import { dictionary, type Lang } from "../data/i18n";
+import { LOCALES, delocalizePath, localizePath } from "../data/locale";
 import { site } from "../data/site";
 import { getBlogPosts, summarize } from "../data/blog";
 
 interface Props {
-	// Per-page title/description (English — the prerendered language). Home
-	// omits them and falls back to the site-wide meta.
+	// The page's prerendered language: "es" for the /es/ copies (indexable
+	// Spanish), "en" otherwise. Visitors can still switch client-side.
+	lang?: Lang;
+	// Per-page title/description, in `lang`. Home omits them and falls back
+	// to the site-wide meta.
 	title?: string;
 	description?: string;
 	ogType?: "website" | "article";
@@ -20,7 +24,8 @@ interface Props {
 	ogImage?: string;
 }
 
-const meta = dictionary.en.meta;
+const { lang = "en" } = Astro.props;
+const meta = dictionary[lang].meta;
 const {
 	title = meta.title,
 	description = meta.description,
@@ -37,12 +42,18 @@ const personImage = new URL(`${base}/og-image.jpg`, Astro.site).toString();
 const blogIndex = (await getBlogPosts()).map((post) => summarize(post));
 const homeUrl = new URL(`${base}/`, Astro.site).toString();
 const canonicalUrl = new URL(Astro.url.pathname, Astro.site).toString();
+// hreflang alternates: the same page in each language (x-default: English).
+const neutralPath = delocalizePath(Astro.url.pathname);
+const alternates = LOCALES.map((l) => ({
+	lang: l,
+	href: new URL(`${base}${localizePath(neutralPath, l)}`, Astro.site).toString(),
+}));
 
 const personLd = {
 	"@context": "https://schema.org",
 	"@type": "Person",
 	name: site.name,
-	jobTitle: dictionary.en.hero.role,
+	jobTitle: dictionary[lang].hero.role,
 	url: homeUrl,
 	image: personImage,
 	email: `mailto:${site.email}`,
@@ -56,7 +67,7 @@ const personLd = {
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={lang}>
 	<head>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -90,6 +101,12 @@ const personLd = {
 		<link rel="apple-touch-icon" href={`${base}/apple-touch-icon.png`} />
 		<link rel="manifest" href={`${base}/manifest.webmanifest`} />
 		{noindex ? <meta name="robots" content="noindex" /> : <link rel="canonical" href={canonicalUrl} />}
+		{
+			!noindex &&
+				alternates.map((a) => <link rel="alternate" hreflang={a.lang} href={a.href} />)
+		}
+		{!noindex && <link rel="alternate" hreflang="x-default" href={alternates[0].href} />}
+		<meta property="og:locale" content={lang === "es" ? "es_ES" : "en_US"} />
 		<meta name="theme-color" content="#fdba74" id="theme-color-meta" />
 		<meta name="generator" content={Astro.generator} />
 
@@ -123,17 +140,27 @@ const personLd = {
 					var param = new URLSearchParams(location.search).get("lang");
 					if (param === "en" || param === "es") localStorage.setItem("lang", param);
 					var stored = localStorage.getItem("lang");
+					// The language this page was prerendered in (<html lang>): "es"
+					// on the /es/ copies. Arriving on one (e.g. from Google) keeps
+					// the rest of the visit in Spanish, without making it a
+					// permanent preference.
+					var pageLang = document.documentElement.lang === "es" ? "es" : "en";
+					if (pageLang === "es") sessionStorage.setItem("lang-session", "es");
+					var session = sessionStorage.getItem("lang-session");
 					var lang =
 						stored === "en" || stored === "es"
 							? stored
-							: (navigator.language || "en").toLowerCase().startsWith("es")
+							: session === "es"
 								? "es"
-								: "en";
+								: (navigator.language || "en").toLowerCase().startsWith("es")
+									? "es"
+									: "en";
 					window.__INITIAL_LANG__ = lang;
 					document.documentElement.lang = lang;
-					if (lang !== "en") {
-						// Hide the English prerender until React swaps it (see
-						// global.css); never stay hidden if hydration fails.
+					if (lang !== pageLang) {
+						// Hide the prerender (in the other language) until React
+						// swaps it (see global.css); never stay hidden if hydration
+						// fails.
 						var root = document.documentElement;
 						root.setAttribute("data-lang-pending", "");
 						setTimeout(function () {
@@ -141,7 +168,7 @@ const personLd = {
 						}, 1500);
 					}
 				} catch (e) {
-					window.__INITIAL_LANG__ = "en";
+					window.__INITIAL_LANG__ = document.documentElement.lang === "es" ? "es" : "en";
 				}
 			})();
 		</script>

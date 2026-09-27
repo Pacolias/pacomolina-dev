@@ -1,3 +1,4 @@
+import type { Lang } from "../../data/i18n";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -152,9 +153,9 @@ export function AboutPage() {
   );
 }
 
-export function AboutApp() {
+export function AboutApp({ pageLang }: { pageLang?: Lang }) {
   return (
-    <SiteShell current="about">
+    <SiteShell current="about" pageLang={pageLang}>
       <AboutPage />
     </SiteShell>
   );

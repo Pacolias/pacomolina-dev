@@ -1,17 +1,24 @@
 ---
 import { render } from "astro:content";
-import Layout from "../../layouts/Layout.astro";
-import { BlogPostApp } from "../../components/pages/BlogPages";
-import { getBlogPosts, hasOwnPage, summarize, type BlogPost } from "../../data/blog";
-import { dictionary } from "../../data/i18n";
+import Layout from "../../../layouts/Layout.astro";
+import { BlogPostApp } from "../../../components/pages/BlogPages";
+import { getBlogPosts, hasOwnPage, summarize, type BlogPost } from "../../../data/blog";
+import { dictionary, type Lang } from "../../../data/i18n";
+import { LOCALES, localizePath } from "../../../data/locale";
 
 export async function getStaticPaths() {
 	// Only entries with their own page; the rest live inline in the list.
 	const posts = (await getBlogPosts()).filter((post) => hasOwnPage(post.primary));
-	return posts.map((post) => ({ params: { slug: post.slug }, props: { post } }));
+	// …in both languages: /blog/<slug>/ and /es/blog/<slug>/.
+	return posts.flatMap((post) =>
+		LOCALES.map((lang) => ({
+			params: { slug: post.slug, lang: lang === "en" ? undefined : lang },
+			props: { post, lang },
+		}))
+	);
 }
 
-const { post } = Astro.props as { post: BlogPost };
+const { post, lang } = Astro.props as { post: BlogPost; lang: Lang };
 const summary = summarize(post);
 
 // Each language shows its own version, or falls back to the other one with
@@ -22,18 +29,20 @@ const { Content: EnContent } = await render(enEntry);
 const { Content: EsContent } = await render(esEntry);
 const enFallback = !post.entries.en;
 const esFallback = !post.entries.es;
+// This page's own language version (title, description, structured data).
+const entry = lang === "es" ? esEntry : enEntry;
 
-const postUrl = new URL(`${import.meta.env.BASE_URL.replace(/\/$/, "")}/blog/${post.slug}/`, Astro.site).toString();
+const postUrl = new URL(`${import.meta.env.BASE_URL.replace(/\/$/, "")}${localizePath(`/blog/${post.slug}/`, lang)}`, Astro.site).toString();
 const articleLd = {
 	"@context": "https://schema.org",
 	"@type": post.primary.data.type === "talk" ? "Event" : "BlogPosting",
 	...(post.primary.data.type === "talk"
-		? { name: enEntry.data.title, startDate: post.primary.data.date.toISOString(), description: enEntry.data.description }
+		? { name: entry.data.title, startDate: post.primary.data.date.toISOString(), description: entry.data.description }
 		: {
-				headline: enEntry.data.title,
-				description: enEntry.data.description,
+				headline: entry.data.title,
+				description: entry.data.description,
 				datePublished: post.primary.data.date.toISOString(),
-				inLanguage: Object.keys(post.entries),
+				inLanguage: lang,
 			}),
 	url: postUrl,
 	author: { "@type": "Person", name: "Paco Molina", url: new URL("/", Astro.site).toString() },
@@ -41,13 +50,14 @@ const articleLd = {
 ---
 
 <Layout
-	title={`${enEntry.data.title} — Paco Molina`}
-	description={enEntry.data.description}
+	lang={lang}
+	title={`${entry.data.title} — Paco Molina`}
+	description={entry.data.description}
 	ogType="article"
 	jsonLd={articleLd}
 	ogImage="/og/blog.jpg"
 >
-	<BlogPostApp client:load post={summary}>
+	<BlogPostApp client:load post={summary} pageLang={lang}>
 		<div data-lang="en" lang={enFallback ? "es" : "en"}>
 			{enFallback && <p><em>{dictionary.en.pages.blog.onlyIn}</em></p>}
 			<EnContent />

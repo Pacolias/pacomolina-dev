@@ -1,0 +1,15 @@
+---
+// Generated in both languages: /about/ and /es/about/ (see src/data/locale.ts).
+import Layout from "../../layouts/Layout.astro";
+import { AboutApp } from "../../components/pages/AboutPage";
+import { dictionary, type Lang } from "../../data/i18n";
+import { localePaths } from "../../data/locale";
+
+export const getStaticPaths = localePaths;
+const { lang } = Astro.props as { lang: Lang };
+const copy = dictionary[lang].pages.about;
+---
+
+<Layout lang={lang} title={`${copy.title} — Paco Molina`} description={copy.subtitle} ogImage="/og/about.jpg">
+	<AboutApp client:load pageLang={lang} />
+</Layout>

@@ -1,0 +1,14 @@
+---
+// Generated in both languages: / and /es/ (see src/data/locale.ts).
+import Layout from "../../layouts/Layout.astro";
+import { HomeApp } from "../../components/pages/HomePage";
+import type { Lang } from "../../data/i18n";
+import { localePaths } from "../../data/locale";
+
+export const getStaticPaths = localePaths;
+const { lang } = Astro.props as { lang: Lang };
+---
+
+<Layout lang={lang}>
+	<HomeApp client:load pageLang={lang} />
+</Layout>

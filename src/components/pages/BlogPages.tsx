@@ -273,9 +273,9 @@ function PageRow({ post }: { post: BlogPostSummary }) {
   );
 }
 
-export function BlogIndexApp({ posts }: { posts: BlogPostSummary[] }) {
+export function BlogIndexApp({ posts, pageLang }: { posts: BlogPostSummary[]; pageLang?: Lang }) {
   return (
-    <SiteShell current="blog">
+    <SiteShell current="blog" pageLang={pageLang}>
       <BlogIndex posts={posts} />
     </SiteShell>
   );
@@ -371,13 +371,15 @@ function BlogIndex({ posts }: { posts: BlogPostSummary[] }) {
 // passed in as `children`; CSS shows the one matching <html lang>.
 export function BlogPostApp({
   post,
+  pageLang,
   children,
 }: {
   post: BlogPostSummary;
+  pageLang?: Lang;
   children?: ReactNode;
 }) {
   return (
-    <SiteShell current="blog">
+    <SiteShell current="blog" pageLang={pageLang}>
       <BlogPost post={post}>{children}</BlogPost>
     </SiteShell>
   );

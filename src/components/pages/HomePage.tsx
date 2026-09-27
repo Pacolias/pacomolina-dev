@@ -1,3 +1,4 @@
+import type { Lang } from "../../data/i18n";
 import { AppWindow, ArrowRight, Download, Globe } from "lucide-react";
 import { SiGithub } from "@icons-pack/react-simple-icons";
 import { projects, type ProjectLink } from "../../data/projects";
@@ -162,9 +163,9 @@ export function HomePage() {
   );
 }
 
-export function HomeApp() {
+export function HomeApp({ pageLang }: { pageLang?: Lang }) {
   return (
-    <SiteShell current="home">
+    <SiteShell current="home" pageLang={pageLang}>
       <HomePage />
     </SiteShell>
   );

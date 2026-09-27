@@ -22,12 +22,20 @@ function detectInitialLang(): Lang {
   return w.__INITIAL_LANG__ === "es" ? "es" : "en";
 }
 
-export function LanguageProvider({ children }: { children: ReactNode }) {
-  // Server-rendered output always starts in English; the inline bootstrap
-  // script in Layout.astro sets window.__INITIAL_LANG__ before this runs,
-  // so client visitors get their detected/stored language on first paint.
-  const [lang, setLang] = useState<Lang>("en");
-  // Same as ThemeProvider: don't write the "en" placeholder to <html lang>
+export function LanguageProvider({
+  initialLang = "en",
+  children,
+}: {
+  // The language the page is prerendered in ("es" on the /es/ copies).
+  initialLang?: Lang;
+  children: ReactNode;
+}) {
+  // Renders in the page's prerender language first (matching the server
+  // HTML); the inline bootstrap script in Layout.astro sets
+  // window.__INITIAL_LANG__ before this runs, so client visitors get their
+  // detected/stored language on first paint.
+  const [lang, setLang] = useState<Lang>(initialLang);
+  // Same as ThemeProvider: don't write the placeholder to <html lang>
   // before the detected language is in state (it would briefly switch the
   // CSS-driven bilingual blocks back to English).
   const [detected, setDetected] = useState(false);

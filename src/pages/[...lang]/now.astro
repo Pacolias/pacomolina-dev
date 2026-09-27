@@ -1,0 +1,15 @@
+---
+// Generated in both languages: /now/ and /es/now/ (see src/data/locale.ts).
+import Layout from "../../layouts/Layout.astro";
+import { NowApp } from "../../components/pages/NowPage";
+import { dictionary, type Lang } from "../../data/i18n";
+import { localePaths } from "../../data/locale";
+
+export const getStaticPaths = localePaths;
+const { lang } = Astro.props as { lang: Lang };
+const copy = dictionary[lang].pages.now;
+---
+
+<Layout lang={lang} title={`${copy.title} — Paco Molina`} description={copy.subtitle}>
+	<NowApp client:load pageLang={lang} />
+</Layout>

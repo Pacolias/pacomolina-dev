@@ -16,7 +16,7 @@ import { AxeBuilder } from "@axe-core/playwright";
 const base = process.argv[2] ?? "http://localhost:4321";
 // Expanded rows included: their panels (galleries, links) only render when
 // opened. /nope/ exercises the 404 page.
-const pages = ["/", "/projects/#redcheck", "/work/#quimify", "/blog/", "/blog/#terraceo-31", "/about/", "/now/", "/nope/"];
+const pages = ["/", "/projects/#redcheck", "/work/#quimify", "/blog/", "/blog/#terraceo-31", "/about/", "/now/", "/es/", "/es/blog/", "/nope/"];
 const variants = [
   { width: 360, height: 800, lang: "es", theme: "light" },
   { width: 390, height: 844, lang: "en", theme: "dark" },

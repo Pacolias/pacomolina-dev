@@ -1,3 +1,4 @@
+import type { Lang } from "../../data/i18n";
 import { useEffect, useId, useState } from "react";
 import { AppWindow, ArrowRight, ChevronDown, Globe } from "lucide-react";
 import { SiGithub } from "@icons-pack/react-simple-icons";
@@ -184,9 +185,9 @@ export function ProjectsPage() {
   );
 }
 
-export function ProjectsApp() {
+export function ProjectsApp({ pageLang }: { pageLang?: Lang }) {
   return (
-    <SiteShell current="projects">
+    <SiteShell current="projects" pageLang={pageLang}>
       <ProjectsPage />
     </SiteShell>
   );

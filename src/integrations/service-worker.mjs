@@ -35,8 +35,10 @@ export default function serviceWorker() {
         const root = fileURLToPath(dir);
         const files = walk(root).map((f) => relative(root, f).split(sep).join("/"));
 
+        // The /es/ copies exist for search engines; visitors browse the
+        // bare URLs (language is switched client-side), so they're left out.
         const pages = files
-          .filter((f) => f.endsWith("index.html"))
+          .filter((f) => f.endsWith("index.html") && !f.startsWith("es/"))
           .map((f) => base + f.replace(/index\.html$/, ""));
         const assets = files.filter(
           (f) =>

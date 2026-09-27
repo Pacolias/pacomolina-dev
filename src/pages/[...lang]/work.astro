@@ -1,0 +1,15 @@
+---
+// Generated in both languages: /work/ and /es/work/ (see src/data/locale.ts).
+import Layout from "../../layouts/Layout.astro";
+import { WorkApp } from "../../components/pages/WorkPage";
+import { dictionary, type Lang } from "../../data/i18n";
+import { localePaths } from "../../data/locale";
+
+export const getStaticPaths = localePaths;
+const { lang } = Astro.props as { lang: Lang };
+const copy = dictionary[lang].pages.work;
+---
+
+<Layout lang={lang} title={`${copy.title} — Paco Molina`} description={copy.subtitle} ogImage="/og/work.jpg">
+	<WorkApp client:load pageLang={lang} />
+</Layout>

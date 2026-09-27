@@ -1,3 +1,4 @@
+import type { Lang } from "../../data/i18n";
 import { ArrowRight } from "lucide-react";
 import { now, nowUpdated } from "../../data/now";
 import { formatDate } from "../../data/format";
@@ -50,9 +51,9 @@ export function NowPage() {
   );
 }
 
-export function NowApp() {
+export function NowApp({ pageLang }: { pageLang?: Lang }) {
   return (
-    <SiteShell current={null}>
+    <SiteShell current={null} pageLang={pageLang}>
       <NowPage />
     </SiteShell>
   );

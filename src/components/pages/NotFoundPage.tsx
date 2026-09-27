@@ -1,3 +1,4 @@
+import type { Lang } from "../../data/i18n";
 import { ArrowLeft } from "lucide-react";
 import { sections, withBase } from "../../data/site";
 import { useLanguage } from "../LanguageProvider";
@@ -35,9 +36,9 @@ export function NotFoundPage() {
   );
 }
 
-export function NotFoundApp() {
+export function NotFoundApp({ pageLang }: { pageLang?: Lang }) {
   return (
-    <SiteShell current={null}>
+    <SiteShell current={null} pageLang={pageLang}>
       <NotFoundPage />
     </SiteShell>
   );

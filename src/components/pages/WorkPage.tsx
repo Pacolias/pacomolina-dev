@@ -1,3 +1,4 @@
+import type { Lang } from "../../data/i18n";
 import { ArrowUpRight, ArrowRight } from "lucide-react";
 import { jobs, type Job } from "../../data/work";
 import { formatMonth } from "../../data/format";
@@ -106,9 +107,9 @@ export function WorkPage() {
   );
 }
 
-export function WorkApp() {
+export function WorkApp({ pageLang }: { pageLang?: Lang }) {
   return (
-    <SiteShell current="work">
+    <SiteShell current="work" pageLang={pageLang}>
       <WorkPage />
     </SiteShell>
   );

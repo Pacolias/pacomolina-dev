@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import type { SectionId } from "../data/site";
+import type { Lang } from "../data/i18n";
 import { LanguageProvider } from "./LanguageProvider";
 import { ThemeProvider } from "./ThemeProvider";
 import { SiteNav } from "./SiteNav";
@@ -12,10 +13,13 @@ import { CommandPalette } from "./CommandPalette";
 // rooted here, so the language/theme state is shared by everything on it.
 export function SiteShell({
   current,
+  pageLang = "en",
   children,
   footer = true,
 }: {
   current: SectionId | null;
+  // The page's prerender language (see Layout.astro's `lang`).
+  pageLang?: Lang;
   children: ReactNode;
   // Lets a page render the contact card somewhere else instead.
   footer?: boolean;
@@ -24,7 +28,7 @@ export function SiteShell({
 
   return (
     <ThemeProvider>
-      <LanguageProvider>
+      <LanguageProvider initialLang={pageLang}>
         <div className="flex min-h-screen flex-col overflow-x-clip">
           <SiteNav current={current} />
           <CommandPalette />

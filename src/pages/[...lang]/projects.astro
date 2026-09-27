@@ -1,0 +1,15 @@
+---
+// Generated in both languages: /projects/ and /es/projects/ (see src/data/locale.ts).
+import Layout from "../../layouts/Layout.astro";
+import { ProjectsApp } from "../../components/pages/ProjectsPage";
+import { dictionary, type Lang } from "../../data/i18n";
+import { localePaths } from "../../data/locale";
+
+export const getStaticPaths = localePaths;
+const { lang } = Astro.props as { lang: Lang };
+const copy = dictionary[lang].pages.projects;
+---
+
+<Layout lang={lang} title={`${copy.title} — Paco Molina`} description={copy.subtitle} ogImage="/og/projects.jpg">
+	<ProjectsApp client:load pageLang={lang} />
+</Layout>

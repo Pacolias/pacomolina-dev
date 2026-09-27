@@ -60,10 +60,22 @@ second-guess them without checking in again:
   a recruiter; combines with `?ref=`), and there's a manual toggle pill in the
   nav (`LanguageToggle.tsx`). Translated copy lives in
   `src/data/i18n.ts`; non-translated facts (links, email, project URLs) live
-  in `src/data/site.ts`. Known trade-off: the statically prerendered HTML is
-  always English, so non-English visitors get a near-instant client-side
-  swap to Spanish rather than zero flash — acceptable for a static GH Pages
-  site with no server-side locale negotiation.
+  in `src/data/site.ts`. The bare URLs are prerendered in English, so
+  Spanish visitors get a near-instant client-side swap (hidden until done).
+- **Indexable Spanish copies under `/es/`** (so Google indexes the Spanish
+  content): every page lives in `src/pages/[...lang]/` with
+  `getStaticPaths = localePaths` (`src/data/locale.ts`), generating
+  `/projects/` *and* `/es/projects/` from one file; blog pages too
+  (`/es/blog/<slug>/`). `Layout`'s `lang` prop sets `<html lang>`, the
+  title/description, `og:locale`, a self canonical and `hreflang` en/es/
+  x-default alternates; the sitemap lists both with `xhtml:link`
+  alternates. Pages pass `pageLang` → `SiteShell` → `LanguageProvider
+  initialLang`, so the /es/ HTML hydrates in Spanish with no swap.
+  Language resolution in the inline script: `?lang=` > stored choice >
+  arriving on an /es/ page (sessionStorage `lang-session`, keeps the rest
+  of the visit Spanish, not a permanent preference) > browser language.
+  Internal links stay unprefixed (the NFC/QR target and nav remain the
+  bare URLs). The service worker doesn't precache the /es/ copies.
 - **Icons for the tech stack**: `lucide-react` has no brand/logo icons at all
   (Python, Docker, FastAPI, React, LangGraph, Spring Boot aren't in it), so
   `@icons-pack/react-simple-icons` is used instead, recolored to a single
