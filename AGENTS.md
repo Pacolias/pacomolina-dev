@@ -437,6 +437,16 @@ All real content is in as of the second pass:
   silently fell back to Times/Arial; the script now throws if the fonts
   didn't load). English text, since crawlers see the English prerender.
   Re-run it if a card's text changes (job title, project names…).
+  **Blog entries with their own page** get a card each, per language,
+  generated at build time — nothing to remember when publishing: the
+  endpoint `src/pages/og/blog/[lang]/[slug].jpg.ts` →
+  `/og/blog/{en,es}/<slug>.jpg` (title, type · event · date, description
+  cut at a word to one line). Same look as the section cards, built with
+  `satori` (lays it out with the site's Fraunces/Inter `.woff` files, text
+  as paths) + `sharp` (SVG → JPEG), in `src/data/og.ts`; both are
+  build-time only, nothing reaches the browser. Inline entries share the
+  blog card (crawlers ignore `#fragments`). `@types/node` is a dev
+  dependency for these build-time modules.
 - **Blog feed + structured data**: `src/pages/rss.xml.ts` (hand-written,
   published posts only, English version or Spanish fallback), advertised
   via `<link rel="alternate">` in every page's `<head>`; each post also
@@ -558,7 +568,9 @@ nothing reaches production unless it passes. It runs, on its own build:
 - strict type-check (`astro sync` + `tsc --noEmit`);
 - `scripts/ci/check-links.mjs` — every internal href/src (markup and
   island props) resolves to a file in `dist/`, and `#fragments` to an
-  element id (rows are prerendered with their anchor ids). External links
+  element id (rows are prerendered with their anchor ids). Absolute URLs
+  to the site's own domain (canonical, hreflang, `og:image`, `og:url`) are
+  checked the same way, so a missing social card fails. External links
   are listed, never fetched (LinkedIn & co. block bots);
 - `scripts/ci/check-budget.mjs` — gzip weight budgets: all JS ≤80KB, all
   CSS ≤25KB, each HTML page ≤70KB, any image ≤450KB. Raise one

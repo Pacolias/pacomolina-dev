@@ -13,6 +13,11 @@ const walk = (dir) =>
     const p = join(dir, n);
     return statSync(p).isDirectory() ? walk(p) : [p];
   });
+// The site's own domain (dist/CNAME): absolute links to it — canonical,
+// hreflang alternates, og:image — are checked like internal ones.
+const ownOrigin = existsSync(join(dist, "CNAME"))
+  ? `https://${readFileSync(join(dist, "CNAME"), "utf8").trim()}`
+  : null;
 const pages = walk(dist).filter((f) => f.endsWith(".html"));
 
 const decode = (s) => s.replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&#39;/g, "'");
@@ -41,9 +46,13 @@ for (const page of pages) {
   // are plain "\/..." or "/..." strings inside attribute-encoded JSON).
   const refs = [
     ...[...html.matchAll(/\s(?:href|src)="([^"]+)"/g)].map((m) => decode(m[1])),
+    ...[...html.matchAll(/<meta (?:property|name)="(?:og:image|og:url|twitter:image)" content="([^"]+)"/g)].map((m) =>
+      decode(m[1])
+    ),
     ...[...decode(html).matchAll(/"(?:href|src|path)":\s*\[?\d*,?"(\/[^"]*)"/g)].map((m) => m[1]),
   ];
-  for (const ref of refs) {
+  for (let ref of refs) {
+    if (ownOrigin && ref.startsWith(`${ownOrigin}/`)) ref = ref.slice(ownOrigin.length);
     if (/^(https?:)?\/\//.test(ref)) {
       if (!/^\/\//.test(ref)) external.add(ref);
       continue;
