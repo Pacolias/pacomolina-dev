@@ -15,6 +15,19 @@ GEMINI_MODEL = "gemini-flash-lite-latest"
 KNOWLEDGE_URL = "https://pacomolina.dev/assistant/knowledge.txt"
 ALLOWED_ORIGINS = "https://pacomolina.dev"
 
+# The anonymous question log (src/log.ts). Created once with
+#   npx wrangler d1 create pacomolina-assistant-log
+#   npx wrangler d1 migrations apply pacomolina-assistant-log --remote
+[[d1_databases]]
+binding = "LOG"
+database_name = "pacomolina-assistant-log"
+database_id = "REPLACE_WITH_ID_FROM_d1_create"
+migrations_dir = "migrations"
+
+# Nightly purge of questions older than 90 days.
+[triggers]
+crons = ["0 4 * * *"]
+
 # Per-IP limit: 8 questions a minute (Workers rate limiting, free).
 [[ratelimits]]
 name = "LIMITER"
@@ -24,6 +37,13 @@ simple = { limit = 8, period = 60 }
 # `npm run dev` (wrangler dev --env dev): against the local site.
 [env.dev]
 vars = { GEMINI_MODEL = "gemini-flash-lite-latest", KNOWLEDGE_URL = "http://localhost:4321/assistant/knowledge.txt", ALLOWED_ORIGINS = "http://localhost:4321,http://localhost:4330" }
+
+# Local SQLite copy (wrangler dev never touches the real database).
+[[env.dev.d1_databases]]
+binding = "LOG"
+database_name = "pacomolina-assistant-log"
+database_id = "local-dev"
+migrations_dir = "migrations"
 
 [[env.dev.ratelimits]]
 name = "LIMITER"

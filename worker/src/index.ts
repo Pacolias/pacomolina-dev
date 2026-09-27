@@ -1,6 +1,7 @@
 import { SYSTEM_PROMPT } from "./prompt";
+import { logQuestion, purgeOld, type LogEntry } from "./log";
 
-// POST /chat  { messages: [{ role: "user" | "assistant", text }] }
+// POST /chat  { messages: [{ role: "user" | "assistant", text }], lang? }
 //   → text/event-stream: `data: {"t": "..."}` chunks, then `data: {"done": true}`
 //   → JSON { error: "busy" | "limited" | "bad_request" | "failed" } on errors
 // GET  /health → "ok"
@@ -23,6 +24,8 @@ export interface Env {
   // Only to point local tests at a mock of the Gemini API.
   GEMINI_BASE?: string;
   LIMITER?: RateLimiter;
+  // The anonymous question log (D1). Optional: without it nothing is kept.
+  LOG?: D1Database;
 }
 
 type Message = { role: "user" | "assistant"; text: string };
@@ -79,7 +82,12 @@ function parseMessages(body: unknown): Message[] | null {
 }
 
 export default {
-  async fetch(request: Request, env: Env): Promise<Response> {
+  // Nightly: drop logged questions past the retention period.
+  async scheduled(_event: ScheduledController, env: Env, ctx: ExecutionContext) {
+    ctx.waitUntil(purgeOld(env.LOG));
+  },
+
+  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const url = new URL(request.url);
     const origin = request.headers.get("Origin");
     const headers = cors(origin, env);
@@ -97,17 +105,31 @@ export default {
     }
 
     let messages: Message[] | null = null;
+    let lang: string | null = null;
     try {
-      messages = parseMessages(await request.json());
+      const body = await request.json();
+      messages = parseMessages(body);
+      const l = (body as { lang?: unknown })?.lang;
+      lang = l === "en" || l === "es" ? l : null;
     } catch {
       messages = null;
     }
     if (!messages) return json({ error: "bad_request" }, 400, headers);
 
+    // Logged once the outcome is known (after the stream, or on error).
+    const entry = (answer: string | null, error: string | null): LogEntry => ({
+      lang,
+      question: messages![messages!.length - 1].text,
+      answer,
+      error,
+      turn: messages!.filter((m) => m.role === "user").length,
+    });
+
     let content: string;
     try {
       content = await getKnowledge(env);
     } catch {
+      ctx.waitUntil(logQuestion(env.LOG, entry(null, "knowledge")));
       return json({ error: "failed" }, 502, headers);
     }
 
@@ -125,11 +147,13 @@ export default {
       });
     } catch (e) {
       console.log(`gemini unreachable: ${(e as Error).message}`);
+      ctx.waitUntil(logQuestion(env.LOG, entry(null, "unreachable")));
       return json({ error: "failed" }, 502, headers);
     }
     if (!gemini.ok || !gemini.body) {
       // 429: the free tier's quota ran out (per minute or per day).
       console.log(`gemini ${gemini.status}: ${(await gemini.text()).slice(0, 300)}`);
+      ctx.waitUntil(logQuestion(env.LOG, entry(null, gemini.status === 429 ? "busy" : `gemini ${gemini.status}`)));
       return json({ error: gemini.status === 429 ? "busy" : "failed" }, gemini.status === 429 ? 503 : 502, headers);
     }
 
@@ -137,6 +161,10 @@ export default {
     const encoder = new TextEncoder();
     const decoder = new TextDecoder();
     const reader = gemini.body.getReader();
+    // Keeps the Worker alive until the answer has been logged.
+    let finished: (e: LogEntry) => void = () => {};
+    ctx.waitUntil(new Promise<LogEntry>((resolve) => (finished = resolve)).then((e) => logQuestion(env.LOG, e)));
+    let answer = "";
     const stream = new ReadableStream<Uint8Array>({
       async start(controller) {
         const send = (data: unknown) => controller.enqueue(encoder.encode(`data: ${JSON.stringify(data)}\n\n`));
@@ -156,14 +184,24 @@ export default {
                 .filter((p: { thought?: boolean }) => !p.thought)
                 .map((p: { text?: string }) => p.text ?? "")
                 .join("");
-              if (text) send({ t: text });
+              if (text) {
+                answer += text;
+                send({ t: text });
+              }
             }
           }
           send({ done: true });
+          finished(entry(answer, answer ? null : "empty"));
         } catch {
           send({ error: "failed" });
+          finished(entry(answer || null, "stream"));
         }
         controller.close();
+      },
+      // The visitor closed the chat mid-answer.
+      cancel() {
+        reader.cancel().catch(() => {});
+        finished(entry(answer || null, "aborted"));
       },
     });
     return new Response(stream, {

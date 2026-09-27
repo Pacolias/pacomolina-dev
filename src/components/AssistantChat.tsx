@@ -64,31 +64,43 @@ function renderInline(text: string, onNavigate: () => void, key: string): ReactN
 }
 
 function Answer({ text, onNavigate }: { text: string; onNavigate: () => void }) {
-  const blocks = text.trim().split(/\n{2,}/);
+  // Lines grouped into paragraphs and lists: consecutive "- " / "• " lines
+  // form a list even right after a sentence (models often skip the blank
+  // line), and a blank line starts a new paragraph.
+  const bullet = /^\s*[-*•]\s+/;
+  const blocks: { list: boolean; lines: string[] }[] = [];
+  for (const line of text.trim().split("\n")) {
+    if (!line.trim()) {
+      blocks.push({ list: false, lines: [] });
+      continue;
+    }
+    const list = bullet.test(line);
+    const last = blocks[blocks.length - 1];
+    if (last && last.list === list && (list || last.lines.length)) last.lines.push(line.replace(bullet, ""));
+    else blocks.push({ list, lines: [line.replace(bullet, "")] });
+  }
   return (
     <>
-      {blocks.map((block, b) => {
-        const lines = block.split("\n").filter((l) => l.trim());
-        if (lines.length && lines.every((l) => /^\s*[-*•]\s+/.test(l))) {
-          return (
+      {blocks
+        .filter((b) => b.lines.length)
+        .map((block, b) =>
+          block.list ? (
             <ul key={b} className="my-1 list-disc space-y-0.5 pl-5 marker:text-amber-500">
-              {lines.map((l, i) => (
-                <li key={i}>{renderInline(l.replace(/^\s*[-*•]\s+/, ""), onNavigate, `${b}-${i}`)}</li>
+              {block.lines.map((l, i) => (
+                <li key={i}>{renderInline(l, onNavigate, `${b}-${i}`)}</li>
               ))}
             </ul>
-          );
-        }
-        return (
-          <p key={b} className="my-1">
-            {lines.map((l, i) => (
-              <span key={i}>
-                {i > 0 && <br />}
-                {renderInline(l.replace(/^\s*[-*•]\s+/, "• "), onNavigate, `${b}-${i}`)}
-              </span>
-            ))}
-          </p>
-        );
-      })}
+          ) : (
+            <p key={b} className="my-1">
+              {block.lines.map((l, i) => (
+                <span key={i}>
+                  {i > 0 && <br />}
+                  {renderInline(l, onNavigate, `${b}-${i}`)}
+                </span>
+              ))}
+            </p>
+          )
+        )}
     </>
   );
 }
@@ -103,7 +115,7 @@ export default function AssistantChat({
   onNavigate: () => void;
   inputRef: React.RefObject<HTMLInputElement | null>;
 }) {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
   const copy = t.assistant;
   const [messages, setMessages] = useState<Message[]>(load);
   const [draft, setDraft] = useState("");
@@ -143,7 +155,7 @@ export default function AssistantChat({
       const res = await fetch(`${site.assistantUrl}/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: history.map(({ role, text }) => ({ role, text })) }),
+        body: JSON.stringify({ messages: history.map(({ role, text }) => ({ role, text })), lang }),
         signal: controller.signal,
       });
       if (!res.ok || !res.body) {

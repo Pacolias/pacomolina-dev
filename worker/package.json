@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "wrangler dev --env dev --port 8787",
     "deploy": "wrangler deploy --env=\"\"",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "questions": "wrangler d1 execute pacomolina-assistant-log --remote --env=\"\" --command \"SELECT at, lang, turn, cited, error, question FROM questions ORDER BY at DESC LIMIT 50\"",
+    "migrate:dev": "wrangler d1 migrations apply pacomolina-assistant-log --local --env dev"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^5.20260927.1",

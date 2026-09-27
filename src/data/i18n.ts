@@ -202,7 +202,7 @@ export const dictionary = {
         "What did he study?",
       ],
       thinking: "Thinking…",
-      disclaimer: "AI answers from this site's content — may be imperfect. Don't share personal data.",
+      disclaimer: "AI answers from this site's content — may be imperfect. Questions are kept anonymously for 90 days to improve it; don't share personal data.",
       clear: "New chat",
       errors: {
         busy: "The assistant is resting right now (its free quota ran out). Try again later, or write to Paco:",
@@ -420,7 +420,7 @@ export const dictionary = {
         "¿Qué ha estudiado?",
       ],
       thinking: "Pensando…",
-      disclaimer: "Respuestas de IA a partir del contenido de esta web — pueden no ser perfectas. No compartas datos personales.",
+      disclaimer: "Respuestas de IA a partir del contenido de esta web — pueden no ser perfectas. Las preguntas se guardan de forma anónima 90 días para mejorarlo; no compartas datos personales.",
       clear: "Nuevo chat",
       errors: {
         busy: "El asistente está descansando ahora mismo (se acabó su cuota gratuita). Prueba más tarde o escribe a Paco:",

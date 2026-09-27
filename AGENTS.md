@@ -264,6 +264,13 @@ The site grew from one page into five, keeping the same look everywhere:
     <worker url>` — by hand (Actions → "Evaluate assistant"), it spends
     quota. Local testing without Gemini: `GEMINI_BASE` points the Worker
     at a mock.
+  - **Question log** (Paco said yes, Sep 27 2026): every question goes to
+    a D1 database (`LOG` binding, `worker/src/log.ts`, schema in
+    `worker/migrations/`): date, site language, turn, question, answer,
+    whether it cited a page, error (busy/aborted/…). **No IP or anything
+    identifying.** A nightly cron deletes rows older than 90 days; the
+    chat's notice says so. Read them with `npm run questions` in
+    `worker/`. Good source of new eval cases and of gaps in the site.
   - Local dev: `worker/.dev.vars` with `GEMINI_API_KEY=…` (git-ignored),
     `npm run dev` in `worker/` (port 8787, reads the knowledge from the
     astro dev server). Deploy: `npx wrangler login`, `npx wrangler secret
