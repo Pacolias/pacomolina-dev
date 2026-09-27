@@ -73,9 +73,11 @@ jobs:
         run: npm install --no-save --no-audit --no-fund playwright@1.63.0 pixelmatch@7 pngjs@7
       - name: Compare every page with its baseline
         run: |
-          npx astro preview --port 4321 &
-          npx -y wait-on http://localhost:4321/ --timeout 60000
-          node scripts/ci/check-visual.mjs http://localhost:4321
+          # 127.0.0.1, not localhost: in the container localhost can
+          # resolve to ::1, where the preview server isn't listening.
+          npx astro preview --host 127.0.0.1 --port 4321 &
+          npx -y wait-on http-get://127.0.0.1:4321/ --timeout 60000
+          node scripts/ci/check-visual.mjs http://127.0.0.1:4321
       - name: Upload the differences
         if: failure()
         uses: actions/upload-artifact@v4
