@@ -25,6 +25,11 @@ export default defineConfig({
   },
   vite: {
     plugins: [tailwindcss()],
+    // `astro build` gets its own Vite cache: sharing node_modules/.vite with
+    // a running `astro dev` rewrote the dev server's pre-bundled deps, and
+    // open pages then failed to hydrate ("error loading dynamically
+    // imported module …/.vite/deps/react.js").
+    cacheDir: process.argv.includes('build') ? 'node_modules/.vite-build' : 'node_modules/.vite',
     // Bundle the React-API icon packages into the server builds too, so the
     // react → preact/compat aliases apply while prerendering (left external,
     // they import the real React and their icons fail to render). Setting

@@ -749,6 +749,12 @@ astro dev --background
 Manage the background server with `astro dev stop`, `astro dev status`, and
 `astro dev logs`.
 
+`astro build` uses its own Vite cache (`node_modules/.vite-build`,
+`cacheDir` in astro.config.mjs): sharing `node_modules/.vite` with a
+running `astro dev` rewrote its pre-bundled deps and broke hydration in
+pages already open — so building to check something no longer breaks
+the dev server.
+
 **After installing or removing packages, restart it** (`astro dev stop`,
 `rm -rf node_modules/.vite`, `astro dev --background --force`): changing
 `node_modules` under a running dev server leaves Vite's pre-bundled deps
