@@ -8,8 +8,21 @@ custom domain `pacomolina.dev`.
 
 ## Stack
 
-Astro 7 (static output) + React 19 islands + TypeScript (strict) + Tailwind
-CSS v4 (CSS-first config, no `tailwind.config.js`) + Vite.
+Astro 7 (static output) + Preact islands (`@astrojs/preact` with
+`compat: true`) + TypeScript (strict) + Tailwind CSS v4 (CSS-first config,
+no `tailwind.config.js`) + Vite.
+
+The components are written against the React API (hooks, `lucide-react`,
+`@icons-pack/react-simple-icons`) and run on Preact through its compat
+layer: all JS went from ~107KB to ~57KB gzipped when switching (Sep 27
+2026). Gotcha: the icon packages must be bundled into the server builds
+(`vite.environments.{ssr,prerender}.resolve.noExternal` in
+`astro.config.mjs`), otherwise they import the real React while
+prerendering and fail ("[object Object] is not a valid HTML tag name");
+setting that list replaces the one `@astrojs/preact` adds, so React's own
+entry points are repeated there. `@types/react` stays for typing; there's
+no `react`/`react-dom` dependency any more. The rest of these notes still
+say "React" for the component model — it's Preact at runtime.
 
 ## Design decisions (from the Sep 2026 design pass)
 
