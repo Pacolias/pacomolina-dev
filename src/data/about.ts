@@ -97,7 +97,7 @@ export const timeline: TimelineItem[] = [
     date: { en: "Now", es: "Ahora" },
     title: {
       en: "Building in the open, looking for my first AI Engineer role",
-      es: "Construyendo en abierto, buscando mi primer puesto de AI Engineer",
+      es: "Construyendo en público, buscando mi primer puesto de AI Engineer",
     },
     body: {
       en: "Shipping side projects around agents, MCP and safer AI tooling — ShellMate, spotify-mcp, a LangGraph multi-agent planner. Based in Málaga, open to remote, hybrid or on-site roles, available immediately.",
