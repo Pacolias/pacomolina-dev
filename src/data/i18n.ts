@@ -3,12 +3,12 @@ export type Lang = "en" | "es";
 export const dictionary = {
   en: {
     meta: {
-      title: "Paco Molina — AI/Software Engineer",
+      title: "Paco Molina — AI Engineer",
       description:
-        "Portfolio of Paco Molina, an AI/Software Engineer based in Málaga, Spain. Mathematician and Computer Scientist, and builder of RedCheck, an AI-powered task manager. Open to remote, hybrid and on-site roles.",
+        "Portfolio of Paco Molina, an AI Engineer based in Málaga, Spain. Mathematician and Computer Scientist, and builder of RedCheck, an AI-powered task manager. Open to remote, hybrid and on-site roles.",
     },
     hero: {
-      role: "AI/Software Engineer",
+      role: "AI Engineer",
       tagline: "Mathematician and Computer Scientist.",
       availability: "Available now · Málaga · remote, hybrid or on-site",
     },
@@ -221,12 +221,12 @@ export const dictionary = {
   },
   es: {
     meta: {
-      title: "Paco Molina — AI/Software Engineer",
+      title: "Paco Molina — AI Engineer",
       description:
-        "Portfolio de Paco Molina, AI/Software Engineer en Málaga. Matemático e Informático, y creador de RedCheck, un gestor de tareas con IA. Abierto a trabajo remoto, híbrido y presencial.",
+        "Portfolio de Paco Molina, AI Engineer en Málaga. Matemático e Informático, y creador de RedCheck, un gestor de tareas con IA. Abierto a trabajo remoto, híbrido y presencial.",
     },
     hero: {
-      role: "AI/Software Engineer",
+      role: "AI Engineer",
       tagline: "Matemático e Ingeniero Informático.",
       availability: "Disponible ya · Málaga · remoto, híbrido, presencial",
     },

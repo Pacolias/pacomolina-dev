@@ -23,7 +23,7 @@ const cards = [
   {
     out: "public/og-image.jpg",
     title: "Paco Molina",
-    accent: "AI/Software Engineer",
+    accent: "AI Engineer",
     line: "Málaga, Spain · Open to remote, hybrid & on-site roles",
   },
   {
