@@ -2,14 +2,16 @@
 // Generated in both languages: /blog/ and /es/blog/ (see src/data/locale.ts).
 import Layout from "../../../layouts/Layout.astro";
 import { BlogIndexApp } from "../../../components/pages/BlogPages";
-import { getBlogPosts, summarize } from "../../../data/blog";
+import { getBlogPosts, hasOwnPage, summarize } from "../../../data/blog";
 import { dictionary, type Lang } from "../../../data/i18n";
 import { localePaths } from "../../../data/locale";
 
 export const getStaticPaths = localePaths;
 const { lang } = Astro.props as { lang: Lang };
 const copy = dictionary[lang].pages.blog;
-const posts = (await getBlogPosts()).map((post) => summarize(post, { full: true }));
+// Body and images only for entries that expand inline in the list; the rest
+// just link to their own page.
+const posts = (await getBlogPosts()).map((post) => summarize(post, { full: !hasOwnPage(post.primary) }));
 ---
 
 <Layout lang={lang} title={`Blog — Paco Molina`} description={copy.subtitle} ogImage="/og/blog.jpg">
