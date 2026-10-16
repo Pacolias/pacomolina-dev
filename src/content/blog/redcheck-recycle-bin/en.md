@@ -4,20 +4,20 @@ description: "Soft deletes and a recycle bin for RedCheck — and why a 'just ad
 date: 2026-08-21
 type: linkedin
 linkedin: https://www.linkedin.com/feed/update/urn:li:activity:7496618991306821632/
+page: true
 project: redcheck
 series:
   id: building-redcheck
   title: "Building RedCheck"
   part: 3
 topics: [backend, frontend]
-images:
-  - src: ./empty-bin.webp
-    alt: "RedCheck's recycle bin, empty: a friendly empty state saying deleted items will show up here."
-  - src: ./bin-with-items.webp
-    alt: "RedCheck's recycle bin with a deleted subject and three deleted tasks, each with restore and delete-forever actions, and an 'Empty bin' button."
 ---
 
 Deleted something by mistake? No worries, RedCheck now has a Recycle Bin. 🗑️
+
+![RedCheck's recycle bin, empty: a friendly empty state saying deleted items will show up here.](./empty-bin.webp)
+
+![RedCheck's recycle bin with a deleted subject and three deleted tasks, each with restore and delete-forever actions, and an 'Empty bin' button.](./bin-with-items.webp)
 
 Accidental deletions are incredibly common and a surefire way to ruin the UX. That's why the latest feature I've been working on is a complete soft-delete and recycle bin system.
 

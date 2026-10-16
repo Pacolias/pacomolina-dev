@@ -138,6 +138,13 @@ export const dictionary = {
         project: "Project",
         minRead: "min read",
         seriesPart: "Part {part} of {total}",
+        series: "Series",
+        seriesParts: "{n} parts",
+        // One line under each series' title, by series id.
+        seriesIntros: {
+          "building-redcheck":
+            "From localhost to a product other people can use: building an AI planner in public, one feature at a time.",
+        } as Record<string, string>,
         readMore: "Read",
       },
     },
@@ -356,6 +363,12 @@ export const dictionary = {
         project: "Proyecto",
         minRead: "min de lectura",
         seriesPart: "Parte {part} de {total}",
+        series: "Serie",
+        seriesParts: "{n} partes",
+        seriesIntros: {
+          "building-redcheck":
+            "De localhost a un producto que otras personas pueden usar: construyendo en público un planificador con IA, funcionalidad a funcionalidad.",
+        } as Record<string, string>,
         readMore: "Leer",
       },
     },

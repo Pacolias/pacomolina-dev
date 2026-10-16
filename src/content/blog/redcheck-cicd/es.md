@@ -4,18 +4,18 @@ description: "Llevar RedCheck de los despliegues manuales a un pipeline de CI/CD
 date: 2026-07-01
 type: linkedin
 linkedin: https://www.linkedin.com/feed/update/urn:li:activity:7478121077211172865/
+page: true
 project: redcheck
 series:
   id: building-redcheck
   title: "Construyendo RedCheck"
   part: 2
 topics: [devops, backend]
-images:
-  - src: ./github-actions.webp
-    alt: "Una ejecución de GitHub Actions del deploy.yml de RedCheck: build-and-push (36 s) y después deploy (18 s) — completada en 1 m 3 s."
 ---
 
 Decir adiós a los despliegues manuales es uno de los hitos más satisfactorios de la ingeniería de software. 🚀
+
+![Una ejecución de GitHub Actions del deploy.yml de RedCheck: build-and-push (36 s) y después deploy (18 s) — completada en 1 m 3 s.](./github-actions.webp)
 
 Los despliegues manuales son un cuello de botella. Para escalar RedCheck de forma eficiente necesitaba eliminarlos por completo. Acabo de rehacer nuestra arquitectura de despliegue, pasando de un montaje manual tradicional a un pipeline de CI/CD totalmente automatizado, y el salto de arquitectura es enorme.
 

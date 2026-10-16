@@ -4,20 +4,20 @@ description: "Borrado lógico y papelera para RedCheck — y por qué una funcio
 date: 2026-08-21
 type: linkedin
 linkedin: https://www.linkedin.com/feed/update/urn:li:activity:7496618991306821632/
+page: true
 project: redcheck
 series:
   id: building-redcheck
   title: "Construyendo RedCheck"
   part: 3
 topics: [backend, frontend]
-images:
-  - src: ./empty-bin.webp
-    alt: "La papelera de RedCheck vacía: un estado vacío amable que indica que ahí aparecerán los elementos eliminados."
-  - src: ./bin-with-items.webp
-    alt: "La papelera de RedCheck con una asignatura y tres tareas eliminadas, cada una con acciones de restaurar y eliminar para siempre, y un botón de «Vaciar papelera»."
 ---
 
 ¿Has borrado algo sin querer? Tranquilo, RedCheck ya tiene papelera. 🗑️
+
+![La papelera de RedCheck vacía: un estado vacío amable que indica que ahí aparecerán los elementos eliminados.](./empty-bin.webp)
+
+![La papelera de RedCheck con una asignatura y tres tareas eliminadas, cada una con acciones de restaurar y eliminar para siempre, y un botón de «Vaciar papelera».](./bin-with-items.webp)
 
 Los borrados accidentales son muy habituales y una forma segura de estropear la experiencia de usuario. Por eso la última funcionalidad en la que he estado trabajando es un sistema completo de borrado lógico (soft delete) con papelera.
 

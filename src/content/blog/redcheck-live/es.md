@@ -4,20 +4,20 @@ description: "Desplegar RedCheck en su propio dominio — Docker, un servidor de
 date: 2026-06-02
 type: linkedin
 linkedin: https://www.linkedin.com/feed/update/urn:li:activity:7467504912843702272/
+page: true
 project: redcheck
 series:
   id: building-redcheck
   title: "Construyendo RedCheck"
   part: 1
 topics: [backend, devops, ai]
-images:
-  - src: ./dashboard.webp
-    alt: "El dashboard de RedCheck: el calendario del mes coloreado según la carga de trabajo, el balance de tareas por asignatura y la lista de tareas agrupada por asignatura."
-  - src: ./focus-mode.webp
-    alt: "El Modo Foco de RedCheck: las tareas de hoy con sus etiquetas de fecha límite y, al lado, el mapa de actividad."
 ---
 
 Hay un abismo entre el código que funciona en localhost y una aplicación en producción. Este fin de semana decidí cruzar esa línea y desplegué RedCheck en su propio dominio: [redcheck.es](https://redcheckapp.com/). 🚀
+
+![El dashboard de RedCheck: el calendario del mes coloreado según la carga de trabajo, el balance de tareas por asignatura y la lista de tareas agrupada por asignatura.](./dashboard.webp)
+
+![El Modo Foco de RedCheck: las tareas de hoy con sus etiquetas de fecha límite y, al lado, el mapa de actividad.](./focus-mode.webp)
 
 Empezó como un gestor de tareas al uso, pero quería ir un paso más allá integrando SmartCheck AI para analizar la carga de trabajo. Llevarlo a producción fue todo un reto técnico:
 

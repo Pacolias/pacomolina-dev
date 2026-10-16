@@ -4,18 +4,18 @@ description: "Moving RedCheck from manual deployments to a fully automated CI/CD
 date: 2026-07-01
 type: linkedin
 linkedin: https://www.linkedin.com/feed/update/urn:li:activity:7478121077211172865/
+page: true
 project: redcheck
 series:
   id: building-redcheck
   title: "Building RedCheck"
   part: 2
 topics: [devops, backend]
-images:
-  - src: ./github-actions.webp
-    alt: "A GitHub Actions run of RedCheck's deploy.yml: build-and-push (36 s), then deploy (18 s) — succeeded in 1 m 3 s."
 ---
 
 Saying goodbye to manual deployments is one of the most satisfying milestones in software engineering. 🚀
+
+![A GitHub Actions run of RedCheck's deploy.yml: build-and-push (36 s), then deploy (18 s) — succeeded in 1 m 3 s.](./github-actions.webp)
 
 Manual deployments are a bottleneck. To scale RedCheck efficiently, I needed to eliminate them entirely. I've just overhauled our deployment architecture, transitioning from a traditional manual setup to a fully automated CI/CD pipeline, and the architectural leap is massive.
 

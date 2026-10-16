@@ -4,20 +4,20 @@ description: "Deploying RedCheck on its own domain — Docker, a server from scr
 date: 2026-06-02
 type: linkedin
 linkedin: https://www.linkedin.com/feed/update/urn:li:activity:7467504912843702272/
+page: true
 project: redcheck
 series:
   id: building-redcheck
   title: "Building RedCheck"
   part: 1
 topics: [backend, devops, ai]
-images:
-  - src: ./dashboard.webp
-    alt: "RedCheck's dashboard: the month calendar coloured by workload, task balance per subject, and the task list grouped by subject."
-  - src: ./focus-mode.webp
-    alt: "RedCheck's Focus Mode: today's tasks with their deadline labels, and the activity heatmap on the side."
 ---
 
 There is a huge gap between code working on localhost and a live application in production. Over the weekend, I decided to cross that line and deployed RedCheck on its own domain: [redcheck.es](https://redcheckapp.com/). 🚀
+
+![RedCheck's dashboard: the month calendar coloured by workload, task balance per subject, and the task list grouped by subject.](./dashboard.webp)
+
+![RedCheck's Focus Mode: today's tasks with their deadline labels, and the activity heatmap on the side.](./focus-mode.webp)
 
 It started as a standard task manager, but I wanted to take it a step further by integrating SmartCheck AI to analyze workload. Bringing this to production was a solid technical challenge:
 

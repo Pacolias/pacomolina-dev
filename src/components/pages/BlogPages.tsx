@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type ReactNode, type RefObject } from "react";
+import { useEffect, useId, useRef, useState, type ReactNode, type RefObject } from "react";
 import {
   ArrowLeft,
   ArrowRight,
@@ -9,8 +9,10 @@ import {
   Share2,
   FileText,
   Flag,
+  Layers,
   Lightbulb,
   Mic,
+  Plus,
   Rocket,
   Presentation,
   Video,
@@ -18,7 +20,7 @@ import {
 import { SiGithub } from "@icons-pack/react-simple-icons";
 import type { BlogPostSummary, BlogType } from "../../data/blog";
 import type { Lang } from "../../data/i18n";
-import { formatDate } from "../../data/format";
+import { formatDate, formatMonth } from "../../data/format";
 import { readBlogIndex } from "../../data/blogIndex";
 import { withBase } from "../../data/site";
 import { useLanguage } from "../LanguageProvider";
@@ -28,6 +30,7 @@ import { Lightbox } from "../Lightbox";
 import { Gallery, type LightboxImage } from "../Gallery";
 import { Chips } from "../Chips";
 import { ExpandableRow, rowTitle } from "../ExpandableRow";
+import { Collapsible } from "../Collapsible";
 import { LinkedInIcon } from "../icons/LinkedInIcon";
 import { button, buttonSm, card, focusRing, textLink } from "../ui";
 
@@ -273,6 +276,112 @@ function PageRow({ post }: { post: BlogPostSummary }) {
   );
 }
 
+// Series with more than one part, each with its parts in order. They get a
+// card of their own above the list instead of being scattered through it.
+function seriesGroups(posts: BlogPostSummary[]) {
+  const groups = new Map<string, BlogPostSummary[]>();
+  for (const post of posts) {
+    if (post.series) groups.set(post.series.id, [...(groups.get(post.series.id) ?? []), post]);
+  }
+  return [...groups.values()]
+    .filter((parts) => parts.length > 1)
+    .map((parts) => parts.sort((a, b) => a.series!.part - b.series!.part));
+}
+
+// "Jun – Sep 2026" (or "Nov 2026 – Feb 2027") from the parts' dates.
+function monthRange(parts: BlogPostSummary[], lang: Lang) {
+  const months = parts.map((p) => p.date.slice(0, 7)).sort();
+  const [first, last] = [months[0], months[months.length - 1]];
+  if (first === last) return formatMonth(first, lang);
+  const sameYear = first.slice(0, 4) === last.slice(0, 4);
+  const start = sameYear
+    ? new Intl.DateTimeFormat(lang, { month: "short", timeZone: "UTC" }).format(new Date(`${first}-01T00:00:00Z`))
+    : formatMonth(first, lang);
+  return `${start} – ${formatMonth(last, lang)}`;
+}
+
+// A whole series as one card: title, a line about it, and — folded away
+// until the header is clicked — its parts as a compact numbered list, each
+// opening its own page. Every part keeps an id so old /blog/#<slug> links
+// still land on it; #series-<id> opens the card.
+function SeriesCard({ parts }: { parts: BlogPostSummary[] }) {
+  const { t, lang } = useLanguage();
+  const copy = t.pages.blog;
+  const id = parts[0].series!.id;
+  const intro = copy.seriesIntros[id];
+  const shortDate = new Intl.DateTimeFormat(lang, { day: "numeric", month: "short", timeZone: "UTC" });
+  const [open, setOpen] = useState(false);
+  const panelId = useId();
+  useEffect(() => {
+    if (decodeURIComponent(window.location.hash.slice(1)) === `series-${id}`) setOpen(true);
+  }, [id]);
+  return (
+    <section
+      id={`series-${id}`}
+      aria-labelledby={`series-${id}-title`}
+      className={`${card} fade-up-3 mb-6 scroll-mt-20 px-6 py-2 sm:px-8`}
+    >
+      <h2>
+        <button
+          type="button"
+          onClick={() => setOpen((o) => !o)}
+          aria-expanded={open}
+          aria-controls={panelId}
+          className={`group flex w-full items-start gap-3 rounded-2xl py-4 text-left sm:gap-4 sm:py-5 ${focusRing}`}
+        >
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-amber-50 text-amber-700 dark:bg-amber-950/40 dark:text-amber-400">
+            <Layers className="h-4 w-4" aria-hidden="true" />
+          </span>
+          <span className="block min-w-0">
+            <span className="block text-xs font-medium tracking-wide text-amber-700 uppercase dark:text-amber-400">
+              {copy.series}
+            </span>
+            <span
+              id={`series-${id}-title`}
+              className="mt-0.5 block font-display text-xl font-medium tracking-tight text-stone-900 transition-colors group-hover:text-amber-700 dark:text-stone-100 dark:group-hover:text-amber-400"
+            >
+              {version(parts[0], lang).seriesTitle}
+            </span>
+            {intro && (
+              <span className="mt-1.5 block text-sm leading-relaxed text-pretty text-stone-600 dark:text-stone-400">
+                {intro}
+              </span>
+            )}
+            <span className="mt-1.5 block text-xs text-stone-500 dark:text-stone-400">
+              {copy.seriesParts.replace("{n}", String(parts.length))} · {monthRange(parts, lang)}
+            </span>
+          </span>
+          <Plus
+            aria-hidden="true"
+            className={`mt-0.5 ml-auto h-4 w-4 shrink-0 text-stone-400 transition-transform duration-300 group-hover:text-amber-600 dark:text-stone-500 dark:group-hover:text-amber-400 ${open ? "rotate-45" : ""}`}
+          />
+        </button>
+      </h2>
+      <Collapsible id={panelId} open={open} className="pb-3">
+        <ol className="border-t border-stone-100 dark:border-stone-800">
+          {parts.map((part) => (
+            <li
+              key={part.slug}
+              id={part.slug}
+              className="scroll-mt-20 border-t border-stone-100 first:border-t-0 dark:border-stone-800"
+            >
+              <a href={hrefOf(part)} className={`group flex items-baseline gap-3 rounded-xl py-2.5 ${focusRing}`}>
+                <span className="w-5 shrink-0 text-right text-xs text-stone-400 tabular-nums dark:text-stone-500">
+                  {part.series!.part}
+                </span>
+                <span className={`min-w-0 flex-1 truncate ${rowTitle}`}>{version(part, lang).title}</span>
+                <time dateTime={part.date} className="shrink-0 text-xs text-stone-500 tabular-nums dark:text-stone-400">
+                  {shortDate.format(new Date(part.date))}
+                </time>
+              </a>
+            </li>
+          ))}
+        </ol>
+      </Collapsible>
+    </section>
+  );
+}
+
 export function BlogIndexApp({ posts, pageLang }: { posts: BlogPostSummary[]; pageLang?: Lang }) {
   return (
     <SiteShell current="blog" pageLang={pageLang}>
@@ -295,7 +404,19 @@ function BlogIndex({ posts }: { posts: BlogPostSummary[] }) {
   const copy = t.pages.blog;
   const [filter, setFilter] = useState<BlogType | "all">("all");
   const types = TYPE_ORDER.filter((type) => posts.some((p) => p.type === type));
-  const shown = filter === "all" ? posts : posts.filter((p) => p.type === filter);
+  const series = seriesGroups(posts);
+  const inSeries = new Set(series.flat().map((p) => p.slug));
+  // In "All" the series' parts live only in their card; a type filter still
+  // lists every matching entry.
+  const shown = filter === "all" ? posts.filter((p) => !inSeries.has(p.slug)) : posts.filter((p) => p.type === filter);
+
+  // An old /blog/#<slug> link to an entry that now has its own page (a
+  // LinkedIn post grown into a director's cut): go to the page.
+  useEffect(() => {
+    const slug = decodeURIComponent(window.location.hash.slice(1));
+    const target = posts.find((p) => p.slug === slug);
+    if (target?.hasPage) window.location.replace(hrefOf(target));
+  }, [posts]);
 
   // A #slug link to an entry the current filter hides: show everything, so
   // the row exists and can open itself (ExpandableRow's anchor handling).
@@ -326,6 +447,9 @@ function BlogIndex({ posts }: { posts: BlogPostSummary[] }) {
           </p>
         ) : (
           <>
+            {series.map((parts) => (
+              <SeriesCard key={parts[0].series!.id} parts={parts} />
+            ))}
             {types.length > 1 && (
               <div className="fade-up-3 mb-3 flex flex-wrap gap-2" role="group" aria-label={copy.title}>
                 {(["all", ...types] as const).map((type) => (
