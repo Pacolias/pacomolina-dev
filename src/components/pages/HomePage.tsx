@@ -60,11 +60,8 @@ function Intro() {
         {t.hero.tagline}
       </p>
 
-      <p className="fade-up-2 mt-4 inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50/70 px-2.5 py-1 text-[11px] font-medium text-emerald-800 dark:border-emerald-900 dark:bg-emerald-950/30 dark:text-emerald-300">
-        <span className="relative flex h-2 w-2" aria-hidden="true">
-          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60 motion-reduce:hidden" />
-          <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
-        </span>
+      <p className="fade-up-2 mt-4 inline-flex items-center gap-2 rounded-full border border-stone-200 bg-stone-50/70 px-2.5 py-1 text-[11px] font-medium text-stone-700 dark:border-stone-800 dark:bg-stone-900/40 dark:text-stone-300">
+        <span className="inline-flex h-2 w-2 rounded-full bg-amber-500" aria-hidden="true" />
         {t.hero.availability}
       </p>
 

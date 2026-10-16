@@ -5,12 +5,12 @@ export const dictionary = {
     meta: {
       title: "Paco Molina — AI Engineer",
       description:
-        "Portfolio of Paco Molina, an AI Engineer based in Málaga, Spain. Mathematician and Computer Scientist, and builder of RedCheck, an AI-powered task manager. Open to remote, hybrid and on-site roles.",
+        "Portfolio of Paco Molina, an AI Engineer based in Málaga, Spain. Mathematician and Computer Scientist, and builder of RedCheck, an AI-powered task manager.",
     },
     hero: {
       role: "AI Engineer",
       tagline: "Mathematician and Computer Scientist.",
-      availability: "Available now · Málaga · remote, hybrid or on-site",
+      availability: "Working as an AI Engineer · Málaga",
     },
     cta: {
       linkedin: "Connect on LinkedIn",
@@ -173,7 +173,7 @@ export const dictionary = {
       egg: {
         prompt: "[sudo] password for recruiter:",
         granted: "Access granted.",
-        body: "Paco is available now — Málaga · remote, hybrid or on-site. Next step's yours:",
+        body: "Paco is working as an AI Engineer now, but he's always up for a chat. Next step's yours:",
         linkedin: "LinkedIn",
       },
       actions: {
@@ -201,11 +201,11 @@ export const dictionary = {
       placeholder: "Ask anything about Paco…",
       back: "Back to search",
       send: "Send",
-      intro: "Ask about Paco's projects, experience, stack or availability. Answers come only from this site.",
+      intro: "Ask about Paco's projects, experience, stack or what he's doing now. Answers come only from this site.",
       suggestions: [
         "What has Paco built with LLMs?",
         "What's RedCheck's architecture?",
-        "Is he available, and where?",
+        "What is he doing now?",
         "What did he study?",
       ],
       thinking: "Thinking…",
@@ -230,12 +230,12 @@ export const dictionary = {
     meta: {
       title: "Paco Molina — AI Engineer",
       description:
-        "Portfolio de Paco Molina, AI Engineer en Málaga. Matemático e Informático, y creador de RedCheck, un gestor de tareas con IA. Abierto a trabajo remoto, híbrido y presencial.",
+        "Portfolio de Paco Molina, AI Engineer en Málaga. Matemático e Informático, y creador de RedCheck, un gestor de tareas con IA.",
     },
     hero: {
       role: "AI Engineer",
       tagline: "Matemático e Ingeniero Informático.",
-      availability: "Disponible ya · Málaga · remoto, híbrido, presencial",
+      availability: "Trabajando como AI Engineer · Málaga",
     },
     cta: {
       linkedin: "Conectar en LinkedIn",
@@ -397,7 +397,7 @@ export const dictionary = {
       egg: {
         prompt: "[sudo] contraseña para recruiter:",
         granted: "Acceso concedido.",
-        body: "Paco está disponible ya — Málaga · remoto, híbrido o presencial. El siguiente paso es tuyo:",
+        body: "Paco ya trabaja como AI Engineer, pero siempre le apetece charlar. El siguiente paso es tuyo:",
         linkedin: "LinkedIn",
       },
       actions: {
@@ -425,11 +425,11 @@ export const dictionary = {
       placeholder: "Pregunta lo que quieras sobre Paco…",
       back: "Volver a la búsqueda",
       send: "Enviar",
-      intro: "Pregunta por los proyectos, la experiencia, el stack o la disponibilidad de Paco. Las respuestas salen solo de esta web.",
+      intro: "Pregunta por los proyectos, la experiencia, el stack o la situación actual de Paco. Las respuestas salen solo de esta web.",
       suggestions: [
         "¿Qué ha construido Paco con LLMs?",
         "¿Cómo es la arquitectura de RedCheck?",
-        "¿Está disponible? ¿Dónde?",
+        "¿A qué se dedica ahora?",
         "¿Qué ha estudiado?",
       ],
       thinking: "Pensando…",

@@ -94,14 +94,14 @@ export const timeline: TimelineItem[] = [
   },
   {
     kind: "milestone",
-    date: { en: "Now", es: "Ahora" },
+    date: { en: "Oct 2026", es: "Oct 2026" },
     title: {
-      en: "Building in the open, looking for my first AI Engineer role",
-      es: "Construyendo en público, buscando mi primer puesto de AI Engineer",
+      en: "First role: AI Native Software Engineer",
+      es: "Primer puesto: AI Native Software Engineer",
     },
     body: {
-      en: "Shipping side projects around agents, MCP and safer AI tooling — ShellMate, spotify-mcp, a LangGraph multi-agent planner. Based in Málaga, open to remote, hybrid or on-site roles, available immediately.",
-      es: "Sacando proyectos en torno a agentes, MCP y herramientas de IA más seguras — ShellMate, spotify-mcp, un planificador multiagente con LangGraph. En Málaga, abierto a remoto, híbrido o presencial, con disponibilidad inmediata.",
+      en: "Started in October 2026: full-stack, production software that connects to LLM APIs and agentic AI systems, with AI tooling as part of everyday engineering. Still building in the open on the side: RedCheck, and projects around agents, MCP and safer AI tooling — ShellMate, spotify-mcp, a LangGraph multi-agent planner.",
+      es: "Desde octubre de 2026: software full stack en producción que se conecta a APIs de LLM y a sistemas de IA agéntica, con herramientas de IA como parte del día a día. Y sigo construyendo en público en paralelo: RedCheck y proyectos en torno a agentes, MCP y herramientas de IA más seguras — ShellMate, spotify-mcp, un planificador multiagente con LangGraph.",
     },
   },
 ];

@@ -46,7 +46,7 @@ export const GET: APIRoute = async () => {
     `Name: ${site.name} (full name Francisco Javier Molina Cuenca)`,
     `Role: ${en.hero.role}`,
     `In one line: ${en.hero.tagline} (Spanish: "${dictionary.es.hero.tagline}")`,
-    `Availability: ${en.hero.availability}`,
+    `Current status: ${en.hero.availability} (not looking for a new role)`,
     `CV: can be viewed and downloaded on the home page ("View CV").`,
     `Core tech stack: ${stack.map((s) => s.name).join(", ")}`,
   ]);

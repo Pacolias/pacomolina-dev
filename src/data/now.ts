@@ -3,7 +3,7 @@ import { withBase } from "./site";
 
 // The /now page ("what I'm doing now", nownownow.com-style). Update
 // `updated` whenever the content changes — the page shows it.
-export const nowUpdated = "2026-09-26";
+export const nowUpdated = "2026-10-21";
 
 export type NowSection = {
   heading: Localized;
@@ -12,12 +12,12 @@ export type NowSection = {
 
 export const now: NowSection[] = [
   {
-    heading: { en: "Looking for", es: "Buscando" },
+    heading: { en: "Working", es: "Trabajando" },
     items: [
       {
         text: {
-          en: "My first role as an AI/Software Engineer — based in Málaga, open to remote, hybrid or on-site, available now.",
-          es: "Mi primer puesto como AI/Software Engineer — desde Málaga, abierto a remoto, híbrido o presencial, con disponibilidad inmediata.",
+          en: "My first role, as an AI Native Software Engineer since October 2026: full-stack software that connects to LLM APIs and agentic AI systems.",
+          es: "Mi primer puesto, como AI Native Software Engineer desde octubre de 2026: software full stack que se conecta a APIs de LLM y a sistemas de IA agéntica.",
         },
       },
     ],
