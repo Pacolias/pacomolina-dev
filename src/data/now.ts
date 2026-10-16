@@ -16,8 +16,8 @@ export const now: NowSection[] = [
     items: [
       {
         text: {
-          en: "My first role, as an AI Native Software Engineer since October 2026: full-stack software that connects to LLM APIs and agentic AI systems.",
-          es: "Mi primer puesto, como AI Native Software Engineer desde octubre de 2026: software full stack que se conecta a APIs de LLM y a sistemas de IA agéntica.",
+          en: "My first role, as an AI Engineer since October 2026: full-stack software that connects to LLM APIs and agentic AI systems.",
+          es: "Mi primer puesto, como AI Engineer desde octubre de 2026: software full stack que se conecta a APIs de LLM y a sistemas de IA agéntica.",
         },
       },
     ],

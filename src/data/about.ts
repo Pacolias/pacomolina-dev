@@ -96,8 +96,8 @@ export const timeline: TimelineItem[] = [
     kind: "milestone",
     date: { en: "Oct 2026", es: "Oct 2026" },
     title: {
-      en: "First role: AI Native Software Engineer",
-      es: "Primer puesto: AI Native Software Engineer",
+      en: "First role as an AI Engineer",
+      es: "Primer puesto como AI Engineer",
     },
     body: {
       en: "Started in October 2026: full-stack, production software that connects to LLM APIs and agentic AI systems, with AI tooling as part of everyday engineering. Still building in the open on the side: RedCheck, and projects around agents, MCP and safer AI tooling — ShellMate, spotify-mcp, a LangGraph multi-agent planner.",

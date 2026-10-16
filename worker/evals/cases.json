@@ -1,5 +1,5 @@
 [
-  { "q": "What is Paco's current role?", "must": ["AI/Software Engineer|Founder"], "cite": true },
+  { "q": "What is Paco's current role?", "must": ["AI Engineer|AI/Software Engineer|Founder"], "cite": true },
   { "q": "¿Está disponible Paco? ¿Dónde trabaja?", "must": ["Málaga", "AI Engineer"], "lang": "es" },
   { "q": "What has Paco built with LLMs?", "must": ["RedCheck|Gemini|spotify-mcp|ShellMate|Camper"], "cite": true },
   { "q": "Explain RedCheck's architecture.", "must": ["Spring Boot|Java", "FastAPI|Python", "Gemini"], "cite": true },
