@@ -52,7 +52,10 @@ select. The trade-off is reach versus capability: it runs everywhere,
 but some things native apps get for free are harder. Which leads to the
 second line.
 
-![Four phone screenshots of RedCheck in dark mode: the task list with a bottom tab bar, the sidebar drawer, Settings as a bottom sheet with a drag handle, and the month calendar.](./mobile-screens.webp "The \"native app\" as it actually shipped: a web app, installed on a phone.")
+![RedCheck on a phone in dark mode: the task list grouped by subject, with the bottom tab bar.](./mobile-tasks.webp "Tasks, with the bottom tab bar.")
+![The sidebar drawer open over the task list: today's progress ring, the task balance per subject, and links to Trash, My routines, Settings and Log out.](./mobile-drawer.webp "The drawer, opened with an edge swipe.")
+![Settings as a bottom sheet with a drag handle, over the dimmed task list.](./mobile-settings.webp "Settings as a bottom sheet.")
+![The month calendar on a phone, each day coloured by how much was completed.](./mobile-calendar.webp "The month calendar.")
 
 ## Push notifications became reminders
 

@@ -55,7 +55,10 @@ borrar, pulsación larga para seleccionar. El compromiso es alcance frente
 a capacidad: funciona en todas partes, pero algunas cosas que las apps
 nativas tienen gratis son más difíciles. Lo que lleva a la segunda línea.
 
-![Cuatro capturas de RedCheck en un móvil en modo oscuro: la lista de tareas con la barra de pestañas inferior, el cajón lateral, Ajustes como hoja inferior con asa y el calendario mensual.](./mobile-screens.webp "La \"app nativa\" tal como se publicó: una web, instalada en un móvil.")
+![RedCheck en un móvil en modo oscuro: la lista de tareas agrupada por asignaturas, con la barra de pestañas inferior.](./mobile-tasks.webp "Tareas, con la barra de pestañas inferior.")
+![El cajón lateral abierto sobre la lista de tareas: el anillo de progreso del día, el balance de tareas por asignatura y enlaces a Papelera, Mis rutinas, Ajustes y Cerrar sesión.](./mobile-drawer.webp "El cajón lateral, abierto deslizando desde el borde.")
+![Ajustes como hoja inferior con asa, sobre la lista de tareas atenuada.](./mobile-settings.webp "Ajustes como hoja inferior.")
+![El calendario mensual en un móvil, con cada día coloreado según lo completado.](./mobile-calendar.webp "El calendario mensual.")
 
 ## Las notificaciones push se convirtieron en recordatorios
 
