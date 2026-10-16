@@ -75,17 +75,20 @@ export function SiteNav({ current }: { current: SectionId | null }) {
 function SearchButton({ label }: { label: string }) {
   const [mac, setMac] = useState(false);
   useEffect(() => setMac(/Mac|iPhone|iPad/.test(navigator.platform)), []);
+  const shortcut = mac ? "⌘K" : "Ctrl K";
   return (
     <button
       type="button"
       onClick={() => window.dispatchEvent(new Event("open-search"))}
-      aria-label={label}
       aria-keyshortcuts={mac ? "Meta+K" : "Control+K"}
       title={label}
       className="hidden h-8 items-center gap-1.5 rounded-full border border-stone-200 bg-white/80 px-2.5 text-xs font-medium text-stone-500 backdrop-blur transition-colors duration-200 hover:border-amber-300 hover:text-amber-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 sm:inline-flex dark:border-stone-700 dark:bg-stone-900/80 dark:text-stone-400 dark:hover:border-amber-700 dark:hover:text-amber-400"
     >
-      <Search className="h-3.5 w-3.5" />
-      <kbd className="font-sans">{mac ? "⌘K" : "Ctrl K"}</kbd>
+      <Search className="h-3.5 w-3.5" aria-hidden="true" />
+      {/* Named by its content — the label for screen readers, then the visible
+          shortcut — so the name includes what's on screen (WCAG 2.5.3). */}
+      <span className="sr-only">{label} </span>
+      <kbd className="font-sans">{shortcut}</kbd>
     </button>
   );
 }
