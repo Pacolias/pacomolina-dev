@@ -3,8 +3,9 @@ import { useEffect, useRef, useState, type RefObject } from "react";
 // Zoom and pan for the lightbox image:
 //   - phones: pinch with two fingers (zooms around them, and moving them
 //     pans), drag with one finger once zoomed, double-tap to zoom in/out;
-//   - desktop: mouse wheel (or trackpad pinch) around the cursor,
-//     double-click to zoom in on that spot / back out, drag to pan;
+//   - desktop: mouse wheel (or trackpad pinch) around the cursor, click
+//     (or double-click) the image to zoom in on that spot / back out,
+//     drag to pan;
 //   - keyboard: + / - / 0.
 // The transform is written straight to the <img> (origin top-left,
 // translate + scale), not through state, so gestures stay at 60fps; the
@@ -152,7 +153,7 @@ export function useImageZoom(
       pinch = null;
       pan = null;
       downAt = null;
-      // Double-tap (touch only; mice get the native dblclick).
+      // Double-tap (touch only; mice zoom on a single click, see onClick).
       if (e.type === "pointerup" && e.pointerType !== "mouse" && !dragged.current) {
         const now = performance.now();
         if (now - lastTap.t < TAP_MS && Math.hypot(p.x - lastTap.x, p.y - lastTap.y) < 40) {
@@ -172,8 +173,15 @@ export function useImageZoom(
       zoomAt(e.clientX, e.clientY, view.current.s * Math.exp(-delta * 0.002), false);
     };
 
-    const onDblClick = (e: MouseEvent) => {
-      if (lastPointerType.current !== "mouse" || (e.target as HTMLElement).closest("button")) return;
+    // A click on the image toggles zoom (mouse only; touch has double-tap
+    // and pinch, and a tap there is too easy to make by accident). Only the
+    // first click of a double-click counts, so double-clicking still zooms
+    // in once instead of in and back out. With the pointer captured the
+    // click lands on the area, so hit-test what's actually under it.
+    const onClick = (e: MouseEvent) => {
+      if (lastPointerType.current !== "mouse" || e.detail > 1 || dragged.current) return;
+      const hit = document.elementFromPoint(e.clientX, e.clientY);
+      if (!hit || hit !== imgRef.current) return;
       toggleAt(e.clientX, e.clientY);
     };
 
@@ -184,7 +192,7 @@ export function useImageZoom(
     area.addEventListener("pointerup", onUp);
     area.addEventListener("pointercancel", onUp);
     area.addEventListener("wheel", onWheel, { passive: false });
-    area.addEventListener("dblclick", onDblClick);
+    area.addEventListener("click", onClick);
     window.addEventListener("resize", onResize);
     return () => {
       area.removeEventListener("pointerdown", onDown);
@@ -192,7 +200,7 @@ export function useImageZoom(
       area.removeEventListener("pointerup", onUp);
       area.removeEventListener("pointercancel", onUp);
       area.removeEventListener("wheel", onWheel);
-      area.removeEventListener("dblclick", onDblClick);
+      area.removeEventListener("click", onClick);
       window.removeEventListener("resize", onResize);
     };
     // Only the refs and stable setters are used inside, so the listeners

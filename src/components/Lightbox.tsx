@@ -11,7 +11,7 @@ import { useImageZoom } from "./useImageZoom";
 // backdrop's: that one is invisible to contrast checkers, and the caption
 // needs ≥4.5:1 over a light page). Arrow keys, the side buttons or a
 // horizontal swipe move between images (wrapping around). The image zooms: pinch or double-tap
-// on phones, wheel or double-click on desktop, + / - / 0 on the keyboard
+// on phones, wheel or a click on desktop, + / - / 0 on the keyboard
 // (see useImageZoom); while zoomed, swipes pan instead of changing image.
 export function Lightbox({
   images,
