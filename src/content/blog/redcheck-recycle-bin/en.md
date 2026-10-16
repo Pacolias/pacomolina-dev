@@ -9,7 +9,8 @@ project: redcheck
 series:
   id: building-redcheck
   title: "Building RedCheck"
-  part: 3
+  part: 8
+  arc: "Out in the Wild"
 topics: [backend, frontend]
 ---
 

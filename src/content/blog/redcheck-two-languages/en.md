@@ -7,7 +7,8 @@ project: redcheck
 series:
   id: building-redcheck
   title: "Building RedCheck"
-  part: 4
+  part: 9
+  arc: "Out in the Wild"
 topics: [frontend, backend, ai]
 ---
 
@@ -144,7 +145,7 @@ justify.
 
 The reason those two preferences live in a cookie is that RedCheck is
 now split across two sites: the landing page at `redcheckapp.com` and
-the app at `my.redcheckapp.com` (part 7 is about that split).
+the app at `my.redcheckapp.com` (part 12 is about that split).
 `localStorage` is scoped to a single origin, so a visitor who picks
 English and dark mode on the landing page would arrive at the login
 screen in Spanish and light mode. A cookie scoped to the parent domain

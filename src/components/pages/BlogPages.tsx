@@ -121,20 +121,29 @@ function SeriesNav({ post, all }: { post: BlogPostSummary; all: BlogPostSummary[
       <p className="text-xs text-stone-500 dark:text-stone-400">
         {version(post, lang).seriesTitle} · {label}
       </p>
-      <ol className="mt-2 space-y-1">
-        {parts.map((p) => (
-          <li key={p.slug} className="flex gap-2">
-            <span className="text-stone-400 tabular-nums dark:text-stone-500">{p.series!.part}.</span>
-            {p.slug === post.slug ? (
-              <span className="font-medium text-stone-800 dark:text-stone-200">{version(p, lang).title}</span>
-            ) : (
-              <a href={hrefOf(p)} className={textLink}>
-                {version(p, lang).title}
-              </a>
-            )}
-          </li>
-        ))}
-      </ol>
+      {arcGroups(parts, lang).map((group) => (
+        <div key={group.parts[0].slug}>
+          {group.arc && (
+            <p className="mt-3 text-[11px] font-medium tracking-wide text-stone-500 uppercase dark:text-stone-400">
+              {group.arc}
+            </p>
+          )}
+          <ol start={group.parts[0].series!.part} className="mt-2 space-y-1">
+            {group.parts.map((p) => (
+              <li key={p.slug} className="flex gap-2">
+                <span className="text-stone-400 tabular-nums dark:text-stone-500">{p.series!.part}.</span>
+                {p.slug === post.slug ? (
+                  <span className="font-medium text-stone-800 dark:text-stone-200">{version(p, lang).title}</span>
+                ) : (
+                  <a href={hrefOf(p)} className={textLink}>
+                    {version(p, lang).title}
+                  </a>
+                )}
+              </li>
+            ))}
+          </ol>
+        </div>
+      ))}
     </div>
   );
 }
@@ -288,6 +297,19 @@ function seriesGroups(posts: BlogPostSummary[]) {
     .map((parts) => parts.sort((a, b) => a.series!.part - b.series!.part));
 }
 
+// A series' parts split into its named stages (`series.arc`), in order;
+// a series without arcs is one group with no name.
+function arcGroups(parts: BlogPostSummary[], lang: Lang) {
+  const groups: { arc?: string; parts: BlogPostSummary[] }[] = [];
+  for (const part of parts) {
+    const arc = version(part, lang).seriesArc;
+    const last = groups[groups.length - 1];
+    if (last && last.arc === arc) last.parts.push(part);
+    else groups.push({ arc, parts: [part] });
+  }
+  return groups;
+}
+
 // "Jun – Sep 2026" (or "Nov 2026 – Feb 2027") from the parts' dates.
 function monthRange(parts: BlogPostSummary[], lang: Lang) {
   const months = parts.map((p) => p.date.slice(0, 7)).sort();
@@ -358,25 +380,36 @@ function SeriesCard({ parts }: { parts: BlogPostSummary[] }) {
         </button>
       </h2>
       <Collapsible id={panelId} open={open} className="pb-3">
-        <ol className="border-t border-stone-100 dark:border-stone-800">
-          {parts.map((part) => (
-            <li
-              key={part.slug}
-              id={part.slug}
-              className="scroll-mt-20 border-t border-stone-100 first:border-t-0 dark:border-stone-800"
-            >
-              <a href={hrefOf(part)} className={`group flex items-baseline gap-3 rounded-xl py-2.5 ${focusRing}`}>
-                <span className="w-5 shrink-0 text-right text-xs text-stone-400 tabular-nums dark:text-stone-500">
-                  {part.series!.part}
-                </span>
-                <span className={`min-w-0 flex-1 truncate ${rowTitle}`}>{version(part, lang).title}</span>
-                <time dateTime={part.date} className="shrink-0 text-xs text-stone-500 tabular-nums dark:text-stone-400">
-                  {shortDate.format(new Date(part.date))}
-                </time>
-              </a>
-            </li>
+        <div className="border-t border-stone-100 dark:border-stone-800">
+          {arcGroups(parts, lang).map((group) => (
+            <div key={group.parts[0].slug}>
+              {group.arc && (
+                <h3 className="pt-4 pb-1 text-[11px] font-medium tracking-wide text-amber-700 uppercase dark:text-amber-400">
+                  {group.arc}
+                </h3>
+              )}
+              <ol start={group.parts[0].series!.part}>
+                {group.parts.map((part) => (
+                  <li
+                    key={part.slug}
+                    id={part.slug}
+                    className="scroll-mt-20 border-t border-stone-100 first:border-t-0 dark:border-stone-800"
+                  >
+                    <a href={hrefOf(part)} className={`group flex items-baseline gap-3 rounded-xl py-2.5 ${focusRing}`}>
+                      <span className="w-5 shrink-0 text-right text-xs text-stone-400 tabular-nums dark:text-stone-500">
+                        {part.series!.part}
+                      </span>
+                      <span className={`min-w-0 flex-1 truncate ${rowTitle}`}>{version(part, lang).title}</span>
+                      <time dateTime={part.date} className="shrink-0 text-xs text-stone-500 tabular-nums dark:text-stone-400">
+                        {shortDate.format(new Date(part.date))}
+                      </time>
+                    </a>
+                  </li>
+                ))}
+              </ol>
+            </div>
           ))}
-        </ol>
+        </div>
       </Collapsible>
     </section>
   );

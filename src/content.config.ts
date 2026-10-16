@@ -40,8 +40,9 @@ const blog = defineCollection({
       // project both ways.
       project: z.string().optional(),
       // Parts of a series share an id; `title` is the series' name in this
-      // file's language.
-      series: z.object({ id: z.string(), title: z.string(), part: z.number() }).optional(),
+      // file's language. `arc` optionally groups consecutive parts into a
+      // named stage of the series (e.g. "The Beginnings"), also localized.
+      series: z.object({ id: z.string(), title: z.string(), part: z.number(), arc: z.string().optional() }).optional(),
       topics: z
         .array(z.enum(["ai", "backend", "frontend", "devops", "maths", "career"]))
         .default([]),

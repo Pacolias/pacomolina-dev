@@ -7,7 +7,8 @@ project: redcheck
 series:
   id: building-redcheck
   title: "Construyendo RedCheck"
-  part: 4
+  part: 9
+  arc: "Ya en el mundo real"
 topics: [frontend, backend, ai]
 ---
 
@@ -148,7 +149,7 @@ justificar.
 
 Esas dos preferencias viven en una cookie porque RedCheck ahora está
 repartido entre dos sitios: la landing en `redcheckapp.com` y la app en
-`my.redcheckapp.com` (la parte 7 trata sobre esa separación).
+`my.redcheckapp.com` (la parte 12 trata sobre esa separación).
 `localStorage` está limitado a un único origen, así que quien eligiera
 inglés y modo oscuro en la landing llegaría a la pantalla de login en
 español y en modo claro. Una cookie asociada al dominio padre se puede

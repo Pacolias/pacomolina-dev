@@ -7,7 +7,8 @@ project: redcheck
 series:
   id: building-redcheck
   title: "Construyendo RedCheck"
-  part: 7
+  part: 12
+  arc: "Ya en el mundo real"
 topics: [frontend, devops]
 ---
 

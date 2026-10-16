@@ -7,7 +7,8 @@ project: redcheck
 series:
   id: building-redcheck
   title: "Building RedCheck"
-  part: 8
+  part: 13
+  arc: "Out in the Wild"
 topics: [backend, devops]
 ---
 
@@ -86,7 +87,7 @@ production, and no email arrived. No error either.
 
 **Problem one: the configuration never reached the server.** RedCheck's
 `docker-compose.yml` lives in its own infrastructure repository (see
-part 7). The backend and frontend each have a pipeline that builds an
+part 12). The backend and frontend each have a pipeline that builds an
 image and restarts their own container. The infrastructure repository
 had no pipeline at all. The compose file on the server was a plain copy
 made by hand, so the new email environment variables I had added to the

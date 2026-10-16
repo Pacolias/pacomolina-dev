@@ -9,7 +9,8 @@ project: redcheck
 series:
   id: building-redcheck
   title: "Construyendo RedCheck"
-  part: 1
+  part: 6
+  arc: "Ya en el mundo real"
 topics: [backend, devops, ai]
 ---
 

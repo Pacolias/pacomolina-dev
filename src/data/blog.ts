@@ -20,6 +20,7 @@ type Version = {
   title: string;
   description: string;
   seriesTitle?: string;
+  seriesArc?: string;
   // Full summaries only (the blog page itself):
   html?: string;
   images?: { src: string; width: number; height: number; alt: string }[];
@@ -88,6 +89,7 @@ export function summarize(post: BlogPost, { full = false } = {}): BlogPostSummar
       title: entry.data.title,
       description: entry.data.description,
       seriesTitle: entry.data.series?.title,
+      seriesArc: entry.data.series?.arc,
       ...(full && {
         html: entry.rendered?.html ?? "",
         images: entry.data.images.map((img) => ({

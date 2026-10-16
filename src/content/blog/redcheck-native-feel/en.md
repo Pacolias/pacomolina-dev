@@ -7,7 +7,8 @@ project: redcheck
 series:
   id: building-redcheck
   title: "Building RedCheck"
-  part: 10
+  part: 15
+  arc: "Out in the Wild"
 topics: [frontend]
 ---
 
@@ -145,7 +146,7 @@ pretending otherwise.
 The same push brought a lot of smaller things, most of them on desktop
 too: a command palette (Ctrl/Cmd+K), toasts instead of `alert()`, an
 "Undo" toast on delete (which was cheap to build because every delete
-already goes to the recycle bin from part 3), skeleton loading states,
+already goes to the recycle bin from part 8), skeleton loading states,
 a first-run tour, focus trapping in modals, `prefers-reduced-motion`
 support, and personalised checkbox styles. Removing `framer-motion`,
 which was used in exactly one place and whose exit animations never

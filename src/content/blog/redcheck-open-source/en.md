@@ -7,7 +7,8 @@ project: redcheck
 series:
   id: building-redcheck
   title: "Building RedCheck"
-  part: 5
+  part: 10
+  arc: "Out in the Wild"
 topics: [backend, devops]
 ---
 

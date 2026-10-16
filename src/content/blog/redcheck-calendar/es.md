@@ -7,7 +7,8 @@ project: redcheck
 series:
   id: building-redcheck
   title: "Construyendo RedCheck"
-  part: 9
+  part: 14
+  arc: "Ya en el mundo real"
 topics: [backend, frontend]
 ---
 
@@ -188,7 +189,7 @@ segunda ejecución simultánea simplemente no hace nada.
 La sincronización con Google Calendar está diseñada (una capa de solo
 lectura con tus eventos, más una exportación opcional de las tareas de
 RedCheck a un calendario dedicado) y esperando a la verificación OAuth de
-Google, un proceso cuya historia conté en la parte 8.
+Google, un proceso cuya historia conté en la parte 13.
 
 ## Con qué me quedo
 

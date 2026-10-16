@@ -7,7 +7,8 @@ project: redcheck
 series:
   id: building-redcheck
   title: "Construyendo RedCheck"
-  part: 10
+  part: 15
+  arc: "Ya en el mundo real"
 topics: [frontend]
 ---
 
@@ -159,7 +160,7 @@ ligera y la llamé por su nombre en lugar de fingir otra cosa.
 La misma tanda trajo muchas cosas más pequeñas, la mayoría también en
 escritorio: una paleta de comandos (Ctrl/Cmd+K), toasts en lugar de
 `alert()`, un toast de "Deshacer" al borrar (que fue barato de construir
-porque todo borrado ya va a la papelera de la parte 3), estados de carga
+porque todo borrado ya va a la papelera de la parte 8), estados de carga
 con esqueleto, un tour inicial, foco atrapado dentro de los modales,
 soporte para `prefers-reduced-motion` y casillas personalizables. Quitar
 `framer-motion`, que se usaba en un único sitio y cuyas animaciones de

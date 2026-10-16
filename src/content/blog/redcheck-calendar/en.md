@@ -7,7 +7,8 @@ project: redcheck
 series:
   id: building-redcheck
   title: "Building RedCheck"
-  part: 9
+  part: 14
+  arc: "Out in the Wild"
 topics: [backend, frontend]
 ---
 
@@ -170,7 +171,7 @@ non-blocking named lock; a second concurrent run simply does nothing.
 Google Calendar sync is designed (a read-only overlay of your events,
 plus opt-in export of RedCheck tasks to a dedicated calendar) and waiting
 on Google's OAuth verification. I told the story of that verification
-process in part 8.
+process in part 13.
 
 ## What I took away
 

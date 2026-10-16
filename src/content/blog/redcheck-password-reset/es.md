@@ -7,7 +7,8 @@ project: redcheck
 series:
   id: building-redcheck
   title: "Construyendo RedCheck"
-  part: 8
+  part: 13
+  arc: "Ya en el mundo real"
 topics: [backend, devops]
 ---
 
@@ -92,7 +93,7 @@ en producción y no llegó ningún correo. Tampoco ningún error.
 
 **Problema uno: la configuración nunca llegó al servidor.** El
 `docker-compose.yml` de RedCheck vive en su propio repositorio de
-infraestructura (ver parte 7). El backend y el frontend tienen cada uno
+infraestructura (ver parte 12). El backend y el frontend tienen cada uno
 un pipeline que construye una imagen y reinicia su propio contenedor. El
 repositorio de infraestructura no tenía ningún pipeline. El fichero
 compose del servidor era una copia hecha a mano, así que las nuevas
