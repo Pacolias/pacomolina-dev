@@ -170,6 +170,24 @@ html.no-intro [class*="fade-up-"] {
   animation: none;
 }
 
+/* Several images on consecutive lines of one Markdown paragraph
+   (src/plugins/figure-captions.mjs): side by side, two per row on phones. */
+.figure-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem 1rem;
+  margin: 1.75rem 0;
+}
+@media (min-width: 640px) {
+  .figure-row {
+    grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+  }
+}
+.figure-row figure,
+.figure-row img {
+  margin: 0;
+}
+
 /* Mermaid diagrams in posts (src/plugins/mermaid-diagrams.mjs): both
    themes are in the page, the active one shows. The SVG scales down to the
    column (Mermaid caps it at its natural width). */

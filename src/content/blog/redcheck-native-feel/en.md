@@ -37,7 +37,10 @@ A small but important detail: the app height uses `100dvh` instead of
 `100vh`. On mobile browsers, `100vh` ignores the address bar collapsing
 and expanding, which pushed the bottom tab bar off screen.
 
-![Four phone screenshots of RedCheck in dark mode: the task list with a bottom tab bar, the sidebar drawer, Settings as a bottom sheet with a drag handle, and the month calendar.](./mobile-screens.webp "Tasks, the drawer, a bottom sheet and the calendar on a phone.")
+![RedCheck on a phone in dark mode: the task list grouped by subject, with the bottom tab bar.](./mobile-tasks.webp "Tasks, with the bottom tab bar.")
+![The sidebar drawer open over the task list: today's progress ring, the task balance per subject, and links to Trash, My routines, Settings and Log out.](./mobile-drawer.webp "The drawer, opened with an edge swipe.")
+![Settings as a bottom sheet with a drag handle, over the dimmed task list.](./mobile-settings.webp "Settings as a bottom sheet.")
+![The month calendar on a phone, each day coloured by how much was completed.](./mobile-calendar.webp "The month calendar.")
 
 ## Why a PWA and not a native app
 

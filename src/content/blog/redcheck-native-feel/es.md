@@ -41,7 +41,10 @@ lugar de `100vh`. En los navegadores móviles, `100vh` ignora que la barra
 de direcciones se esconde y reaparece, y eso dejaba la barra de pestañas
 inferior fuera de la pantalla.
 
-![Cuatro capturas de RedCheck en un móvil en modo oscuro: la lista de tareas con la barra de pestañas inferior, el cajón lateral, Ajustes como hoja inferior con asa y el calendario mensual.](./mobile-screens.webp "Tareas, el cajón lateral, una hoja inferior y el calendario en un móvil.")
+![RedCheck en un móvil en modo oscuro: la lista de tareas agrupada por asignaturas, con la barra de pestañas inferior.](./mobile-tasks.webp "Tareas, con la barra de pestañas inferior.")
+![El cajón lateral abierto sobre la lista de tareas: el anillo de progreso del día, el balance de tareas por asignatura y enlaces a Papelera, Mis rutinas, Ajustes y Cerrar sesión.](./mobile-drawer.webp "El cajón lateral, abierto deslizando desde el borde.")
+![Ajustes como hoja inferior con asa, sobre la lista de tareas atenuada.](./mobile-settings.webp "Ajustes como hoja inferior.")
+![El calendario mensual en un móvil, con cada día coloreado según lo completado.](./mobile-calendar.webp "El calendario mensual.")
 
 ## Por qué una PWA y no una app nativa
 
