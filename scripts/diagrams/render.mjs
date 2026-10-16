@@ -38,6 +38,11 @@ const THEMES = {
     lineColor: "#a8a29e", // stone-400
     textColor: "#44403c", // stone-700: edge labels
     edgeLabelBackground: "#ffffff",
+    // erDiagram attribute rows
+    attributeBackgroundColorOdd: "#ffffff",
+    attributeBackgroundColorEven: "#fafaf9",
+    rowOdd: "#ffffff",
+    rowEven: "#fafaf9",
   },
   dark: {
     background: "#1c1917",
@@ -50,6 +55,10 @@ const THEMES = {
     lineColor: "#78716c", // stone-500
     textColor: "#d6d3d1", // stone-300
     edgeLabelBackground: "#1c1917",
+    attributeBackgroundColorOdd: "#292524",
+    attributeBackgroundColorEven: "#1c1917",
+    rowOdd: "#292524",
+    rowEven: "#1c1917",
   },
 };
 
