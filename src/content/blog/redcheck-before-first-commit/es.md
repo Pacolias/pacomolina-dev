@@ -2,7 +2,9 @@
 title: "Antes del primer commit"
 description: "RedCheck empezó como una libreta y una forma de planificarme que ninguna app sabía reproducir. Cómo un ritual diario se convirtió en bocetos, y los bocetos en un modelo de datos."
 date: 2026-03-01
-type: article
+type: linkedin
+linkedin: https://www.linkedin.com/feed/update/urn:li:activity:7518197197578866690/
+page: true
 project: redcheck
 series:
   id: building-redcheck

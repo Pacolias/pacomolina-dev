@@ -2,7 +2,9 @@
 title: "Before the first commit"
 description: "RedCheck started as a paper notebook and a planning habit no app could reproduce. How a daily ritual became sketches, and the sketches became a data model."
 date: 2026-03-01
-type: article
+type: linkedin
+linkedin: https://www.linkedin.com/feed/update/urn:li:activity:7518197197578866690/
+page: true
 project: redcheck
 series:
   id: building-redcheck
