@@ -1,10 +1,9 @@
-# pacomolina.dev — project notes
+# pacomolina.dev — decisions & implementation notes
 
-Personal portfolio / "link in bio" for Paco Molina, built to be shared via NFC
-stickers and QR codes at networking events while job-hunting for his first
-role as an AI Engineer. Optimized mobile-first, but must also look good on
-desktop. Deployed as a static site on GitHub Pages, eventually behind the
-custom domain `pacomolina.dev`.
+The long-form companion to `CLAUDE.md`: why things are the way they are,
+what was tried and failed, and how each feature was verified. Read the
+section for whatever you're about to touch. Decisions marked as Paco's
+were made with him explicitly — check with him before reversing one.
 
 ## Stack
 
@@ -240,7 +239,7 @@ The site grew from one page into five, keeping the same look everywhere:
     as `[[/path|label]]` using the blocks' `Source:` paths, reply in the
     visitor's language, decline off-topic, don't reveal the prompt,
     salary/private → ask Paco, and **never link the CS thesis to RedCheck**
-    (see the memory note).
+    (Paco's rule; also enforced by an eval case).
   - **Knowledge**: `/assistant/knowledge.txt` (`src/pages/assistant/
     knowledge.txt.ts`), built from the same data files as the pages +
     blog + the CV's text (`src/data/documents-text.json`, extracted by
@@ -288,7 +287,7 @@ The site grew from one page into five, keeping the same look everywhere:
     `npm run dev` in `worker/` (port 8787, reads the knowledge from the
     astro dev server). Deploy: `npx wrangler login`, `npx wrangler secret
     put GEMINI_API_KEY`, `npm run deploy`.
-- **/now page** (`src/pages/now.astro`, `NowPage.tsx`, content in
+- **/now page** (`src/pages/[...lang]/now.astro`, `NowPage.tsx`, content in
   `src/data/now.ts` with a `nowUpdated` date shown on the page): what Paco
   is focused on — looking for, building, out and about. **Not in the top
   nav** (a sixth item doesn't fit at 360px in Spanish); linked from Home
@@ -361,8 +360,7 @@ The site grew from one page into five, keeping the same look everywhere:
   English C1 card links to Paco's British Council credential (URL given by
   him; its `#acc.…` share-tracking fragment was dropped, the `key` param is
   what grants access).
-- **Blog = "bitácora"** (design chosen by Paco, Sep 26 2026 — see the
-  memory note too): one chronological list of typed entries, same compact
+- **Blog = "bitácora"** (design chosen by Paco, Sep 26 2026): one chronological list of typed entries, same compact
   `ExpandableRow` style as Projects/Work, a type icon per row, and type
   filter chips on top (only when there's more than one type). Content
   collection (`src/content.config.ts`), one folder per entry with
@@ -499,9 +497,6 @@ The site grew from one page into five, keeping the same look everywhere:
   the stack chips wrapped ("Python / / FastAPI") — the bento grid is now
   3/2 of 5 columns instead of 2/1 of 3.
 
-**Workflow**: Paco wants every change reviewed on localhost at mobile and
-desktop widths before anything is committed or pushed.
-
 ## Content status
 
 All real content is in as of the second pass:
@@ -531,10 +526,8 @@ All real content is in as of the second pass:
   **Website** (soft amber) → the Astro landing (`redcheckapp.com`);
   **Source code** → the GitHub org. "Live demo" pointing at the real app
   rather than the marketing site is intentional — don't swap them back.
-- **Personal GitHub link** (`site.github`) is inferred as
-  `https://github.com/Pacolias` from this very repo's own git remote — never
-  independently confirmed by Paco in words. Flag it if he ever says
-  otherwise.
+- **Personal GitHub link** (`site.github`): `https://github.com/Pacolias`
+  (confirmed by Paco, Nov 2026).
 - **Availability pill** (`hero.availability` in `i18n.ts`): "Available now ·
   Málaga · remote, hybrid or on-site" / "Disponible ya · Málaga · remoto,
   híbrido, presencial". Facts came directly from Paco; update both (and
@@ -742,40 +735,3 @@ To run the browser check locally: `npm install --no-save playwright
   comments on) an issue labelled `broken-links` with the report, and
   closes it once everything answers again. Deliberately not part of the
   deploy gate: someone else's site being down shouldn't block a deploy.
-
-## Development
-
-When starting the dev server, use background mode:
-
-```
-astro dev --background
-```
-
-Manage the background server with `astro dev stop`, `astro dev status`, and
-`astro dev logs`.
-
-`astro build` uses its own Vite cache (`node_modules/.vite-build`,
-`cacheDir` in astro.config.mjs): sharing `node_modules/.vite` with a
-running `astro dev` rewrote its pre-bundled deps and broke hydration in
-pages already open — so building to check something no longer breaks
-the dev server.
-
-**After installing or removing packages, restart it** (`astro dev stop`,
-`rm -rf node_modules/.vite`, `astro dev --background --force`): changing
-`node_modules` under a running dev server leaves Vite's pre-bundled deps
-stale, every island fails with "error loading dynamically imported module
-…/.vite/deps/react.js" and nothing hydrates (images without `src`, rows
-that don't open, dead filters) — while the production build is fine.
-
-## Documentation
-
-Full documentation: https://docs.astro.build
-
-Consult these guides before working on related tasks:
-
-- [Adding pages, dynamic routes, or middleware](https://docs.astro.build/en/guides/routing/)
-- [Working with Astro components](https://docs.astro.build/en/basics/astro-components/)
-- [Using React, Vue, Svelte, or other framework components](https://docs.astro.build/en/guides/framework-components/)
-- [Adding or managing content](https://docs.astro.build/en/guides/content-collections/)
-- [Adding styles or using Tailwind](https://docs.astro.build/en/guides/styling/)
-- [Supporting multiple languages](https://docs.astro.build/en/guides/internationalization/)
